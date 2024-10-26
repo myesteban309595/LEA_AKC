@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Button } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Button, IconButton } from '@mui/material';
+
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 
 const SGMRC = () => {
   // Estado para la fecha y hora actual
@@ -144,14 +148,33 @@ const SGMRC = () => {
               autoFocus
             />
           ) : colIndex === 7 ? ( // Cambia aquí para la columna 8 (índice 7)
-            <Button
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginLeft:15, marginRight:15 }}>
+             <IconButton
+              style={{outline:"none"}}
+              variant="contained"
+              color="primary"
+              onClick={() => handleDownload(rowIndex)}
+             >
+              <RemoveRedEyeIcon />
+            </IconButton>
+             <IconButton
+              style={{outline:"none"}}
+              variant="contained"
+              color="primary"
+              onClick={() => handleDownload(rowIndex)}
+             >
+              <CloudUploadIcon />
+            </IconButton>
+            <IconButton
+              style={{outline:"none"}}
               variant="contained"
               color="primary"
               onClick={() => handleDownload(rowIndex)}
             >
-              Ver/Descargar PDF
-            </Button>
-          ) : (
+              <DownloadForOfflineIcon />
+           </IconButton>       
+            </div>
+            ) : (
             row[column]
           )}
         </TableCell>
@@ -159,8 +182,8 @@ const SGMRC = () => {
     </TableRow>
   ))}
 </TableBody>
-      </Table>
-    </TableContainer>
+  </Table>
+  </TableContainer>
   );
 };
 
