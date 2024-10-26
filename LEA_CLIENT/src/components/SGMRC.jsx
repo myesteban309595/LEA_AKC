@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Button } from '@mui/material';
 
 const SGMRC = () => {
   // Estado para la fecha y hora actual
@@ -122,29 +122,43 @@ const SGMRC = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row, rowIndex) => (
-            <TableRow key={rowIndex}>
-              {Object.keys(row).map((column, colIndex) => (
-                <TableCell
-                  key={colIndex}
-                  style={{ textAlign: 'center' }}
-                  onDoubleClick={() => handleDoubleClick(rowIndex, column)}
-                >
-                  {editingCell.rowIndex === rowIndex && editingCell.column === column ? (
-                    <TextField
-                      value={tempValue}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      autoFocus
-                    />
-                  ) : (
-                    row[column]
-                  )}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
+  {data.map((row, rowIndex) => (
+    <TableRow key={rowIndex}>
+      {Object.keys(row).map((column, colIndex) => (
+        <TableCell
+          key={colIndex}
+          style={{ textAlign: 'center' }}
+          onDoubleClick={() => handleDoubleClick(rowIndex, column)}
+        >
+          {editingCell.rowIndex === rowIndex && editingCell.column === column ? (
+            <TextField
+              sx={{
+                width: "100%",
+                transform: 'scale(0.9)',
+                padding: 0,
+                marginLeft: 0
+              }}
+              value={tempValue}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              autoFocus
+            />
+          ) : colIndex === 7 ? ( // Cambia aquí para la columna 8 (índice 7)
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleDownload(rowIndex)}
+            >
+              Ver/Descargar PDF
+            </Button>
+          ) : (
+            row[column]
+          )}
+        </TableCell>
+      ))}
+    </TableRow>
+  ))}
+</TableBody>
       </Table>
     </TableContainer>
   );
