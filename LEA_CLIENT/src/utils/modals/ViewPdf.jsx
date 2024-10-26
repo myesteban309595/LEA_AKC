@@ -1,5 +1,7 @@
 import React from 'react';
 import { Modal, Box, Button } from '@mui/material';
+import { Document, Page } from 'react-pdf';
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 
 const modalStyle = {
     position: 'absolute',
@@ -26,7 +28,9 @@ const PdfModal = ({ isOpen, onClose, pdfUrl }) => {
                 >
                     &times;
                 </Button>
-                <iframe src={pdfUrl} width="100%" height="500px" title="PDF Viewer" />
+                <Document file={pdfUrl}>
+                    <Page pageNumber={1} width={500} />
+                </Document>
             </Box>
         </Modal>
     );
