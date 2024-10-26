@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Button, IconButton } from '@mui/material';
 
+import ModalComponent from '../utils/modals/ViewPdf';
+
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
@@ -11,6 +13,9 @@ const SGMRC = () => {
   const [data, setData] = useState([]);
   const [editingCell, setEditingCell] = useState({ rowIndex: null, column: null });
   const [tempValue, setTempValue] = useState('');
+  // Visualizador de Pdf
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState('');
 
   useEffect(() => {
     const mostrarFechaYHora = () => {
@@ -56,6 +61,17 @@ const SGMRC = () => {
     }));
     setData(initialData);
   }, []);
+
+  const handleOpenModal = async () => {
+    // Aquí puedes hacer la llamada a la base de datos para obtener la URL del PDF
+    const fetchedPdfUrl = 'URL_DE_TU_PDF'; // Reemplaza esto con tu lógica de obtención
+    setPdfUrl(fetchedPdfUrl);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
 
   const handleDoubleClick = (rowIndex, column) => {
     setEditingCell({ rowIndex, column });
@@ -147,13 +163,13 @@ const SGMRC = () => {
               onBlur={handleBlur}
               autoFocus
             />
-          ) : colIndex === 7 ? ( // Cambia aquí para la columna 8 (índice 7)
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginLeft:15, marginRight:15 }}>
+          ) : colIndex === 13 ? ( // Cambia aquí para la columna 8 (índice 7)
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginLeft:10, marginRight:10 }}>
              <IconButton
               style={{outline:"none"}}
               variant="contained"
               color="primary"
-              onClick={() => handleDownload(rowIndex)}
+              onClick={handleOpenModal}
              >
               <RemoveRedEyeIcon />
             </IconButton>
@@ -180,11 +196,16 @@ const SGMRC = () => {
         </TableCell>
       ))}
     </TableRow>
-  ))}
-</TableBody>
-  </Table>
-  </TableContainer>
-  );
+   ))}
+  </TableBody>
+ </Table>
+ 
+ {/* Componente Modal visualizar Pdf */}
+ <ModalComponent isOpen={isModalOpen} onClose={handleCloseModal} pdfUrl={pdfUrl} />
+
+</TableContainer>
+
+);
 };
 
 export default SGMRC;
