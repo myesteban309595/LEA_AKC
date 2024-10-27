@@ -1,14 +1,22 @@
-import React from 'react';
+import {React, Fragment} from 'react';
+import {BrowserRouter, Route, Routes} from 'react-router-dom'
+
 import SGMRC from './components/SGMRC';
+import UploadFile from './components/UploadFile'
 import { Typography } from '@mui/material';
+
 
 function App() {
   return (
     <div>
-      <Typography variant="h4" sx={{ margin: 2, textAlign:'center' }}>
-        MATERIAL DE REFERENCIA CERTIFICADO
-      </Typography>
-      <SGMRC />
+     <Fragment>   
+      <BrowserRouter>
+       <Routes>
+        <Route path='/' element = {<SGMRC/>}/>
+        <Route path='/upload' element = {<UploadFile/>}/>
+       </Routes>
+      </BrowserRouter>
+     </Fragment>
     </div>
   );
 }
