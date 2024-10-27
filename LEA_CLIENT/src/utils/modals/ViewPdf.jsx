@@ -17,6 +17,9 @@ const modalStyle = {
 };
 
 const PdfModal = ({ isOpen, onClose, pdfUrl }) => {
+
+    console.log("pdf url: ",pdfUrl);
+    
     return (
         <Modal open={isOpen} onClose={onClose}>
             <Box sx={modalStyle}>

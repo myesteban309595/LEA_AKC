@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Button, IconButton } from '@mui/material';
 
 import ModalComponent from '../utils/modals/ViewPdf';
@@ -62,12 +63,20 @@ const SGMRC = () => {
     setData(initialData);
   }, []);
 
-  const handleOpenModal = async () => {
-    // Aquí puedes hacer la llamada a la base de datos para obtener la URL del PDF
-    const fetchedPdfUrl = 'URL_DE_TU_PDF'; // Reemplaza esto con tu lógica de obtención
-    setPdfUrl(fetchedPdfUrl);
-    setModalOpen(true);
+  const fetchPdf = async () => {
+    try {
+        // const response = await axios.get(`http://localhost:3000/pdf/${pdfId}`, {
+        //     responseType: 'blob', // Importante para manejar el PDF
+        // });
+
+        // const url = window.URL.createObjectURL(new Blob([response.data]));
+        // setPdfUrl(url);
+        setModalOpen(true);
+    } catch (error) {
+        console.error('Error al obtener el PDF:', error);
+    }
   };
+
 
   const handleCloseModal = () => {
     setModalOpen(false);
@@ -169,7 +178,7 @@ const SGMRC = () => {
               style={{outline:"none"}}
               variant="contained"
               color="primary"
-              onClick={handleOpenModal}
+              onClick={fetchPdf}
              >
               <RemoveRedEyeIcon />
             </IconButton>
