@@ -3,15 +3,8 @@ import morgan from 'morgan'
 import cors from 'cors';
 import dotenv from 'dotenv';
 
-import users from './routes/user.route.js'
-import products from './routes/products.route.js'
-import login from './routes/login.route.js'
-import videos from './routes/video.route.js'
-import comentaries from './routes/comentary.route.js'
-import uploadPdfFile from './routes/filePdf.route.js'
-import validateTokenRoute from './routes/validatetoken.route.js'
-
-import db from './database/db.js';
+import db from './db/db.js';
+import pdfRoutes from './routes/pdfRoutes.js';
 
 import configuraciones from './config/config.js'
 const app = express();
@@ -34,13 +27,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 //*Rutas
-app.use('/api/user', users);
-app.use('/api/login', login);
-app.use('/api/product', products);
-app.use('/api/video', videos);
-app.use('/api/comentary', comentaries);
-app.use('/api/uploadpdf', uploadPdfFile);
-app.use('/api/validatetoken', validateTokenRoute);
+app.use('/pdfs', pdfRoutes);
 // ***************************************************************
 
 app.listen(PORT, ()=> {
