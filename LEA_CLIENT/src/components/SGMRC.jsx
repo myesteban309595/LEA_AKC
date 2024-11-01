@@ -9,6 +9,7 @@ import FileUpload from '../components/UploadFile';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
+import PushPinIcon from '@mui/icons-material/PushPin';
 
 const SGMRC = () => {
   // Estado para la fecha y hora actual
@@ -16,6 +17,7 @@ const SGMRC = () => {
   const [data, setData] = useState([]);
   const [editingCell, setEditingCell] = useState({ rowIndex: null, column: null });
   const [tempValue, setTempValue] = useState('');
+  const [ColumValue, setColumValue] = useState();
   // Visualizador de Pdf
   const [isModalOpen, setModalOpen] = useState(false);
   const [pdfUrl, setPdfUrl] = useState('');
@@ -50,7 +52,7 @@ const SGMRC = () => {
 
   useEffect(() => {
     const initialData = Array.from({ length: 10 }, (_, index) => ({
-      fechaSolicitud: `2024-10-0${index + 1}`,
+      fechaSolicitud: `2024-11-0${index + 1}`,
       codigoInventario: `INV-${index + 1}`,
       col3: `Certipur® Buffer solution pH 6.00 (25°C). Certified Reference Material for pH measurement`,
       col4: `Fila ${index + 1} Col 4`,
@@ -141,11 +143,20 @@ const SGMRC = () => {
     setEditingCell({ rowIndex: null, column: null });
   };
 
+  const setColumnValue =(columIndex)=> {
+    setColumValue(columIndex)
+  }
+
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper}
+        style={{
+          height: '100vh', // Ocupa el 100% de la altura de la ventana
+          overflow: 'auto', // Permite el desplazamiento vertical y horizontal
+        }}
+      >
       <Table style={{ width: 'max-content' }}>
         <TableHead>
-          <TableRow>
+          <TableRow style={{ position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 1 }}>
             <TableCell colSpan={4} style={{ fontSize: '25px', fontWeight: 'bold' }}>
               <div>{fechaHoraActual}</div>
             </TableCell>
@@ -173,16 +184,157 @@ const SGMRC = () => {
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell style={{ background: "#bbfad1", width: '200px', textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'sticky', top: 0 }}>Fecha Solicitud</TableCell>
-            <TableCell style={{ background: "#bbfad1", width: '150px', textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Código de inventario</TableCell>
-            <TableCell style={{ background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Nombre</TableCell>
-            <TableCell style={{ background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Marca</TableCell>
-            <TableCell style={{ background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>No. Lote</TableCell>
-            <TableCell style={{ background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>TIPO</TableCell>
-            <TableCell style={{ background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>AREA</TableCell>
-            <TableCell style={{ background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Fecha de ingreso al laboratorio</TableCell>
-            <TableCell style={{ background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Fecha de vencimiento</TableCell>
-            <TableCell style={{ background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Fecha actualización de la información</TableCell>
+
+          <TableCell style={{ background: "#bbfad1", width: '200px', textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>
+              Fecha Solicitud
+              <IconButton
+                size="small"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  outline: "none"
+                }}
+                onClick={()=> {setColumnValue(0)}}
+              >
+                <PushPinIcon fontSize="small" sx={ColumValue == 0 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
+              </IconButton>
+            </TableCell>
+            <TableCell style={{ background: "#bbfad1", width: '150px', textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>
+              Código de inventario
+              <IconButton
+                size="small"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  outline: "none"
+                }}
+                onClick={()=> {setColumnValue(1)}}
+              >
+                <PushPinIcon fontSize="small" sx={ColumValue == 1 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
+              </IconButton>
+            </TableCell>
+            <TableCell style={{ background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>
+              Nombre
+              <IconButton
+                size="small"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  outline: "none"
+                }}
+                onClick={()=> {setColumnValue(2)}}
+              >
+               <PushPinIcon fontSize="small" sx={ColumValue == 2 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
+              </IconButton>
+            </TableCell>
+            <TableCell style={{ background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>
+              Marca
+              <IconButton
+                size="small"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  outline: "none"
+                }}
+                onClick={()=> {setColumnValue(3)}}
+              >
+               <PushPinIcon fontSize="small" sx={ColumValue == 3 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
+              </IconButton>
+            </TableCell>
+            <TableCell style={{ background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>
+              No. Lote
+              <IconButton
+                size="small"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  outline: "none"
+                }}
+                onClick={()=> {setColumnValue(4)}}
+              >
+               <PushPinIcon fontSize="small" sx={ColumValue == 4 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
+              </IconButton>
+            </TableCell>
+            <TableCell style={{ background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>
+              TIPO
+              <IconButton
+                size="small"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  outline: "none"
+                }}
+                onClick={()=> {setColumnValue(5)}}
+              >
+                <PushPinIcon fontSize="small" sx={ColumValue == 5 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
+              </IconButton>
+            </TableCell>
+            <TableCell style={{ background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>
+              AREA
+              <IconButton
+                size="small"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  outline: "none"
+                }}
+                onClick={()=> {setColumnValue(6)}}
+              >
+                 <PushPinIcon fontSize="small" sx={ColumValue == 6 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
+                </IconButton>
+            </TableCell>
+            <TableCell style={{ background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>
+              Fecha de ingreso al laboratorio
+              <IconButton
+                size="small"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  outline: "none"
+                }}
+                onClick={()=> {setColumnValue(7)}}
+              >
+                 <PushPinIcon fontSize="small" sx={ColumValue == 7 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
+                </IconButton>
+            </TableCell>
+            <TableCell style={{ background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>
+              Fecha de vencimiento
+              <IconButton
+                size="small"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  outline: "none"
+                }}
+                onClick={()=> {setColumnValue(8)}}
+              >
+                <PushPinIcon fontSize="small" sx={ColumValue == 8 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
+                </IconButton>
+            </TableCell>
+            <TableCell style={{ background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>
+              Fecha actualización de la información
+              <IconButton
+                size="small"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  outline: "none"
+                }}
+                onClick={()=> {setColumnValue(9)}}
+              >
+                  <PushPinIcon fontSize="small" sx={ColumValue == 9 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
+                </IconButton>
+            </TableCell>
             <TableCell style={{ background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Cantidad de ingreso</TableCell>
             <TableCell style={{ background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Consideración de la manipulación</TableCell>
             <TableCell style={{ background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Almacenamiento</TableCell>
@@ -199,7 +351,7 @@ const SGMRC = () => {
       {Object.keys(row).map((column, colIndex) => (
         <TableCell
           key={colIndex}
-          style={{ textAlign: 'center' }}
+          style={ colIndex == ColumValue ? {position: 'sticky', left: 0, zIndex: 1, background: 'white', textAlign: 'center'} : {textAlign: 'center'} }
           onDoubleClick={() => handleDoubleClick(rowIndex, column)}
         >
           {editingCell.rowIndex === rowIndex && editingCell.column === column ? (
