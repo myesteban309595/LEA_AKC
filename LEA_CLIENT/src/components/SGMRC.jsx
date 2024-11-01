@@ -144,7 +144,15 @@ const SGMRC = () => {
   };
 
   const setColumnValue =(columIndex)=> {
-    setColumValue(columIndex)
+
+    console.log("columindex:", columIndex);
+    console.log("ColumValue:", ColumValue);
+    
+    if (columIndex === ColumValue) {
+      setColumValue(100);
+    } else {
+      setColumValue(columIndex);
+    }
   }
 
   return (
@@ -193,7 +201,8 @@ const SGMRC = () => {
                   position: 'absolute',
                   top: 0,
                   right: 0,
-                  outline: "none"
+                  outline: "none",
+                 
                 }}
                 onClick={()=> {setColumnValue(0)}}
               >
@@ -351,7 +360,7 @@ const SGMRC = () => {
       {Object.keys(row).map((column, colIndex) => (
         <TableCell
           key={colIndex}
-          style={ colIndex == ColumValue ? {position: 'sticky', left: 0, zIndex: 1, background: 'white', textAlign: 'center'} : {textAlign: 'center'} }
+          style={ colIndex == ColumValue ? {position: 'sticky', left: 0, zIndex: 1, backgroundColor: 'rgba(255, 255, 255, 0.7)', textAlign: 'center'} : {textAlign: 'center'} }
           onDoubleClick={() => handleDoubleClick(rowIndex, column)}
         >
           {editingCell.rowIndex === rowIndex && editingCell.column === column ? (
