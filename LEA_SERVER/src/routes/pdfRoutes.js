@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { uploadPdf, getPdfByIndex } from '../controllers/pdfController.js';
+import { uploadPdf, getPdfByIndex ,deletePdfByIndex} from '../controllers/pdfController.js';
 
 
 const storage = multer.memoryStorage();
@@ -13,5 +13,8 @@ router.post('/upload', upload.single('pdf'), uploadPdf);
 
 // Ruta para obtener PDF por rowIndex
 router.get('/:rowIndex', getPdfByIndex);
+
+// Ruta para eliminar PDF por rowIndex
+router.delete('/:rowIndex', deletePdfByIndex);
 
 export default router;

@@ -10,6 +10,7 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 import PushPinIcon from '@mui/icons-material/PushPin';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const SGMRC = () => {
   // Estado para la fecha y hora actual
@@ -119,6 +120,45 @@ const SGMRC = () => {
         console.error('Error al obtener el PDF:', error);
     }
 };
+
+const DeletePdf = async (rowIndex) => {
+  console.log(`Intentando eliminar el PDF con ID: ${rowIndex}`);
+
+  try {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    // Verifica si el usuario confirmó la acción
+    if (result.isConfirmed) {
+      const response = await axios.delete(`http://localhost:4041/api/pdfs/${rowIndex}`);
+
+      // Notificación de éxito
+      Swal.fire({
+        icon: 'success',
+        title: 'PDF eliminado',
+        text: response.data.message,
+      });
+
+      // Aquí puedes realizar cualquier acción adicional, como actualizar el estado de la lista de PDFs
+    }
+   } catch (error) {
+     console.error('Error al eliminar el PDF:', error);
+    // Notificación de error
+    Swal.fire({
+      icon: 'error',
+      title: 'Error al eliminar el PDF',
+      text: error.response?.data?.message || 'Ocurrió un error inesperado.',
+    });
+  }
+};
+
 
   const handleCloseModal = () => {
     setModalOpen(false);
@@ -399,7 +439,15 @@ const SGMRC = () => {
               onClick={() => DownloadPdf(rowIndex)}
             >
               <DownloadForOfflineIcon />
-           </IconButton>       
+            </IconButton>       
+            <IconButton
+              style={{outline:"none"}}
+              variant="contained"
+              color="primary"
+              onClick={() => DeletePdf(rowIndex)}
+            >
+              <DeleteForeverIcon />
+            </IconButton>       
             </div>
             ) : (
             row[column]

@@ -56,3 +56,22 @@ export const uploadPdf = async (req, res) => {
             res.status(500).json({ message: 'Error al obtener el PDF', error });
         }
 };
+
+// Eliminar PDF
+export const deletePdfByIndex = async (req, res) => {
+    const { rowIndex } = req.params;
+
+    try {
+        const deletedPdf = await Pdf.findOneAndDelete({ rowIndex: Number(rowIndex) });
+
+        if (!deletedPdf) {
+            return res.status(404).json({ message: 'PDF no encontrado' });
+        }
+
+        res.status(200).json({ message: 'PDF eliminado exitosamente', filename: deletedPdf.filename });
+    } catch (error) {
+        console.error("Error al eliminar el PDF:", error);
+        res.status(500).json({ message: 'Error al eliminar el PDF', error });
+    }
+};
+
