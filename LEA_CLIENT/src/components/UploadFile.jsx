@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import { Box, Button, TextField, Typography } from '@mui/material';
 
-const FileUpload = () => {
+
+const FileUpload = ({ uploadRowIndex }) => {
   const [file, setFile] = useState(null);
   const [fileExtension, setFileExtension] = useState('');
   const [message, setMessage] = useState('');
   const [previewUrl, setPreviewUrl] = useState('');
   const [fileName, setFileName] = useState('Arrastra y suelta tu archivo aquí');
+
+  const { rowIndex } = useParams(); // Obtener el rowIndex de los parámetros de la URL
+
+  console.log("uploadRowIndex useParams()", rowIndex);
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -43,27 +49,33 @@ const FileUpload = () => {
     event.preventDefault();
 
     if (!file) {
-      setMessage('Por favor, selecciona un archivo primero.');
-      return;
+        setMessage('Por favor, selecciona un archivo primero.');
+        return;
     }
 
+    console.log("rowIndex en uploadFile", rowIndex);
+    
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('pdf', file);
+    formData.append('rowIndex', Number(rowIndex));
+
+    console.log("formdata:", formData);
+    
 
     try {
-      const response = await axios.post('http://localhost:5000/api/files/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      setMessage(`Archivo subido exitosamente: ${response.data.filename} (Extensión: ${fileExtension})`);
-      setPreviewUrl('');
-      setFile(null);
-      setFileName('Arrastra y suelta tu archivo aquí'); // Resetear el texto del input
+        const response = await axios.post('http://localhost:4041/api/pdfs/upload', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        setMessage(`Archivo subido exitosamente: ${response.data.filename} (Extensión: ${fileExtension})`);
+        setPreviewUrl('');
+        setFile(null);
+        setFileName('Arrastra y suelta tu archivo aquí'); // Resetear el texto del input
     } catch (error) {
-      setMessage('Error al subir el archivo: ' + error.message);
+        setMessage('Error al subir el archivo: ' + error.message);
     }
-  };
+};
 
   useEffect(() => {
     return () => {

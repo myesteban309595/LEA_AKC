@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Button, IconButton } from '@mui/material';
 
 import ModalComponent from '../utils/modals/ViewPdf';
+import FileUpload from '../components/UploadFile';
 
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -17,6 +18,13 @@ const SGMRC = () => {
   // Visualizador de Pdf
   const [isModalOpen, setModalOpen] = useState(false);
   const [pdfUrl, setPdfUrl] = useState('');
+
+  const [uploadRowIndex, setUploadRowIndex] = useState(null); // Estado para el rowIndex a subir
+
+  const handleUploadIndex = (rowIndex) => {
+    setUploadRowIndex(rowIndex); // Establecer el rowIndex seleccionado
+    window.location = `/upload/${rowIndex}`; // Incluye el rowIndex en la URL
+  };
 
   useEffect(() => {
     const mostrarFechaYHora = () => {
@@ -63,20 +71,44 @@ const SGMRC = () => {
     setData(initialData);
   }, []);
 
-  const fetchPdf = async () => {
+  const DownloadPdf = async (rowIndex) => {
     try {
-        // const response = await axios.get(`http://localhost:3000/pdf/${pdfId}`, {
-        //     responseType: 'blob', // Importante para manejar el PDF
-        // });
-
-        // const url = window.URL.createObjectURL(new Blob([response.data]));
-        // setPdfUrl(url);
-        setModalOpen(true);
+      const response = await axios.get(`http://localhost:4041/api/pdfs/${rowIndex}`, {
+        responseType: 'blob', // Asegúrate de recibir el blob
+      });
+  
+      // Crea un blob y una URL para el archivo
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      
+      // Crea un enlace de descarga
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `archivo-${rowIndex}.pdf`); // Nombre del archivo
+  
+      // Agrega el enlace al documento y simula un clic
+      document.body.appendChild(link);
+      link.click();
+  
+      // Elimina el enlace del documento
+      link.parentNode.removeChild(link);
     } catch (error) {
-        console.error('Error al obtener el PDF:', error);
+      console.error('Error al obtener el PDF:', error);
     }
   };
 
+  const fetchPdf = async (rowIndex) => {
+    try {
+        const response = await axios.get(`http://localhost:4041/api/pdfs/${rowIndex}`, {
+            responseType: 'blob', // Importante para recibir un blob
+        });
+
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        setPdfUrl(url); // Establecer la URL del PDF para el modal
+        setModalOpen(true); // Abrir el modal
+    } catch (error) {
+        console.error('Error al obtener el PDF:', error);
+    }
+};
 
   const handleCloseModal = () => {
     setModalOpen(false);
@@ -90,6 +122,7 @@ const SGMRC = () => {
   const handleChange = (event) => {
     setTempValue(event.target.value);
   };
+
 
   const handleBlur = () => {
     const newData = [...data];
@@ -178,7 +211,7 @@ const SGMRC = () => {
               style={{outline:"none"}}
               variant="contained"
               color="primary"
-              onClick={fetchPdf}
+              onClick={()=> fetchPdf(rowIndex)}
              >
               <RemoveRedEyeIcon />
             </IconButton>
@@ -186,7 +219,7 @@ const SGMRC = () => {
               style={{outline:"none"}}
               variant="contained"
               color="primary"
-              onClick={() => handleDownload(rowIndex)}
+              onClick={() => handleUploadIndex(rowIndex)}
              >
               <CloudUploadIcon />
             </IconButton>
@@ -194,7 +227,7 @@ const SGMRC = () => {
               style={{outline:"none"}}
               variant="contained"
               color="primary"
-              onClick={() => handleDownload(rowIndex)}
+              onClick={() => DownloadPdf(rowIndex)}
             >
               <DownloadForOfflineIcon />
            </IconButton>       
@@ -209,9 +242,13 @@ const SGMRC = () => {
   </TableBody>
  </Table>
  
- {/* Componente Modal visualizar Pdf */}
- <ModalComponent isOpen={isModalOpen} onClose={handleCloseModal} pdfUrl={pdfUrl} />
+   {/* Componente Modal visualizar Pdf */}
+   <ModalComponent isOpen={isModalOpen} onClose={handleCloseModal} pdfUrl={pdfUrl} />
 
+   {/* Condicional para mostrar el componente FileUpload */}
+      {uploadRowIndex !== null && (
+        <FileUpload rowIndex={uploadRowIndex} />
+      )}
 </TableContainer>
 
 );

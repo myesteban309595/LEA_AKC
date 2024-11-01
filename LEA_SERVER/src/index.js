@@ -20,14 +20,14 @@ app.use(express.json()); //* middleware- analiza solicitudes entrantes con carga
 
 
 const corsOptions = {
-    origin: ['http://127.0.0.1:5173', 'https://celebrated-platypus-293fba.netlify.app', 'https://peluditostrendyambientepruebas.netlify.app'],
+    origin: ['http://127.0.0.1:5173'],
     optionsSuccessStatus: 200 
 };
 
 app.use(cors(corsOptions));
 
 //*Rutas
-app.use('/pdfs', pdfRoutes);
+app.use('/api/pdfs', pdfRoutes);
 // ***************************************************************
 
 app.listen(PORT, ()=> {
