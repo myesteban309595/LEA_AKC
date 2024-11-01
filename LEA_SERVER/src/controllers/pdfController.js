@@ -46,13 +46,11 @@ export const uploadPdf = async (req, res) => {
     
             res.set('Content-Type', pdf.contentType);
             res.set('Content-Disposition', `attachment; filename="${pdf.filename}"`);
-            res.send(pdf.data); // Asegúrate de que pdf.data contenga el buffer del PDF
-
-            // res.set({
-            //     'Content-Type': 'application/pdf',
-            //     'Content-Disposition': `attachment; filename=archivo-${rowIndex}.pdf`,
-            //     'Content-Length': pdfDocument.pdfData.length,
-            //   });
+            // res.send(pdf.data); // Asegúrate de que pdf.data contenga el buffer del PDF
+            res.json({
+                filename: pdf.filename,
+                data: pdf.data // Asegúrate de que pdf.data contenga el buffer del PDF
+            });
 
         } catch (error) {
             res.status(500).json({ message: 'Error al obtener el PDF', error });
