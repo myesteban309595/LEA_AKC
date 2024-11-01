@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Button, IconButton } from '@mui/material';
+import Swal from 'sweetalert2'
 
 import ModalComponent from '../utils/modals/ViewPdf';
 import FileUpload from '../components/UploadFile';
@@ -72,6 +73,9 @@ const SGMRC = () => {
   }, []);
 
   const DownloadPdf = async (rowIndex) => {
+
+    console.log("dentro de download");
+    
     try {
       const response = await axios.get(`http://localhost:4041/api/pdfs/${rowIndex}`, {
         responseType: 'blob', // Asegúrate de recibir el blob
@@ -93,6 +97,12 @@ const SGMRC = () => {
       link.parentNode.removeChild(link);
     } catch (error) {
       console.error('Error al obtener el PDF:', error);
+      Swal.fire({
+        icon: "error",
+        title: "Error al descargar el archivo",
+        text: "No hay archivo asociado a este material de referencia!",
+        footer: `<a href="/upload/${rowIndex}">Subir archivo</a>`, // Usa comillas invertidas (backticks)
+      });
     }
   };
 
