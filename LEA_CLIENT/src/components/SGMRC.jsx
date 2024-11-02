@@ -201,12 +201,12 @@ const DeletePdf = async (rowIndex) => {
       <Table style={{ width: 'max-content' }}>
         <TableHead>
           <TableRow style={{ position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 1 }}>
-            <TableCell colSpan={4} style={{ fontSize: '25px', fontWeight: 'bold' }}>
+            <TableCell colSpan={18} style={{ fontSize: '25px', fontWeight: 'bold' }}>
               <div>{fechaHoraActual}</div>
             </TableCell>
           </TableRow>
           <TableRow style={{background: "#82ccdd" }}>
-            <TableCell colSpan={18} style={{ fontSize: '18px', textAlign: 'center', fontWeight: 'bold', border: '3px solid rgba(224, 224, 224, 1)' }}>
+            <TableCell colSpan={18} style={{ fontSize: '18px', textAlign: 'center', fontWeight: 'bold', border: '1px solid rgba(224, 224, 224, 1)' }}>
               Seguimiento General Material de referencia
             </TableCell>
           </TableRow>
