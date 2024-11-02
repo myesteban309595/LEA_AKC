@@ -205,19 +205,19 @@ const DeletePdf = async (rowIndex) => {
               <div>{fechaHoraActual}</div>
             </TableCell>
           </TableRow>
-          <TableRow style={{ background: "#82ccdd" }}>
+          <TableRow style={{background: "#82ccdd" }}>
             <TableCell colSpan={18} style={{ fontSize: '18px', textAlign: 'center', fontWeight: 'bold', border: '3px solid rgba(224, 224, 224, 1)' }}>
               Seguimiento General Material de referencia
             </TableCell>
           </TableRow>
-          <TableRow>
+          <TableRow style={{position: 'sticky', top: 0, zIndex: 1, }}>
             <TableCell colSpan={2} style={{ background: "#78e08f", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
               Seguimiento inventario
             </TableCell>
             <TableCell colSpan={4} style={{ background: "#eabbfa", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
               Identificacion del MR O MRC
             </TableCell>
-            <TableCell colSpan={5} style={{ background: "#fbfc92", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
+            <TableCell colSpan={5} style={{ background: "#fbfc92",textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
               Seguimiento a su uso
             </TableCell>
             <TableCell colSpan={5} style={{ background: "#b8b3fc", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
@@ -232,9 +232,9 @@ const DeletePdf = async (rowIndex) => {
           <TableCell 
             style={
               ColumValue == 0 ? 
-              {position: 'sticky', left: 0, zIndex: 1, textAlign: 'center', background: "#bbfad1", width: '200px',} 
+              {position: 'sticky', left: 0, top:55, zIndex: 2, textAlign: 'center', background: "#bbfad1", width: '200px',} 
               : 
-              { background: "#bbfad1", width: '200px', textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>
+              { position: 'sticky',top:55, background: "#bbfad1", width: '200px', textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
               Fecha Solicitud
               <IconButton
                 size="small"
@@ -253,9 +253,9 @@ const DeletePdf = async (rowIndex) => {
             <TableCell 
               style={
               ColumValue == 1 ? 
-              {position: 'sticky', left: 0, zIndex: 1, textAlign: 'center', background: "#bbfad1", width: '200px',} 
+              {position: 'sticky', left: 0,top:55, zIndex: 2, textAlign: 'center', background: "#bbfad1", width: '200px',} 
               : 
-              { background: "#bbfad1", width: '200px', textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>    
+              {position: 'sticky',top:55, background: "#bbfad1", width: '200px', textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', }}>    
               Código de inventario
               <IconButton
                 size="small"
@@ -273,9 +273,9 @@ const DeletePdf = async (rowIndex) => {
             <TableCell 
               style={
                 ColumValue == 2 ? 
-                {position: 'sticky', left: 0, zIndex: 1, textAlign: 'center', background: "#f5d9ff"} 
+                {position: 'sticky', left: 0,top:55, zIndex: 2, textAlign: 'center', background: "#f5d9ff"} 
                 : 
-                { background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>            
+                {position: 'sticky',top:55, background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', }}>            
               Nombre
               <IconButton
                 size="small"
@@ -293,9 +293,9 @@ const DeletePdf = async (rowIndex) => {
             <TableCell 
               style={
                 ColumValue == 3 ? 
-                {position: 'sticky', left: 0, zIndex: 1, textAlign: 'center', background: "#f5d9ff"} 
+                {position: 'sticky', left: 0,top:55, zIndex: 2, textAlign: 'center', background: "#f5d9ff"} 
                 : 
-                { background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>    
+                {position: 'sticky',top:55, background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', }}>    
               Marca
               <IconButton
                 size="small"
@@ -313,9 +313,9 @@ const DeletePdf = async (rowIndex) => {
             <TableCell 
               style={
                 ColumValue == 4 ? 
-                {position: 'sticky', left: 0, zIndex: 1, textAlign: 'center', background: "#f5d9ff"} 
+                {position: 'sticky', left: 0,top:55, zIndex: 2, textAlign: 'center', background: "#f5d9ff"} 
                 : 
-                { background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>                 
+                {position: 'sticky',top:55, background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', }}>                 
               No. Lote
               <IconButton
                 size="small"
@@ -333,9 +333,9 @@ const DeletePdf = async (rowIndex) => {
             <TableCell 
                style={
                 ColumValue == 5 ? 
-                {position: 'sticky', left: 0, zIndex: 1, textAlign: 'center', background: "#f5d9ff",} 
+                {position: 'sticky', left: 0,top:55, zIndex: 2, textAlign: 'center', background: "#f5d9ff",} 
                 : 
-                {  background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative'}}>                 
+                { position: 'sticky',top:55, background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)',}}>                 
               TIPO
               <IconButton
                 size="small"
@@ -353,9 +353,9 @@ const DeletePdf = async (rowIndex) => {
             <TableCell 
               style={
                 ColumValue == 6 ? 
-                {position: 'sticky', left: 0, zIndex: 1, textAlign: 'center',  background: "#feffcf",} 
+                {position: 'sticky', left: 0,top:55, zIndex: 2, textAlign: 'center',  background: "#feffcf",} 
                 : 
-                {background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative'}}>                 
+                {position: 'sticky',top:55, background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', }}>                 
               AREA
               <IconButton
                 size="small"
@@ -373,9 +373,9 @@ const DeletePdf = async (rowIndex) => {
             <TableCell 
               style={
                 ColumValue == 7 ? 
-                {position: 'sticky', left: 0, zIndex: 1, textAlign: 'center',   background: "#feffcf",} 
+                {position: 'sticky', left: 0,top:55, zIndex: 2, textAlign: 'center',   background: "#feffcf",} 
                 : 
-                {background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative'}}>                 
+                {position: 'sticky',top:55, background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)',}}>                 
               Fecha de ingreso al laboratorio
               <IconButton
                 size="small"
@@ -393,9 +393,9 @@ const DeletePdf = async (rowIndex) => {
             <TableCell 
               style={
                 ColumValue == 8 ? 
-                {position: 'sticky', left: 0, zIndex: 1, textAlign: 'center', background: "#feffcf"} 
+                {position: 'sticky', left: 0,top:55, zIndex: 2, textAlign: 'center', background: "#feffcf"} 
                 : 
-                {background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative'}}>                    
+                {position: 'sticky',top:55, background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)',}}>                    
               Fecha de vencimiento
               <IconButton
                 size="small"
@@ -413,9 +413,9 @@ const DeletePdf = async (rowIndex) => {
             <TableCell 
               style={
                 ColumValue == 9 ? 
-                {position: 'sticky', left: 0, zIndex: 1, textAlign: 'center', background: "#feffcf"} 
+                {position: 'sticky', left: 0,top:55, zIndex: 2, textAlign: 'center', background: "#feffcf"} 
                 : 
-                {background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative'}}>                    
+                {position: 'sticky',top:55, background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)',}}>                    
               Fecha actualización de la información
               <IconButton
                 size="small"
@@ -430,14 +430,14 @@ const DeletePdf = async (rowIndex) => {
                   <PushPinIcon fontSize="small" sx={ColumValue == 9 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
                 </IconButton>
             </TableCell>
-            <TableCell style={{ background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Cantidad de ingreso</TableCell>
-            <TableCell style={{ background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Consideración de la manipulación</TableCell>
-            <TableCell style={{ background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Almacenamiento</TableCell>
-            <TableCell style={{ background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Certificado de análisis</TableCell>
-            <TableCell style={{ background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Responsable de la manipulación</TableCell>
-            <TableCell style={{ background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Observaciones</TableCell>
-            <TableCell style={{ background: "#d9ffd9", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Vencimiento</TableCell>
-            <TableCell style={{ background: "#d9ffd9", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Fecha actual</TableCell>
+            <TableCell style={{position: 'sticky',top:55, background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Cantidad de ingreso</TableCell>
+            <TableCell style={{position: 'sticky',top:55, background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Consideración de la manipulación</TableCell>
+            <TableCell style={{position: 'sticky',top:55, background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Almacenamiento</TableCell>
+            <TableCell style={{position: 'sticky',top:55, background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Certificado de análisis</TableCell>
+            <TableCell style={{position: 'sticky',top:55, background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Responsable de la manipulación</TableCell>
+            <TableCell style={{position: 'sticky',top:55, background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Observaciones</TableCell>
+            <TableCell style={{position: 'sticky',top:55, background: "#d9ffd9", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Vencimiento</TableCell>
+            <TableCell style={{position: 'sticky',top:55, background: "#d9ffd9", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Fecha actual</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -446,7 +446,7 @@ const DeletePdf = async (rowIndex) => {
       {Object.keys(row).map((column, colIndex) => (
         <TableCell
           key={colIndex}
-          style={ colIndex == ColumValue ? {position: 'sticky', left: 0, zIndex: 1, backgroundColor: 'rgba(255, 255, 255, 0.9)', textAlign: 'center'} : {textAlign: 'center'} }
+          style={ colIndex == ColumValue ? {position: 'sticky', left: 0, zIndex: 0, backgroundColor: 'rgba(255, 255, 255, 0.9)', textAlign: 'center'} : {textAlign: 'center'} }
           onDoubleClick={() => handleDoubleClick(rowIndex, column)}
         >
           {editingCell.rowIndex === rowIndex && editingCell.column === column ? (
