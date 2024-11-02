@@ -449,7 +449,10 @@ const DeletePdf = async (rowIndex) => {
           style={ colIndex == ColumValue ? {position: 'sticky', left: 0, zIndex: 0, backgroundColor: 'rgba(255, 255, 255, 0.9)', textAlign: 'center'} : {textAlign: 'center'} }
           onDoubleClick={() => handleDoubleClick(rowIndex, column)}
         >
-          {editingCell.rowIndex === rowIndex && editingCell.column === column ? (
+          {editingCell.rowIndex === rowIndex && editingCell.column === column 
+          &&  
+          colIndex != 13
+          ? (
             <TextField
               sx={{
                 width: "100%",
@@ -465,7 +468,7 @@ const DeletePdf = async (rowIndex) => {
           ) : colIndex === 13 ? ( // Cambia aquí para la columna 8 (índice 7)
             <div style={{ display: 'flex', justifyContent: 'space-between', marginLeft:10, marginRight:10 }}>
              <IconButton
-              style={{outline:"none"}}
+              style={{outline:"none", zIndex:0}}
               variant="contained"
               color="primary"
               onClick={()=> fetchPdf(rowIndex)}
