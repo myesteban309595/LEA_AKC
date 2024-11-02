@@ -468,7 +468,7 @@ const DeletePdf = async (rowIndex) => {
           ) : colIndex === 13 ? ( // Cambia aquí para la columna 8 (índice 7)
             <div style={{ display: 'flex', justifyContent: 'space-between', marginLeft:10, marginRight:10 }}>
              <IconButton
-              style={{outline:"none", zIndex:0}}
+              style={{outline:"none", color:"#f5d131"}}
               variant="contained"
               color="primary"
               onClick={()=> fetchPdf(rowIndex)}
@@ -476,7 +476,7 @@ const DeletePdf = async (rowIndex) => {
               <RemoveRedEyeIcon />
             </IconButton>
              <IconButton
-              style={{outline:"none"}}
+              style={{outline:"none", color:"#3172f5"}}
               variant="contained"
               color="primary"
               onClick={() => handleUploadIndex(rowIndex)}
@@ -484,7 +484,7 @@ const DeletePdf = async (rowIndex) => {
               <CloudUploadIcon />
             </IconButton>
             <IconButton
-              style={{outline:"none"}}
+              style={{outline:"none", color:"#0f9638"}}
               variant="contained"
               color="primary"
               onClick={() => DownloadPdf(rowIndex)}
@@ -492,7 +492,7 @@ const DeletePdf = async (rowIndex) => {
               <DownloadForOfflineIcon />
             </IconButton>       
             <IconButton
-              style={{outline:"none"}}
+              style={{outline:"none", color: "#ed1111"}}
               variant="contained"
               color="primary"
               onClick={() => DeletePdf(rowIndex)}
