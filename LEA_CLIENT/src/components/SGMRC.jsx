@@ -10,7 +10,7 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 import PushPinIcon from '@mui/icons-material/PushPin';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const SGMRC = () => {
   // Estado para la fecha y hora actual
@@ -75,6 +75,20 @@ const SGMRC = () => {
     setData(initialData);
   }, []);
 
+  const fetchPdf = async (rowIndex) => {
+    try {
+        const response = await axios.get(`http://localhost:4041/api/pdfs/${rowIndex}`, {
+            responseType: 'blob', // Importante para recibir un blob
+        });
+
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        setPdfUrl(url); // Establecer la URL del PDF para el modal
+        setModalOpen(true); // Abrir el modal
+    } catch (error) {
+        console.error('Error al obtener el PDF:', error);
+    }
+};
+
   const DownloadPdf = async (rowIndex) => {    
     try {
         const response = await axios.get(`http://localhost:4041/api/pdfs/${rowIndex}`);
@@ -107,23 +121,7 @@ const SGMRC = () => {
      }
 };
 
-  const fetchPdf = async (rowIndex) => {
-    try {
-        const response = await axios.get(`http://localhost:4041/api/pdfs/${rowIndex}`, {
-            responseType: 'blob', // Importante para recibir un blob
-        });
-
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        setPdfUrl(url); // Establecer la URL del PDF para el modal
-        setModalOpen(true); // Abrir el modal
-    } catch (error) {
-        console.error('Error al obtener el PDF:', error);
-    }
-};
-
 const DeletePdf = async (rowIndex) => {
-  console.log(`Intentando eliminar el PDF con ID: ${rowIndex}`);
-
   try {
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -231,7 +229,12 @@ const DeletePdf = async (rowIndex) => {
           </TableRow>
           <TableRow>
 
-          <TableCell style={{ background: "#bbfad1", width: '200px', textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>
+          <TableCell 
+            style={
+              ColumValue == 0 ? 
+              {position: 'sticky', left: 0, zIndex: 1, textAlign: 'center', background: "#bbfad1", width: '200px',} 
+              : 
+              { background: "#bbfad1", width: '200px', textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>
               Fecha Solicitud
               <IconButton
                 size="small"
@@ -247,7 +250,12 @@ const DeletePdf = async (rowIndex) => {
                 <PushPinIcon fontSize="small" sx={ColumValue == 0 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
               </IconButton>
             </TableCell>
-            <TableCell style={{ background: "#bbfad1", width: '150px', textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>
+            <TableCell 
+              style={
+              ColumValue == 1 ? 
+              {position: 'sticky', left: 0, zIndex: 1, textAlign: 'center', background: "#bbfad1", width: '200px',} 
+              : 
+              { background: "#bbfad1", width: '200px', textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>    
               Código de inventario
               <IconButton
                 size="small"
@@ -262,7 +270,12 @@ const DeletePdf = async (rowIndex) => {
                 <PushPinIcon fontSize="small" sx={ColumValue == 1 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
               </IconButton>
             </TableCell>
-            <TableCell style={{ background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>
+            <TableCell 
+              style={
+                ColumValue == 2 ? 
+                {position: 'sticky', left: 0, zIndex: 1, textAlign: 'center', background: "#f5d9ff"} 
+                : 
+                { background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>            
               Nombre
               <IconButton
                 size="small"
@@ -277,7 +290,12 @@ const DeletePdf = async (rowIndex) => {
                <PushPinIcon fontSize="small" sx={ColumValue == 2 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
               </IconButton>
             </TableCell>
-            <TableCell style={{ background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>
+            <TableCell 
+              style={
+                ColumValue == 3 ? 
+                {position: 'sticky', left: 0, zIndex: 1, textAlign: 'center', background: "#f5d9ff"} 
+                : 
+                { background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>    
               Marca
               <IconButton
                 size="small"
@@ -292,7 +310,12 @@ const DeletePdf = async (rowIndex) => {
                <PushPinIcon fontSize="small" sx={ColumValue == 3 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
               </IconButton>
             </TableCell>
-            <TableCell style={{ background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>
+            <TableCell 
+              style={
+                ColumValue == 4 ? 
+                {position: 'sticky', left: 0, zIndex: 1, textAlign: 'center', background: "#f5d9ff"} 
+                : 
+                { background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>                 
               No. Lote
               <IconButton
                 size="small"
@@ -307,7 +330,12 @@ const DeletePdf = async (rowIndex) => {
                <PushPinIcon fontSize="small" sx={ColumValue == 4 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
               </IconButton>
             </TableCell>
-            <TableCell style={{ background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>
+            <TableCell 
+               style={
+                ColumValue == 5 ? 
+                {position: 'sticky', left: 0, zIndex: 1, textAlign: 'center', background: "#f5d9ff",} 
+                : 
+                {  background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative'}}>                 
               TIPO
               <IconButton
                 size="small"
@@ -322,7 +350,12 @@ const DeletePdf = async (rowIndex) => {
                 <PushPinIcon fontSize="small" sx={ColumValue == 5 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
               </IconButton>
             </TableCell>
-            <TableCell style={{ background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>
+            <TableCell 
+              style={
+                ColumValue == 6 ? 
+                {position: 'sticky', left: 0, zIndex: 1, textAlign: 'center',  background: "#feffcf",} 
+                : 
+                {background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative'}}>                 
               AREA
               <IconButton
                 size="small"
@@ -337,7 +370,12 @@ const DeletePdf = async (rowIndex) => {
                  <PushPinIcon fontSize="small" sx={ColumValue == 6 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
                 </IconButton>
             </TableCell>
-            <TableCell style={{ background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>
+            <TableCell 
+              style={
+                ColumValue == 7 ? 
+                {position: 'sticky', left: 0, zIndex: 1, textAlign: 'center',   background: "#feffcf",} 
+                : 
+                {background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative'}}>                 
               Fecha de ingreso al laboratorio
               <IconButton
                 size="small"
@@ -352,7 +390,12 @@ const DeletePdf = async (rowIndex) => {
                  <PushPinIcon fontSize="small" sx={ColumValue == 7 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
                 </IconButton>
             </TableCell>
-            <TableCell style={{ background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>
+            <TableCell 
+              style={
+                ColumValue == 8 ? 
+                {position: 'sticky', left: 0, zIndex: 1, textAlign: 'center', background: "#feffcf"} 
+                : 
+                {background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative'}}>                    
               Fecha de vencimiento
               <IconButton
                 size="small"
@@ -367,7 +410,12 @@ const DeletePdf = async (rowIndex) => {
                 <PushPinIcon fontSize="small" sx={ColumValue == 8 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
                 </IconButton>
             </TableCell>
-            <TableCell style={{ background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative' }}>
+            <TableCell 
+              style={
+                ColumValue == 9 ? 
+                {position: 'sticky', left: 0, zIndex: 1, textAlign: 'center', background: "#feffcf"} 
+                : 
+                {background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', position: 'relative'}}>                    
               Fecha actualización de la información
               <IconButton
                 size="small"
@@ -398,7 +446,7 @@ const DeletePdf = async (rowIndex) => {
       {Object.keys(row).map((column, colIndex) => (
         <TableCell
           key={colIndex}
-          style={ colIndex == ColumValue ? {position: 'sticky', left: 0, zIndex: 1, backgroundColor: 'rgba(255, 255, 255, 0.7)', textAlign: 'center'} : {textAlign: 'center'} }
+          style={ colIndex == ColumValue ? {position: 'sticky', left: 0, zIndex: 1, backgroundColor: 'rgba(255, 255, 255, 0.9)', textAlign: 'center'} : {textAlign: 'center'} }
           onDoubleClick={() => handleDoubleClick(rowIndex, column)}
         >
           {editingCell.rowIndex === rowIndex && editingCell.column === column ? (
@@ -446,7 +494,7 @@ const DeletePdf = async (rowIndex) => {
               color="primary"
               onClick={() => DeletePdf(rowIndex)}
             >
-              <DeleteForeverIcon />
+              <DeleteIcon />
             </IconButton>       
             </div>
             ) : (
