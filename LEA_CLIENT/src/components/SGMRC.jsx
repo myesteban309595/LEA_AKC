@@ -158,7 +158,6 @@ const DeletePdf = async (rowIndex) => {
   }
 };
 
-
   const handleCloseModal = () => {
     setModalOpen(false);
   };
@@ -175,26 +174,26 @@ const DeletePdf = async (rowIndex) => {
   const agregarDataFila = ()=> {
 
     const newFile = {
-      fechaSolicitud: new Date('2024-11-05T00:00:00Z'), // Puedes dejar la fecha que prefieras o usar el valor por defecto
-      codigoInventario: '',  // Cadena vacía, si se requiere un código, puedes proporcionarlo
-      nombre: '',  // Cadena vacía
-      marca: true,  // Valor predeterminado (puedes cambiarlo dependiendo de si lo necesitas)
-      lote: new Date(), // Fecha actual si no se proporciona
-      tipo: '',  // Cadena vacía, si se requiere un tipo, puedes proporcionarlo
-      area: '',  // Cadena vacía
-      fechaIngreso: new Date('2024-01-01T00:00:00Z'), // Fecha predeterminada si se necesita
-      fechaVencimiento: new Date('2025-01-01T00:00:00Z'), // Fecha predeterminada
-      fechaActualizacionInformacion: new Date('2024-11-01T00:00:00Z'), // Fecha predeterminada
-      cantidadIngreso: 0,  // Número, en este caso 0 como valor por defecto
-      manipulacion: '', // Cadena vacía
-      almacenamiento: '', // Cadena vacía
-      certificadoAnalisis: true, // Si lo necesitas como valor predeterminado
-      responsable: '', // Cadena vacía
-      observaciones: '', // Cadena vacía
-      vencimiento: '', // Cadena vacía
-      mesesRestantes: 0 // Número, 0 como valor predeterminado
-    };
-
+      fechaSolicitud: '',
+      codigoInventario: '',
+      nombre: '',
+      marca: '',
+      lote: '',
+      tipo: '',
+      area: '',
+      fechaIngreso: '',
+      fechaVencimiento: '',
+      fechaActualizacionInformacion: '',
+      cantidadIngreso: null,
+      manipulacion: '',
+      almacenamiento: '',
+      certificadoAnalisis: null,
+      responsable: '',
+      observaciones: '',
+      vencimiento: '',
+      mesesRestantes: null
+    }
+    
     axios.post('http://localhost:4041/api/table/data', newFile)
     .then(response => {
       // Una vez agregada la fila en la base de datos, agregarla al estado local para que se muestre
@@ -207,7 +206,6 @@ const DeletePdf = async (rowIndex) => {
   
 
   }
-
 
   const handleBlur = () => {
     const newData = [...data];
@@ -227,6 +225,48 @@ const DeletePdf = async (rowIndex) => {
       setColumValue(columIndex);
     }
   }
+
+  const filterData = (row) => {
+    // Campos a excluir de la data
+    const excludedFields = ['_id', 'createdAt', 'updatedAt', '__v'];
+  
+    // Filtrar las propiedades que no quieres mostrar
+    return Object.keys(row)
+      .filter((key) => !excludedFields.includes(key)) // Excluye los campos no deseados
+      .reduce((obj, key) => {
+        obj[key] = row[key]; // Solo incluye los campos que quieres
+        return obj;
+      }, {});
+  };
+  const renderPdfButtons = (rowIndex) => (
+    <div style={{ display: 'flex', justifyContent: 'space-between', marginLeft: 10, marginRight: 10 }}>
+      <IconButton
+        style={{ outline: "none", color: "#f5d131" }}
+        onClick={() => fetchPdf(rowIndex)}
+      >
+        <RemoveRedEyeIcon />
+      </IconButton>
+      <IconButton
+        style={{ outline: "none", color: "#3172f5" }}
+        onClick={() => handleUploadIndex(rowIndex)}
+      >
+        <CloudUploadIcon />
+      </IconButton>
+      <IconButton
+        style={{ outline: "none", color: "#0f9638" }}
+        onClick={() => DownloadPdf(rowIndex)}
+      >
+        <DownloadForOfflineIcon />
+      </IconButton>
+      <IconButton
+        style={{ outline: "none", color: "#ed1111" }}
+        onClick={() => DeletePdf(rowIndex)}
+      >
+        <DeleteIcon />
+      </IconButton>
+    </div>
+  );
+  
 
   return (
     <TableContainer component={Paper}
@@ -479,92 +519,64 @@ const DeletePdf = async (rowIndex) => {
           </TableRow>
         </TableHead>
         <TableBody>
-  {data.map((row, rowIndex) => (
-    <TableRow key={rowIndex}>
-    {Object.keys(row).map((column, colIndex) => (
-      <TableCell
-        key={colIndex}
-        style={colIndex === ColumValue ? {
-          position: 'sticky', 
-          left: 0, 
-          zIndex: 0, 
-          padding:0,
-          margin: 0,
-          backgroundColor: 'rgba(255, 255, 255, 0.9)', 
-          textAlign: 'center',
-          fontSize: "14px"
-        } : { textAlign: 'center', fontSize: "14px"}}
-        onDoubleClick={() => handleDoubleClick(rowIndex, column)}
-      >
-        {editingCell.rowIndex === rowIndex && editingCell.column === column && colIndex !== 13
-          ? (
-            <TextField
-            sx={{
-              width: '100%',
-              height: '42px', 
-              padding: 0,
-              margin: 0, 
-              borderRadius:"1px",
-              backgroundColor: '#f9fcfe', 
-              textAlign: 'center',
-              fontSize: '15px',
-              lineHeight:"normal",
-              border: 'none',
-              '& .MuiInputBase-input': {
-                height: '42px', 
-                padding: '0px', // Elimina cualquier padding extra del input
-                fontSize: '15px', // Usa el tamaño de fuente heredado
-                textAlign: 'center', // Centra el texto
+    {data.map((row, rowIndex) => {
+      const filteredRow = filterData(row); // Filtrar la fila
+      return (
+        <TableRow key={rowIndex}>
+          {Object.keys(filteredRow).map((column, colIndex) => (
+            <TableCell
+              key={colIndex}
+              style={
+                colIndex === ColumValue ? {
+                  position: 'sticky', 
+                  left: 0, 
+                  zIndex: 0, 
+                  padding: 0,
+                  margin: 0,
+                  backgroundColor: 'rgba(255, 255, 255, 0.9)', 
+                  textAlign: 'center',
+                  fontSize: "14px"
+                } : { 
+                  textAlign: 'center', 
+                  fontSize: "14px"
+                }
               }
-            }}
-              value={tempValue}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              //autoFocus
-            />
-          ) : colIndex === 13 ? ( // Cambia aquí para la columna 13 (índice 13)
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginLeft: 10, marginRight: 10 }}>
-              <IconButton
-                style={{ outline: "none", color: "#f5d131" }}
-                variant="contained"
-                color="primary"
-                onClick={() => fetchPdf(rowIndex)}
-              >
-                <RemoveRedEyeIcon />
-              </IconButton>
-              <IconButton
-                style={{ outline: "none", color: "#3172f5" }}
-                variant="contained"
-                color="primary"
-                onClick={() => handleUploadIndex(rowIndex)}
-              >
-                <CloudUploadIcon />
-              </IconButton>
-              <IconButton
-                style={{ outline: "none", color: "#0f9638" }}
-                variant="contained"
-                color="primary"
-                onClick={() => DownloadPdf(rowIndex)}
-              >
-                <DownloadForOfflineIcon />
-              </IconButton>
-              <IconButton
-                style={{ outline: "none", color: "#ed1111" }}
-                variant="contained"
-                color="primary"
-                onClick={() => DeletePdf(rowIndex)}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </div>
-          ) : (
-            row[column] // Mostrar el valor por defecto cuando no se está editando
-          )
-        }
-      </TableCell>
-    ))}
-  </TableRow>
-   ))}
+              onDoubleClick={() => handleDoubleClick(rowIndex, column)}
+            >
+              {editingCell.rowIndex === rowIndex && editingCell.column === column && colIndex !== 13 ? (
+                <TextField
+                  sx={{
+                    width: '100%',
+                    height: '42px',
+                    padding: 0,
+                    margin: 0,
+                    borderRadius: "1px",
+                    backgroundColor: '#f9fcfe',
+                    textAlign: 'center',
+                    fontSize: '15px',
+                    lineHeight: "normal",
+                    border: 'none',
+                    '& .MuiInputBase-input': {
+                      height: '42px',
+                      padding: '0px',
+                      fontSize: '15px',
+                      textAlign: 'center',
+                    },
+                  }}
+                  value={tempValue}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+              ) : colIndex === 13 ? (
+                renderPdfButtons(rowIndex) // Mostrar botones solo para la columna 13
+              ) : (
+                filteredRow[column] // Mostrar el valor de la celda filtrada
+              )}
+            </TableCell>
+          ))}
+        </TableRow>
+      );
+    })}
   </TableBody>
  </Table>
  
