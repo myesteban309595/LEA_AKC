@@ -12,6 +12,23 @@ export const createData = async (req, res) => {
   }
 };
 
+// Reemplazar toda la data
+export const replaceAllData = async (req, res) => {
+  try {
+    // Borrar todos los datos existentes
+    await Data.deleteMany({});
+
+    // Insertar la nueva data
+    const newData = await Data.insertMany(req.body); // req.body contiene la nueva data
+
+    // Retornar la nueva data insertada
+    res.status(200).json(newData);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: error.message });
+  }
+};
+
 // Obtener todos los datoss
 export const getAllDatas = async (req, res) => {
   try {

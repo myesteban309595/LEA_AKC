@@ -174,26 +174,26 @@ const DeletePdf = async (rowIndex) => {
   const agregarDataFila = ()=> {
 
     const newFile = {
-      fechaSolicitud: '',
+      fechaSolicitud: '--/--/--',
       codigoInventario: '',
       nombre: '',
       marca: '',
       lote: '',
       tipo: '',
       area: '',
-      fechaIngreso: '',
-      fechaVencimiento: '',
-      fechaActualizacionInformacion: '',
+      fechaIngreso: '--/--/--',
+      fechaVencimiento: '--/--/--',
+      fechaActualizacionInformacion: '--/--/--',
       cantidadIngreso: null,
       manipulacion: '',
       almacenamiento: '',
       certificadoAnalisis: null,
       responsable: '',
       observaciones: '',
-      vencimiento: '',
+      vencimiento: '--/--/--',
       mesesRestantes: null
     }
-    
+
     axios.post('http://localhost:4041/api/table/data', newFile)
     .then(response => {
       // Una vez agregada la fila en la base de datos, agregarla al estado local para que se muestre
@@ -203,26 +203,22 @@ const DeletePdf = async (rowIndex) => {
       setError(`Error al agregar la fila: ${err.response ? err.response.data.message : err.message}`);
       console.error(err);
     });
-  
-
   }
 
-  const handleBlur = () => {
-    const newData = [...data];
-    newData[editingCell.rowIndex][editingCell.column] = tempValue;
-    setData(newData);
-    setEditingCell({ rowIndex: null, column: null });
-  };
-
-  const setColumnValue =(columIndex)=> {
-
-    console.log("columindex:", columIndex);
-    console.log("ColumValue:", ColumValue);
-    
-    if (columIndex === ColumValue) {
-      setColumValue(100);
-    } else {
-      setColumValue(columIndex);
+  const saveDataEdited = async () => {
+    try {
+      // Si modificaste toda la data y quieres reemplazarla por completo
+      const response = await axios.post('http://localhost:4041/api/table/data', data);
+  
+      // Si la solicitud es exitosa
+      if (response.status === 200) {
+        alert('Datos actualizados correctamente');
+        // Puedes actualizar el estado de `data` con los datos retornados por el servidor
+        setData(response.data); // Aquí asumimos que el servidor devuelve los datos actualizados
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Hubo un error al guardar los datos');
     }
   }
 
@@ -281,6 +277,7 @@ const DeletePdf = async (rowIndex) => {
             <TableCell colSpan={18} style={{ fontSize: '25px', fontWeight: 'bold' }}>
               <div>{fechaHoraActual}</div>
               <Button onClick={agregarDataFila}>AGREGAR</Button>
+              <Button onClick={saveDataEdited}>SAVE DATA</Button>
             </TableCell>
           </TableRow>
           <TableRow style={{background: "#82ccdd" }}>

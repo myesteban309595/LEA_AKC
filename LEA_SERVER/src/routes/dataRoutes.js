@@ -1,10 +1,13 @@
 // routes/user.routes.js
 import express from 'express';
 const router = express.Router();
-import {createData,getAllDatas, getDataById, updateData, deleteData} from '../controllers/dataController.js'
+import {replaceAllData, createData,getAllDatas, getDataById, updateData, deleteData} from '../controllers/dataController.js'
 
 // Ruta para crear un nuevo usuario
 router.post('/data', createData);
+
+// Ruta para reemplazar toda la data
+router.post('/data', replaceAllData);
 
 // Ruta para obtener todos los usuarios
 router.get('/data', getAllDatas);
