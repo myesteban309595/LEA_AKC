@@ -7,7 +7,7 @@ import {replaceAllData, createData,getAllDatas, getDataById, updateData, deleteD
 router.post('/data', createData);
 
 // Ruta para reemplazar toda la data
-router.post('/data', replaceAllData);
+router.post('/datareplaceall', replaceAllData);
 
 // Ruta para obtener todos los usuarios
 router.get('/data', getAllDatas);
