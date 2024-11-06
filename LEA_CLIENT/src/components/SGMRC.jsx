@@ -19,6 +19,9 @@ const SGMRC = () => {
   const [editingCell, setEditingCell] = useState({ rowIndex: null, column: null });
   const [tempValue, setTempValue] = useState('');
   const [ColumValue, setColumValue] = useState();
+  // carga de data
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   // Visualizador de Pdf
   const [isModalOpen, setModalOpen] = useState(false);
   const [pdfUrl, setPdfUrl] = useState('');
@@ -52,28 +55,26 @@ const SGMRC = () => {
   }, []);
 
   useEffect(() => {
-    const initialData = Array.from({ length: 10 }, (_, index) => ({
-      fechaSolicitud: `2024-11-0${index + 1}`,
-      codigoInventario: `INV-${index + 1}`,
-      col3: `Certipur® Buffer solution pH 6.00 (25°C). Certified Reference Material for pH measurement`,
-      col4: `Fila ${index + 1} Col 4`,
-      col5: `Fila ${index + 1} Col 5`,
-      col6: `Fila ${index + 1} Col 6`,
-      col7: `Fila ${index + 1} Col 7`,
-      col8: `Fila ${index + 1} Col 8`,
-      col9: `Fila ${index + 1} Col 9`,
-      col10: `Fila ${index + 1} Col 10`,
-      col11: `Fila ${index + 1} Col 11`,
-      col12: `Fila ${index + 1} Col 12`,
-      col13: `Fila ${index + 1} Col 13`,
-      col14: `Fila ${index + 1} Col 14`,
-      col15: `Fila ${index + 1} Col 15`,
-      col16: `Fila ${index + 1} Col 16`,
-      col17: `Fila ${index + 1} Col 17`,
-      col18: `Fila ${index + 1} Col 18`,
-    }));
-    setData(initialData);
+    // Realizar la solicitud GET a la API
+    axios.get('http://localhost:4041/api/table/data')
+      .then(response => {
+        setData(response.data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError('Error al cargar los datos');
+        setLoading(false);
+      });
   }, []);
+
+    // Manejo de loading y error para carga de data
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+  
+    if (error) {
+      return <div>{error}</div>;
+    }
 
   const fetchPdf = async (rowIndex) => {
     try {
@@ -171,6 +172,42 @@ const DeletePdf = async (rowIndex) => {
     setTempValue(event.target.value);
   };
 
+  const agregarDataFila = ()=> {
+
+    const newFile = {
+      fechaSolicitud: new Date('2024-11-05T00:00:00Z'), // Puedes dejar la fecha que prefieras o usar el valor por defecto
+      codigoInventario: '',  // Cadena vacía, si se requiere un código, puedes proporcionarlo
+      nombre: '',  // Cadena vacía
+      marca: true,  // Valor predeterminado (puedes cambiarlo dependiendo de si lo necesitas)
+      lote: new Date(), // Fecha actual si no se proporciona
+      tipo: '',  // Cadena vacía, si se requiere un tipo, puedes proporcionarlo
+      area: '',  // Cadena vacía
+      fechaIngreso: new Date('2024-01-01T00:00:00Z'), // Fecha predeterminada si se necesita
+      fechaVencimiento: new Date('2025-01-01T00:00:00Z'), // Fecha predeterminada
+      fechaActualizacionInformacion: new Date('2024-11-01T00:00:00Z'), // Fecha predeterminada
+      cantidadIngreso: 0,  // Número, en este caso 0 como valor por defecto
+      manipulacion: '', // Cadena vacía
+      almacenamiento: '', // Cadena vacía
+      certificadoAnalisis: true, // Si lo necesitas como valor predeterminado
+      responsable: '', // Cadena vacía
+      observaciones: '', // Cadena vacía
+      vencimiento: '', // Cadena vacía
+      mesesRestantes: 0 // Número, 0 como valor predeterminado
+    };
+
+    axios.post('http://localhost:4041/api/table/data', newFile)
+    .then(response => {
+      // Una vez agregada la fila en la base de datos, agregarla al estado local para que se muestre
+      setData(prevData => [response.data, ...prevData]);
+    })
+    .catch(err => {
+      setError(`Error al agregar la fila: ${err.response ? err.response.data.message : err.message}`);
+      console.error(err);
+    });
+  
+
+  }
+
 
   const handleBlur = () => {
     const newData = [...data];
@@ -203,6 +240,7 @@ const DeletePdf = async (rowIndex) => {
           <TableRow style={{ position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 1 }}>
             <TableCell colSpan={18} style={{ fontSize: '25px', fontWeight: 'bold' }}>
               <div>{fechaHoraActual}</div>
+              <Button onClick={agregarDataFila}>AGREGAR</Button>
             </TableCell>
           </TableRow>
           <TableRow style={{background: "#82ccdd" }}>
@@ -443,69 +481,89 @@ const DeletePdf = async (rowIndex) => {
         <TableBody>
   {data.map((row, rowIndex) => (
     <TableRow key={rowIndex}>
-      {Object.keys(row).map((column, colIndex) => (
-        <TableCell
-          key={colIndex}
-          style={ colIndex == ColumValue ? {position: 'sticky', left: 0, zIndex: 0, backgroundColor: 'rgba(255, 255, 255, 0.9)', textAlign: 'center'} : {textAlign: 'center'} }
-          onDoubleClick={() => handleDoubleClick(rowIndex, column)}
-        >
-          {editingCell.rowIndex === rowIndex && editingCell.column === column 
-          &&  
-          colIndex != 13
+    {Object.keys(row).map((column, colIndex) => (
+      <TableCell
+        key={colIndex}
+        style={colIndex === ColumValue ? {
+          position: 'sticky', 
+          left: 0, 
+          zIndex: 0, 
+          padding:0,
+          margin: 0,
+          backgroundColor: 'rgba(255, 255, 255, 0.9)', 
+          textAlign: 'center',
+          fontSize: "14px"
+        } : { textAlign: 'center', fontSize: "14px"}}
+        onDoubleClick={() => handleDoubleClick(rowIndex, column)}
+      >
+        {editingCell.rowIndex === rowIndex && editingCell.column === column && colIndex !== 13
           ? (
             <TextField
-              sx={{
-                width: "100%",
-                transform: 'scale(0.9)',
-                padding: 0,
-                marginLeft: 0
-              }}
+            sx={{
+              width: '100%',
+              height: '42px', 
+              padding: 0,
+              margin: 0, 
+              borderRadius:"1px",
+              backgroundColor: '#f9fcfe', 
+              textAlign: 'center',
+              fontSize: '15px',
+              lineHeight:"normal",
+              border: 'none',
+              '& .MuiInputBase-input': {
+                height: '42px', 
+                padding: '0px', // Elimina cualquier padding extra del input
+                fontSize: '15px', // Usa el tamaño de fuente heredado
+                textAlign: 'center', // Centra el texto
+              }
+            }}
               value={tempValue}
               onChange={handleChange}
               onBlur={handleBlur}
-              autoFocus
+              //autoFocus
             />
-          ) : colIndex === 13 ? ( // Cambia aquí para la columna 8 (índice 7)
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginLeft:10, marginRight:10 }}>
-             <IconButton
-              style={{outline:"none", color:"#f5d131"}}
-              variant="contained"
-              color="primary"
-              onClick={()=> fetchPdf(rowIndex)}
-             >
-              <RemoveRedEyeIcon />
-            </IconButton>
-             <IconButton
-              style={{outline:"none", color:"#3172f5"}}
-              variant="contained"
-              color="primary"
-              onClick={() => handleUploadIndex(rowIndex)}
-             >
-              <CloudUploadIcon />
-            </IconButton>
-            <IconButton
-              style={{outline:"none", color:"#0f9638"}}
-              variant="contained"
-              color="primary"
-              onClick={() => DownloadPdf(rowIndex)}
-            >
-              <DownloadForOfflineIcon />
-            </IconButton>       
-            <IconButton
-              style={{outline:"none", color: "#ed1111"}}
-              variant="contained"
-              color="primary"
-              onClick={() => DeletePdf(rowIndex)}
-            >
-              <DeleteIcon />
-            </IconButton>       
+          ) : colIndex === 13 ? ( // Cambia aquí para la columna 13 (índice 13)
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginLeft: 10, marginRight: 10 }}>
+              <IconButton
+                style={{ outline: "none", color: "#f5d131" }}
+                variant="contained"
+                color="primary"
+                onClick={() => fetchPdf(rowIndex)}
+              >
+                <RemoveRedEyeIcon />
+              </IconButton>
+              <IconButton
+                style={{ outline: "none", color: "#3172f5" }}
+                variant="contained"
+                color="primary"
+                onClick={() => handleUploadIndex(rowIndex)}
+              >
+                <CloudUploadIcon />
+              </IconButton>
+              <IconButton
+                style={{ outline: "none", color: "#0f9638" }}
+                variant="contained"
+                color="primary"
+                onClick={() => DownloadPdf(rowIndex)}
+              >
+                <DownloadForOfflineIcon />
+              </IconButton>
+              <IconButton
+                style={{ outline: "none", color: "#ed1111" }}
+                variant="contained"
+                color="primary"
+                onClick={() => DeletePdf(rowIndex)}
+              >
+                <DeleteIcon />
+              </IconButton>
             </div>
-            ) : (
-            row[column]
-          )}
-        </TableCell>
-      ))}
-    </TableRow>
+          ) : (
+            row[column] // Mostrar el valor por defecto cuando no se está editando
+          )
+        }
+      </TableCell>
+    ))}
+  </TableRow>
    ))}
   </TableBody>
  </Table>

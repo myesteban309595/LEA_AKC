@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 
 import db from './db/db.js';
 import pdfRoutes from './routes/pdfRoutes.js';
+import dataRoutes from './routes/dataRoutes.js'
 
 import configuraciones from './config/config.js'
 const app = express();
@@ -28,6 +29,7 @@ app.use(cors(corsOptions));
 
 //*Rutas
 app.use('/api/pdfs', pdfRoutes);
+app.use('/api/table', dataRoutes);
 // ***************************************************************
 
 app.listen(PORT, ()=> {
