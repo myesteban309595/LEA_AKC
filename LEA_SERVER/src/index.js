@@ -21,7 +21,7 @@ app.use(express.json()); //* middleware- analiza solicitudes entrantes con carga
 
 
 const corsOptions = {
-    origin: ['http://127.0.0.1:5173'],
+    origin: ['http://127.0.0.1:5173', 'https://supreme-fiesta-gwxj4v95rrw2wrxx-5173.app.github.dev'],
     optionsSuccessStatus: 200 
 };
 
