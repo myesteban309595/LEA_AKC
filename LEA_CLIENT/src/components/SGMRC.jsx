@@ -12,6 +12,8 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import DeleteIcon from '@mui/icons-material/Delete';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 const SGMRC = () => {
   // Estado para la fecha y hora actual
@@ -72,11 +74,6 @@ const SGMRC = () => {
         setLoading(false);
       });
   }, []);
-
-    // Manejo de loading y error para carga de data
-    if (loading) {
-      return <div>Loading...</div>;
-    }
   
     if (error) {
       return <div>{error}</div>;
@@ -533,66 +530,87 @@ const DeletePdf = async (rowIndex) => {
             <TableCell style={{position: 'sticky',top:55, background: "#d9ffd9", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 2 }}>Fecha actual</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
-    {data.map((row, rowIndex) => {
-      const filteredRow = filterData(row); // Filtrar la fila
-      return (
-        <TableRow key={rowIndex}>
-          {Object.keys(filteredRow).map((column, colIndex) => (
-            <TableCell
-              key={colIndex}
-              style={
-                colIndex === ColumValue ? {
-                  position: 'sticky', 
-                  left: 0, 
-                  zIndex: 0, 
-                  padding: 0,
-                  margin: 0,
-                  backgroundColor: 'rgba(255, 255, 255, 0.9)', 
-                  textAlign: 'center',
-                  fontSize: "14px"
-                } : { 
-                  textAlign: 'center', 
-                  fontSize: "14px"
-                }
-              }
-              onDoubleClick={() => handleDoubleClick(rowIndex, column)}
-            >
-              {editingCell.rowIndex === rowIndex && editingCell.column === column && colIndex !== 13 ? (
-                <TextField
-                  sx={{
-                    width: '100%',
-                    height: '42px',
+  <TableBody>
+  {
+    loading ? (
+      <TableRow>
+        <TableCell
+          colSpan={Object.keys(data[0] || {}).length}
+          sx={{
+            marginLeft:"600px",
+            textAlign: 'center',
+            padding: 3,
+            height: '50vh', // Asegura que ocupe toda la altura de la fila
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center', // Centrado vertical y horizontal
+          }}
+        >
+          <CircularProgress size={150} /> {/* Aumenta el tamaño aquí */}
+        </TableCell>
+      </TableRow>
+    ) : (
+      data.map((row, rowIndex) => {
+        const filteredRow = filterData(row); // Filtrar la fila
+        return (
+          <TableRow key={rowIndex}>
+            {Object.keys(filteredRow).map((column, colIndex) => (
+              <TableCell
+                key={colIndex}
+                style={
+                  colIndex === ColumValue ? {
+                    position: 'sticky',
+                    left: 0,
+                    zIndex: 0,
                     padding: 0,
                     margin: 0,
-                    borderRadius: "1px",
-                    backgroundColor: '#f9fcfe',
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
                     textAlign: 'center',
-                    fontSize: '15px',
-                    lineHeight: "normal",
-                    border: 'none',
-                    '& .MuiInputBase-input': {
+                    fontSize: "14px"
+                  } : {
+                    textAlign: 'center',
+                    fontSize: "14px"
+                  }
+                }
+                onDoubleClick={() => handleDoubleClick(rowIndex, column)}
+              >
+                {editingCell.rowIndex === rowIndex && editingCell.column === column && colIndex !== 13 ? (
+                  <TextField
+                    sx={{
+                      width: '100%',
                       height: '42px',
-                      padding: '0px',
-                      fontSize: '15px',
+                      padding: 0,
+                      margin: 0,
+                      borderRadius: "1px",
+                      backgroundColor: '#f9fcfe',
                       textAlign: 'center',
-                    },
-                  }}
-                  value={tempValue}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-              ) : colIndex === 13 ? (
-                renderPdfButtons(rowIndex) // Mostrar botones solo para la columna 13
-              ) : (
-                filteredRow[column] // Mostrar el valor de la celda filtrada
-              )}
-            </TableCell>
-          ))}
-        </TableRow>
-      );
-    })}
-  </TableBody>
+                      fontSize: '15px',
+                      lineHeight: "normal",
+                      border: 'none',
+                      '& .MuiInputBase-input': {
+                        height: '42px',
+                        padding: '0px',
+                        fontSize: '15px',
+                        textAlign: 'center',
+                      },
+                    }}
+                    value={tempValue}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                ) : colIndex === 13 ? (
+                  renderPdfButtons(rowIndex) // Mostrar botones solo para la columna 13
+                ) : (
+                  filteredRow[column] // Mostrar el valor de la celda filtrada
+                )}
+              </TableCell>
+            ))}
+          </TableRow>
+        );
+      })
+    )
+  }
+    </TableBody>
  </Table>
  
    {/* Componente Modal visualizar Pdf */}
