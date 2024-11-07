@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Button, IconButton } from '@mui/material';
 import Swal from 'sweetalert2'
+import { Snackbar, Alert } from '@mui/material'
 
 import ModalComponent from '../utils/modals/ViewPdf';
 import FileUpload from '../components/UploadFile';
@@ -19,6 +20,11 @@ const SGMRC = () => {
   const [editingCell, setEditingCell] = useState({ rowIndex: null, column: null });
   const [tempValue, setTempValue] = useState('');
   const [ColumValue, setColumValue] = useState();
+  // propiedades del snackbar
+  const [snackbarOpen, setSnackbarOpen] = useState(false);  // Estado para controlar el Snackbar
+  const [snackbarMessage, setSnackbarMessage] = useState("");  // Mensaje del Snackbar
+  const [snackbarSeverity, setSnackbarSeverity] = useState('');  // 'success' o 'error'
+
   // carga de data
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -171,10 +177,31 @@ const DeletePdf = async (rowIndex) => {
     setTempValue(event.target.value);
   };
 
-  const handleBlur = () => {
+  const handleBlur = async () => {
+    // Crea una copia de los datos y actualiza el valor modificado
     const newData = [...data];
     newData[editingCell.rowIndex][editingCell.column] = tempValue;
+  
+    // TAN PRONTO DESENFOQUE LA CASILLA, GUARDA LOS DATOS
+    try {
+      // Usar `newData` para enviar los datos modificados al servidor
+      const response = await axios.post('http://localhost:4041/api/table/datareplaceall', newData);
+  
+      // Si la solicitud es exitosa
+      if (response.status === 200) {
+        setSnackbarMessage('Datos actualizados correctamente');
+        setSnackbarSeverity('success'); 
+        setSnackbarOpen(true);
+        // Actualiza el estado de `data` con los datos retornados por el servidor
+        setData(response.data); // Aquí asumimos que el servidor devuelve los datos actualizados
+      }
+    } catch (error) {
+      console.error(error);
+      setSnackbarMessage("Hubo un error al guardar los datos");
+      setSnackbarOpen(true);
+      setSnackbarSeverity("error");
     }
+  }  
 
   const agregarDataFila = ()=> {
 
@@ -210,22 +237,9 @@ const DeletePdf = async (rowIndex) => {
     });
   }
 
-  const saveDataEdited = async () => {
-    try {
-      // Si modificaste toda la data y quieres reemplazarla por completo
-      const response = await axios.post('http://localhost:4041/api/table/datareplaceall', data);
-  
-      // Si la solicitud es exitosa
-      if (response.status === 200) {
-        alert('Datos actualizados correctamente');
-        // Puedes actualizar el estado de `data` con los datos retornados por el servidor
-        setData(response.data); // Aquí asumimos que el servidor devuelve los datos actualizados
-      }
-    } catch (error) {
-      console.error(error);
-      alert('Hubo un error al guardar los datos');
-    }
-  }
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
 
   const filterData = (row) => {
     // Campos a excluir de la data
@@ -282,7 +296,6 @@ const DeletePdf = async (rowIndex) => {
             <TableCell colSpan={18} style={{ fontSize: '25px', fontWeight: 'bold' }}>
               <div>{fechaHoraActual}</div>
               <Button onClick={agregarDataFila}>AGREGAR</Button>
-              <Button onClick={saveDataEdited}>SAVE DATA</Button>
             </TableCell>
           </TableRow>
           <TableRow style={{background: "#82ccdd" }}>
@@ -589,6 +602,18 @@ const DeletePdf = async (rowIndex) => {
       {uploadRowIndex !== null && (
         <FileUpload rowIndex={uploadRowIndex} />
       )}
+
+    {/* Snackbar para mostrar mensajes */}
+    <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={snackbarOpen}
+        autoHideDuration={3000} // Se cierra automáticamente después de 3 segundos
+        onClose={handleSnackbarClose}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
 </TableContainer>
 
 );
