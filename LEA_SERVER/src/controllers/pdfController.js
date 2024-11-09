@@ -89,7 +89,7 @@ export const deletePdfByIndex = async (req, res) => {
     const { rowId } = req.params;
 
     try {
-        const deletedPdf = await Pdf.findOneAndDelete({ rowId: Number(rowId) });
+        const deletedPdf = await Pdf.findOneAndDelete({ rowId: rowId });
 
         if (!deletedPdf) {
             return res.status(404).json({ message: 'PDF no encontrado' });
