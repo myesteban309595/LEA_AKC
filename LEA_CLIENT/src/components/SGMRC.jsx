@@ -6,6 +6,7 @@ import { Snackbar, Alert } from '@mui/material'
 
 import ModalComponent from '../utils/modals/ViewPdf';
 import FileUpload from '../components/UploadFile';
+import SpeedDialComponent from '../utils/speedDial/SpeedDial';
 
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -13,7 +14,6 @@ import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
 
 const SGMRC = () => {
   // Estado para la fecha y hora actual
@@ -299,7 +299,6 @@ const DeletePdf = async (rowId) => {
     </div>
   );
   
-
   return (
     <TableContainer component={Paper}
         style={{
@@ -661,6 +660,17 @@ const DeletePdf = async (rowId) => {
           {snackbarMessage}
         </Alert>
       </Snackbar>
+
+      {/* Speed Dial */}
+      <SpeedDialComponent
+              sx={{
+                position: 'fixed',
+                top: 16,  // Puedes ajustar este valor para mover el SpeedDial
+                right: 16,  // Ajusta el valor para la distancia del borde derecho
+                zIndex: 1300,
+              }}
+      />
+
 </TableContainer>
 
 );
