@@ -386,7 +386,6 @@ const deleteRowData = (rowId) => {
           <TableRow style={{ position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 1 }}>
             <TableCell colSpan={19} style={{ fontSize: '25px', fontWeight: 'bold' }}>
               <div>{fechaHoraActual}</div>
-              <Button onClick={agregarDataFila}>AGREGAR</Button>
             </TableCell>
           </TableRow>
           <TableRow style={{background: "#82ccdd" }}>
@@ -746,6 +745,7 @@ const deleteRowData = (rowId) => {
 
       {/* Speed Dial */}
       <SpeedDialComponent
+        agregarDataFila={agregarDataFila} // ejecuto la funcion agregar fila desde el speedDial
               sx={{
                 position: 'fixed',
                 top: 16,  // Puedes ajustar este valor para mover el SpeedDial
