@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { Box, Button, TextField, Typography } from '@mui/material';
-
+import Swal from 'sweetalert2';
+import SendIcon from '@mui/icons-material/Send';
 
 const FileUpload = ({ uploadrowId }) => {
   const [file, setFile] = useState(null);
@@ -52,14 +53,10 @@ const FileUpload = ({ uploadrowId }) => {
         setMessage('Por favor, selecciona un archivo primero.');
         return;
     }
-
-    console.log("rowId en uploadFile", rowId);
     
     const formData = new FormData();
     formData.append('pdf', file);
     formData.append('rowId', rowId);
-
-    console.log("formdata:", formData);
 
     try {
         const response = await axios.post('http://localhost:4041/api/pdfs/upload', formData, {
@@ -67,11 +64,36 @@ const FileUpload = ({ uploadrowId }) => {
                 'Content-Type': 'multipart/form-data',
             },
         });
+
+        let timerInterval;
+
+        Swal.fire({
+          title: "Archivo cargado correctamente",
+          html: "Redirigiendo en <b></b> millisegundos.",
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: () => {
+            Swal.showLoading();
+            const timer = Swal.getPopup().querySelector("b");
+            timerInterval = setInterval(() => {
+              timer.textContent = `${Swal.getTimerLeft()}`;
+            }, 100);
+          },
+          willClose: () => {
+            clearInterval(timerInterval);
+          }
+        }).then((result) => {
+          if (result.dismiss === Swal.DismissReason.timer) {
+            window.location = '/';
+          }
+        });
+
         setMessage(`Archivo subido exitosamente: ${response.data.filename} (Extensión: ${fileExtension})`);
         setPreviewUrl('');
         setFile(null);
         setFileName('Arrastra y suelta tu archivo aquí'); // Resetear el texto del input
     } catch (error) {
+        Swal.fire('Error al subir el archivo: ' + error.message);
         setMessage('Error al subir el archivo: ' + error.message);
     }
 };
@@ -102,7 +124,7 @@ const FileUpload = ({ uploadrowId }) => {
             onDrop={handleFileDrop}
             onDragOver={handleDragOver}
             sx={{
-              border: file ? '3px dashed  #3366ff' : '2px dashed #ccc',
+              border: file ? '3px dashed #3366ff' : '2px dashed #ccc',
               borderRadius: '4px',
               p: 2,
               textAlign: 'center',
@@ -119,9 +141,16 @@ const FileUpload = ({ uploadrowId }) => {
               {file ? file.name : 'Arrastra y suelta tu archivo aquí'}
             </Typography>
           </Box>
-          <Button variant="contained" type="submit" disabled={!file}>
-            Subir
-          </Button>
+          <Box display="flex" justifyContent="flex-end">
+            <Button
+              variant="contained"
+              type="submit"
+              disabled={!file}
+              endIcon={<SendIcon />}
+            >
+              Subir
+            </Button>
+          </Box>
         </form>
         {message && <Typography sx={{ mt: 2 }}>{message}</Typography>}
       </Box>

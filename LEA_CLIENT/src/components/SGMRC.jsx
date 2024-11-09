@@ -71,7 +71,13 @@ const SGMRC = () => {
         setLoading(false);
       })
       .catch(err => {
-        setError('Error al cargar los datos');
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Error al cargar los datos",
+          footer: '<a href="#">Why do I have this issue?</a>'
+        });
+        //setError('Error al cargar los datos');
         setLoading(false);
       });
   }, []);
@@ -240,7 +246,14 @@ const DeletePdf = async (rowId) => {
       setData(prevData => [response.data, ...prevData]);
     })
     .catch(err => {
-      setError(`Error al agregar la fila: ${err.response ? err.response.data.message : err.message}`);
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: `Error al agregar la fila: ${err.response ? err.response.data.message : err.message}`,
+        showConfirmButton: false,
+        timer: 1500
+      });
+      //setError(`Error al agregar la fila: ${err.response ? err.response.data.message : err.message}`);
       console.error(err);
     });
   }
