@@ -238,6 +238,15 @@ const DeletePdf = async (rowIndex) => {
     setSnackbarOpen(false);
   };
 
+  const clickColumFixed = (columnClicked) => {
+    if(columnClicked == ColumValue)
+    {
+      setColumValue(100000); // se fija un valor de columna que nunca vaya a existir
+    }else{
+      setColumValue(columnClicked); // se fija un valor de columna que nunca vaya a existir
+    }
+  };
+
   const filterData = (row) => {
     // Campos a excluir de la data
     const excludedFields = ['_id', 'createdAt', 'updatedAt', '__v'];
@@ -335,7 +344,7 @@ const DeletePdf = async (rowIndex) => {
                   outline: "none",
                  
                 }}
-                onClick={()=> {setColumValue(0)}}
+                onClick={()=> {clickColumFixed(0)}}
               >
                 <PushPinIcon fontSize="small" sx={ColumValue == 0 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
               </IconButton>
@@ -355,7 +364,7 @@ const DeletePdf = async (rowIndex) => {
                   right: 0,
                   outline: "none"
                 }}
-                onClick={()=> {setColumValue(1)}}
+                onClick={()=> {clickColumFixed(1)}}
               >
                 <PushPinIcon fontSize="small" sx={ColumValue == 1 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
               </IconButton>
@@ -375,7 +384,7 @@ const DeletePdf = async (rowIndex) => {
                   right: 0,
                   outline: "none"
                 }}
-                onClick={()=> {setColumValue(2)}}
+                onClick={()=> {clickColumFixed(2)}}
               >
                <PushPinIcon fontSize="small" sx={ColumValue == 2 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
               </IconButton>
@@ -395,7 +404,7 @@ const DeletePdf = async (rowIndex) => {
                   right: 0,
                   outline: "none"
                 }}
-                onClick={()=> {setColumValue(3)}}
+                onClick={()=> {clickColumFixed(3)}}
               >
                <PushPinIcon fontSize="small" sx={ColumValue == 3 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
               </IconButton>
@@ -415,7 +424,7 @@ const DeletePdf = async (rowIndex) => {
                   right: 0,
                   outline: "none"
                 }}
-                onClick={()=> {setColumValue(4)}}
+                onClick={()=> {clickColumFixed(4)}}
               >
                <PushPinIcon fontSize="small" sx={ColumValue == 4 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
               </IconButton>
@@ -435,7 +444,7 @@ const DeletePdf = async (rowIndex) => {
                   right: 0,
                   outline: "none"
                 }}
-                onClick={()=> {setColumValue(5)}}
+                onClick={()=> {clickColumFixed(5)}}
               >
                 <PushPinIcon fontSize="small" sx={ColumValue == 5 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
               </IconButton>
@@ -455,7 +464,7 @@ const DeletePdf = async (rowIndex) => {
                   right: 0,
                   outline: "none"
                 }}
-                onClick={()=> {setColumValue(6)}}
+                onClick={()=> {clickColumFixed(6)}}
               >
                  <PushPinIcon fontSize="small" sx={ColumValue == 6 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
                 </IconButton>
@@ -475,7 +484,7 @@ const DeletePdf = async (rowIndex) => {
                   right: 0,
                   outline: "none"
                 }}
-                onClick={()=> {setColumValue(7)}}
+                onClick={()=> {clickColumFixed(7)}}
               >
                  <PushPinIcon fontSize="small" sx={ColumValue == 7 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
                 </IconButton>
@@ -495,7 +504,7 @@ const DeletePdf = async (rowIndex) => {
                   right: 0,
                   outline: "none"
                 }}
-                onClick={()=> {setColumValue(8)}}
+                onClick={()=> {clickColumFixed(8)}}
               >
                 <PushPinIcon fontSize="small" sx={ColumValue == 8 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
                 </IconButton>
@@ -515,7 +524,7 @@ const DeletePdf = async (rowIndex) => {
                   right: 0,
                   outline: "none"
                 }}
-                onClick={()=> {setColumValue(9)}}
+                onClick={()=> {clickColumFixed(9)}}
               >
                   <PushPinIcon fontSize="small" sx={ColumValue == 9 ?{color:"red", transform: "rotate(45deg)", transition: "transform 0.2s"}: {outline: "none"}} />
                 </IconButton>
