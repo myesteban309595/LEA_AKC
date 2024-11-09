@@ -749,8 +749,12 @@ const deleteRowData = (rowId) => {
               sx={{
                 position: 'fixed',
                 top: 16,  // Puedes ajustar este valor para mover el SpeedDial
-                right: 16,  // Ajusta el valor para la distancia del borde derecho
+                right: 35,  // Ajusta el valor para la distancia del borde derecho
                 zIndex: 1300,
+                '&:focus, &:active': { 
+                  outline: 'none', // Elimina el borde de enfoque (outline) al hacer clic
+                  // boxShadow: 'none', // Elimina la sombra de enfoque
+                },
               }}
       />
 
