@@ -258,26 +258,65 @@ const DeletePdf = async (rowId) => {
     }
   };
 
-  const deleteRowData = (rowId) => {
-    console.log("rowId que llega a delete:", rowId);
-  
-    axios.delete(`http://localhost:4041/api/table/data/${rowId}`)
-      .then(response => {
-        // Actualiza el estado 'data' después de eliminar la fila
-        setData(prevData => prevData.filter(row => row.id !== rowId));
-        setSnackbarMessage('Datos eliminados correctamente');
-        setSnackbarSeverity('success');
-        setSnackbarOpen(true);
-      })
-      .catch(err => {
-        const errorMessage = err.response ? err.response.data.message : err.message;
-        setSnackbarMessage(`Error al eliminar la fila: ${errorMessage}`);
-        setSnackbarSeverity('error');
-        setSnackbarOpen(true);
-        console.error(err);
-      });
-  };
-  
+const deleteRowData = (rowId) => {
+  // Primero, mostramos una alerta de confirmación utilizando SweetAlert
+  Swal.fire({
+    title: "¿Estás seguro?",
+    text: "¡No podrás revertir esto!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Sí, eliminar",
+  }).then((result) => {
+    // Si el usuario confirma la eliminación
+    if (result.isConfirmed) {
+      // Realizamos la eliminación de la fila
+      axios.delete(`http://localhost:4041/api/table/data/${rowId}`)
+        .then(() => {
+          // Si la eliminación es exitosa, obtenemos los datos actualizados
+          axios.get('http://localhost:4041/api/table/data')
+            .then(updatedDataResponse => {
+              setData(updatedDataResponse.data); // Actualizamos el estado con los nuevos datos
+              setSnackbarMessage('Datos eliminados correctamente');
+              setSnackbarSeverity('success');
+              setSnackbarOpen(true); // Mostrar mensaje de éxito
+
+              // Mostramos una notificación de éxito con SweetAlert
+              Swal.fire({
+                icon: 'success',
+                title: 'Fila eliminada',
+                text: 'La fila se ha eliminado correctamente.',
+              });
+            })
+            .catch(err => {
+              const errorMessage = err.response ? err.response.data.message : err.message;
+              setSnackbarMessage(`Error al obtener datos: ${errorMessage}`);
+              setSnackbarSeverity('error');
+              setSnackbarOpen(true);
+              // Notificación de error en caso de que no se puedan obtener los datos
+              Swal.fire({
+                icon: 'error',
+                title: 'Error al obtener los datos',
+                text: errorMessage,
+              });
+            });
+        })
+        .catch(err => {
+          const errorMessage = err.response ? err.response.data.message : err.message;
+          setSnackbarMessage(`Error al eliminar la fila: ${errorMessage}`);
+          setSnackbarSeverity('error');
+          setSnackbarOpen(true);
+          // Notificación de error si la eliminación falla
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al eliminar la fila',
+            text: errorMessage,
+          });
+        });
+    }
+  });
+};
 
   const filterData = (row) => {
     // Campos a excluir de la data
@@ -332,13 +371,13 @@ const DeletePdf = async (rowId) => {
       <Table style={{ width: 'max-content' }}>
         <TableHead>
           <TableRow style={{ position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 1 }}>
-            <TableCell colSpan={18} style={{ fontSize: '25px', fontWeight: 'bold' }}>
+            <TableCell colSpan={19} style={{ fontSize: '25px', fontWeight: 'bold' }}>
               <div>{fechaHoraActual}</div>
               <Button onClick={agregarDataFila}>AGREGAR</Button>
             </TableCell>
           </TableRow>
           <TableRow style={{background: "#82ccdd" }}>
-            <TableCell colSpan={18} style={{ fontSize: '18px', textAlign: 'center', fontWeight: 'bold', border: '1px solid rgba(224, 224, 224, 1)' }}>
+            <TableCell colSpan={19} style={{ fontSize: '18px', textAlign: 'center', fontWeight: 'bold', border: '1px solid rgba(224, 224, 224, 1)' }}>
               Seguimiento General Material de referencia
             </TableCell>
           </TableRow>
