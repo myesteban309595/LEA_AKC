@@ -79,53 +79,63 @@ const SGMRC = () => {
       return <div>{error}</div>;
     }
 
-  const fetchPdf = async (rowIndex) => {
-    try {
-        const response = await axios.get(`http://localhost:4041/api/pdfs/${rowIndex}`, {
-            responseType: 'blob', // Importante para recibir un blob
-        });
+    const fetchPdf = async (rowId) => {
+      try {
+          const response = await axios.get(`http://localhost:4041/api/pdfs/${rowId}`, {
+              responseType: 'blob',  // Especifica que esperas un blob (archivo binario)
+          });
+  
+          const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
+          const pdfUrl = window.URL.createObjectURL(pdfBlob);
+  
+          // setPdfUrl(url);  // Establecer la URL del PDF para el modal
+          // setModalOpen(true);  // Abrir el modal
 
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        setPdfUrl(url); // Establecer la URL del PDF para el modal
-        setModalOpen(true); // Abrir el modal
-    } catch (error) {
-        console.error('Error al obtener el PDF:', error);
-    }
-};
+          // Abre el PDF en una nueva pestaña o en un modal
+          const newTab = window.open(pdfUrl, '_blank');
 
-  const DownloadPdf = async (rowIndex) => {    
-    try {
-        const response = await axios.get(`http://localhost:4041/api/pdfs/${rowIndex}`);
-
-        const fileName = response.data.filename; // Obtén el nombre del archivo
-        const pdfBlob = new Blob([response.data.data], { type: 'application/pdf' }); // Crea un blob del PDF
-
-        // Crea una URL para el blob
-        const url = window.URL.createObjectURL(pdfBlob);
-        
-        // Crea un enlace de descarga
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', fileName); // Usa el nombre original
-
-        // Agrega el enlace al documento y simula un clic
-        document.body.appendChild(link);
-        link.click();
-
-        // Elimina el enlace del documento
-        document.body.removeChild(link);
+          if (newTab) newTab.focus();
+  
       } catch (error) {
-        console.error('Error al obtener el PDF:', error);
-        Swal.fire({
-            icon: "error",
-            title: "Error al descargar el archivo",
-            text: "No hay archivo asociado a este material de referencia!",
-            footer: `<a href="/upload/${rowIndex}">Subir archivo</a>`,
-        });
-     }
+          console.error('Error al obtener el PDF:', error);
+      }
+  };
+
+  const DownloadPdf = async (rowId) => {
+
+    try {
+      const response = await axios.get(`http://localhost:4041/api/pdfs/download/${rowId}`);
+
+      const fileName = response.data.filename; // Obtén el nombre del archivo
+      const pdfBlob = new Blob([response.data.data], { type: 'application/pdf' }); // Crea un blob del PDF
+
+      // Crea una URL para el blob
+      const url = window.URL.createObjectURL(pdfBlob);
+      
+      // Crea un enlace de descarga
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', fileName); // Usa el nombre original
+
+      // Agrega el enlace al documento y simula un clic
+      document.body.appendChild(link);
+      link.click();
+
+      // Elimina el enlace del documento
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Error al obtener el PDF:', error);
+      Swal.fire({
+          icon: "error",
+          title: "Error al descargar el archivo",
+          text: "No hay archivo asociado a este material de referencia!",
+          footer: `<a href="/upload/${rowId}">Subir archivo</a>`,
+      });
+   }
 };
 
-const DeletePdf = async (rowIndex) => {
+
+const DeletePdf = async (rowId) => {
   try {
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -139,7 +149,7 @@ const DeletePdf = async (rowIndex) => {
 
     // Verifica si el usuario confirmó la acción
     if (result.isConfirmed) {
-      const response = await axios.delete(`http://localhost:4041/api/pdfs/${rowIndex}`);
+      const response = await axios.delete(`http://localhost:4041/api/pdfs/${rowId}`);
 
       // Notificación de éxito
       Swal.fire({
