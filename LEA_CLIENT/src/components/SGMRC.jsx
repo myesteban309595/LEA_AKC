@@ -36,9 +36,9 @@ const SGMRC = () => {
 
   const [uploadRowIndex, setUploadRowIndex] = useState(null); // Estado para el rowIndex a subir
 
-  const handleUploadIndex = (rowIndex) => {
-    setUploadRowIndex(rowIndex); // Establecer el rowIndex seleccionado
-    window.location = `/upload/${rowIndex}`; // Incluye el rowIndex en la URL
+  const handleUploadIndex = (rowId) => {
+    setUploadRowIndex(rowId); // Establecer el rowId seleccionado
+    window.location = `/upload/${rowId}`; // Incluye el rowId en la URL
   };
 
   useEffect(() => {
@@ -259,29 +259,30 @@ const DeletePdf = async (rowIndex) => {
         return obj;
       }, {});
   };
-  const renderPdfButtons = (rowIndex) => (
+
+  const renderPdfButtons = (rowId) => (
     <div style={{ display: 'flex', justifyContent: 'space-between', marginLeft: 10, marginRight: 10 }}>
       <IconButton
         style={{ outline: "none", color: "#f5d131" }}
-        onClick={() => fetchPdf(rowIndex)}
+        onClick={() => fetchPdf(rowId)}
       >
         <RemoveRedEyeIcon />
       </IconButton>
       <IconButton
         style={{ outline: "none", color: "#3172f5" }}
-        onClick={() => handleUploadIndex(rowIndex)}
+        onClick={() => handleUploadIndex(rowId)}
       >
         <CloudUploadIcon />
       </IconButton>
       <IconButton
         style={{ outline: "none", color: "#0f9638" }}
-        onClick={() => DownloadPdf(rowIndex)}
+        onClick={() => DownloadPdf(rowId)}
       >
         <DownloadForOfflineIcon />
       </IconButton>
       <IconButton
         style={{ outline: "none", color: "#ed1111" }}
-        onClick={() => DeletePdf(rowIndex)}
+        onClick={() => DeletePdf(rowId)}
       >
         <DeleteIcon />
       </IconButton>
@@ -609,7 +610,7 @@ const DeletePdf = async (rowIndex) => {
                       onBlur={handleBlur}
                     />
                   ) : colIndex === 13 ? (
-                    renderPdfButtons(rowIndex) // Mostrar botones solo para la columna 13
+                    renderPdfButtons(row._id) // Mostrar botones solo para la columna 13
                   ) : (
                     filteredRow[column] // Mostrar el valor de la celda filtrada
                   )}

@@ -1,7 +1,7 @@
 import Pdf from '../models/pdfModel.js';
 
 export const uploadPdf = async (req, res) => {
-    const { rowIndex } = req.body;
+    const { rowId } = req.body;
 
     // Verifica que req.file esté definido
     if (!req.file) {
@@ -21,7 +21,7 @@ export const uploadPdf = async (req, res) => {
             filename: originalname, // Usa originalname aquí
             data: buffer,
             contentType: mimetype,
-            rowIndex: Number(rowIndex), // Asegúrate de convertirlo a número
+            rowId: Number(rowId), // Asegúrate de convertirlo a número
         });
 
         await newPdf.save();
@@ -35,10 +35,10 @@ export const uploadPdf = async (req, res) => {
 
 // Obtener PDF
     export const getPdfByIndex = async (req, res) => {
-        const { rowIndex } = req.params;
+        const { rowId } = req.params;
     
         try {
-            const pdf = await Pdf.findOne({ rowIndex: Number(rowIndex) });
+            const pdf = await Pdf.findOne({ rowId: Number(rowId) });
     
             if (!pdf) {
                 return res.status(404).json({ message: 'PDF no encontrado' });
@@ -59,10 +59,10 @@ export const uploadPdf = async (req, res) => {
 
 // Eliminar PDF
 export const deletePdfByIndex = async (req, res) => {
-    const { rowIndex } = req.params;
+    const { rowId } = req.params;
 
     try {
-        const deletedPdf = await Pdf.findOneAndDelete({ rowIndex: Number(rowIndex) });
+        const deletedPdf = await Pdf.findOneAndDelete({ rowId: Number(rowId) });
 
         if (!deletedPdf) {
             return res.status(404).json({ message: 'PDF no encontrado' });
