@@ -64,7 +64,7 @@ const SGMRC = () => {
 
   useEffect(() => {
     // Realizar la solicitud GET a la API
-    axios.get('https://supreme-fiesta-gwxj4v95rrw2wrxx-5173.app.github.dev/api/table/data')
+    axios.get('http://localhost:4041/api/table/data')
       .then(response => {
         setData(response.data);
         setLoading(false);
@@ -81,7 +81,7 @@ const SGMRC = () => {
 
   const fetchPdf = async (rowIndex) => {
     try {
-        const response = await axios.get(`https://supreme-fiesta-gwxj4v95rrw2wrxx-5173.app.github.dev/api/pdfs/${rowIndex}`, {
+        const response = await axios.get(`http://localhost:4041/api/pdfs/${rowIndex}`, {
             responseType: 'blob', // Importante para recibir un blob
         });
 
@@ -95,7 +95,7 @@ const SGMRC = () => {
 
   const DownloadPdf = async (rowIndex) => {    
     try {
-        const response = await axios.get(`https://supreme-fiesta-gwxj4v95rrw2wrxx-5173.app.github.dev/api/pdfs/${rowIndex}`);
+        const response = await axios.get(`http://localhost:4041/api/pdfs/${rowIndex}`);
 
         const fileName = response.data.filename; // Obtén el nombre del archivo
         const pdfBlob = new Blob([response.data.data], { type: 'application/pdf' }); // Crea un blob del PDF
@@ -139,7 +139,7 @@ const DeletePdf = async (rowIndex) => {
 
     // Verifica si el usuario confirmó la acción
     if (result.isConfirmed) {
-      const response = await axios.delete(`https://supreme-fiesta-gwxj4v95rrw2wrxx-5173.app.github.dev/api/pdfs/${rowIndex}`);
+      const response = await axios.delete(`http://localhost:4041/api/pdfs/${rowIndex}`);
 
       // Notificación de éxito
       Swal.fire({
@@ -182,7 +182,7 @@ const DeletePdf = async (rowIndex) => {
     // TAN PRONTO DESENFOQUE LA CASILLA, GUARDA LOS DATOS
     try {
       // Usar `newData` para enviar los datos modificados al servidor
-      const response = await axios.post('https://supreme-fiesta-gwxj4v95rrw2wrxx-5173.app.github.dev/api/table/datareplaceall', newData);
+      const response = await axios.post('http://localhost:4041/api/table/datareplaceall', newData);
   
       // Si la solicitud es exitosa
       if (response.status === 200) {
@@ -223,7 +223,7 @@ const DeletePdf = async (rowIndex) => {
       mesesRestantes: null
     }
 
-    axios.post('https://supreme-fiesta-gwxj4v95rrw2wrxx-5173.app.github.dev/api/table/data', newFile)
+    axios.post('http://localhost:4041/api/table/data', newFile)
     .then(response => {
       // Una vez agregada la fila en la base de datos, agregarla al estado local para que se muestre
       setData(prevData => [response.data, ...prevData]);
