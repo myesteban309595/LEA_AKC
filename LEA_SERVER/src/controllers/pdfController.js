@@ -3,6 +3,9 @@ import Pdf from '../models/pdfModel.js';
 export const uploadPdf = async (req, res) => {
     const { rowId } = req.body;
 
+    console.log("rowid recibido:", rowId);
+    
+
     // Verifica que req.file esté definido
     if (!req.file) {
         return res.status(400).json({ message: 'No se subió ningún archivo.' });
@@ -21,7 +24,7 @@ export const uploadPdf = async (req, res) => {
             filename: originalname, // Usa originalname aquí
             data: buffer,
             contentType: mimetype,
-            rowId: Number(rowId), // Asegúrate de convertirlo a número
+            rowId: rowId, // Asegúrate de convertirlo a número
         });
 
         await newPdf.save();
@@ -33,12 +36,34 @@ export const uploadPdf = async (req, res) => {
 };
 
 
-// Obtener PDF
-    export const getPdfByIndex = async (req, res) => {
-        const { rowId } = req.params;
+export const getPdfByIndex = async (req, res) => {
+    const { rowId } = req.params;
+
+    try {
+        const pdf = await Pdf.findOne({ rowId: rowId });
+
+        if (!pdf) {
+            return res.status(404).json({ message: 'PDF no encontrado' });
+        }
+
+        // Establecer los encabezados correctos para el tipo de contenido (PDF)
+        res.set('Content-Type', pdf.contentType);  // application/pdf
+        // Si quieres que se vea en el navegador y no se descargue, NO pongas 'attachment'
+        // res.set('Content-Disposition', `attachment; filename="${pdf.filename}"`); // Descomenta esta línea solo si deseas forzar la descarga
+
+        // Enviar el archivo PDF directamente en la respuesta
+        res.send(pdf.data);  // Aquí enviamos el buffer directamente
+    } catch (error) {
+        res.status(500).json({ message: 'Error al obtener el PDF', error });
+    }
+};
+
+// Obtener y descargar PDF por rowId
+export const getDownPdfByIndex = async (req, res) => {
+    const { rowId } = req.params;
     
         try {
-            const pdf = await Pdf.findOne({ rowId: Number(rowId) });
+            const pdf = await Pdf.findOne({ rowId: rowId });
     
             if (!pdf) {
                 return res.status(404).json({ message: 'PDF no encontrado' });
@@ -56,6 +81,8 @@ export const uploadPdf = async (req, res) => {
             res.status(500).json({ message: 'Error al obtener el PDF', error });
         }
 };
+
+
 
 // Eliminar PDF
 export const deletePdfByIndex = async (req, res) => {

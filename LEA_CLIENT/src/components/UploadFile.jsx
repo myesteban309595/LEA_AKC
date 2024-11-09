@@ -4,16 +4,16 @@ import { useParams } from 'react-router-dom';
 import { Box, Button, TextField, Typography } from '@mui/material';
 
 
-const FileUpload = ({ uploadRowIndex }) => {
+const FileUpload = ({ uploadrowId }) => {
   const [file, setFile] = useState(null);
   const [fileExtension, setFileExtension] = useState('');
   const [message, setMessage] = useState('');
   const [previewUrl, setPreviewUrl] = useState('');
   const [fileName, setFileName] = useState('Arrastra y suelta tu archivo aquí');
 
-  const { rowIndex } = useParams(); // Obtener el rowIndex de los parámetros de la URL
+  const { rowId } = useParams(); // Obtener el rowId de los parámetros de la URL
 
-  console.log("uploadRowIndex useParams()", rowIndex);
+  console.log("uploadrowId useParams()", rowId);
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -53,14 +53,13 @@ const FileUpload = ({ uploadRowIndex }) => {
         return;
     }
 
-    console.log("rowIndex en uploadFile", rowIndex);
+    console.log("rowId en uploadFile", rowId);
     
     const formData = new FormData();
     formData.append('pdf', file);
-    formData.append('rowIndex', Number(rowIndex));
+    formData.append('rowId', rowId);
 
     console.log("formdata:", formData);
-    
 
     try {
         const response = await axios.post('http://localhost:4041/api/pdfs/upload', formData, {

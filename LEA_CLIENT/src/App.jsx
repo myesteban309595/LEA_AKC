@@ -13,7 +13,7 @@ function App() {
       <BrowserRouter>
        <Routes>
         <Route path='/' element = {<SGMRC/>}/>
-        <Route path="/upload/:rowIndex" element = {<UploadFile/>}/>
+        <Route path="/upload/:rowId" element = {<UploadFile/>}/>
        </Routes>
       </BrowserRouter>
      </Fragment>
