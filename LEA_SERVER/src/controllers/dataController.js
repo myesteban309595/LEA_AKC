@@ -1,5 +1,9 @@
+import { Types } from 'mongoose';
+const { ObjectId } = Types;
+
 // controllers/data.controller.js
 import Data from '../models/dataModels.js';
+
 
 // Crear un nuevo datos
 export const createData = async (req, res) => {
@@ -44,7 +48,7 @@ export const getDataById = async (req, res) => {
   try {
     const data = await Data.findById(req.params.id);
     if (!data) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
+      return res.status(404).json({ message: 'Datos no encontrado' });
     }
     res.status(200).json(data);
   } catch (error) {
@@ -57,7 +61,7 @@ export const updateData = async (req, res) => {
   try {
     const data = await Data.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!data) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
+      return res.status(404).json({ message: 'Datos no encontrado' });
     }
     res.status(200).json(data);
   } catch (error) {
@@ -67,13 +71,31 @@ export const updateData = async (req, res) => {
 
 // Eliminar un datos
 export const deleteData = async (req, res) => {
+  console.log("id que llega al delete:", req.params.id);
+
+  // Validación del ObjectId
+  if (!ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ message: 'Id no válido' });
+  }
+
   try {
+    // Intentar eliminar el documento
     const data = await Data.findByIdAndDelete(req.params.id);
+
+    // Verificar si el documento fue encontrado y eliminado
+    console.log("Documento eliminado:", data);
+
     if (!data) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
+      // Si el documento no se encuentra, enviar mensaje de error
+      return res.status(404).json({ message: 'Fila no encontrada' });
     }
-    res.status(200).json({ message: 'Usuario eliminado correctamente' });
+
+    // Si se eliminó correctamente, enviar un mensaje de éxito
+    return res.status(200).json({ message: 'Fila eliminada correctamente', data });
+
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    // En caso de error en la base de datos
+    console.error("Error al eliminar:", error);
+    return res.status(400).json({ error: error.message });
   }
 };

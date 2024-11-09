@@ -13,6 +13,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import DeleteIcon from '@mui/icons-material/Delete';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import CircularProgress from '@mui/material/CircularProgress';
 
 const SGMRC = () => {
@@ -257,9 +258,31 @@ const DeletePdf = async (rowId) => {
     }
   };
 
+  const deleteRowData = (rowId) => {
+    console.log("rowId que llega a delete:", rowId);
+  
+    axios.delete(`http://localhost:4041/api/table/data/${rowId}`)
+      .then(response => {
+        // Actualiza el estado 'data' después de eliminar la fila
+        setData(prevData => prevData.filter(row => row.id !== rowId));
+        setSnackbarMessage('Datos eliminados correctamente');
+        setSnackbarSeverity('success');
+        setSnackbarOpen(true);
+      })
+      .catch(err => {
+        const errorMessage = err.response ? err.response.data.message : err.message;
+        setSnackbarMessage(`Error al eliminar la fila: ${errorMessage}`);
+        setSnackbarSeverity('error');
+        setSnackbarOpen(true);
+        console.error(err);
+      });
+  };
+  
+
   const filterData = (row) => {
     // Campos a excluir de la data
-    const excludedFields = ['_id', 'createdAt', 'updatedAt', '__v'];
+   // const excludedFields = ['_id', 'createdAt', 'updatedAt', '__v'];
+    const excludedFields = ['_id', 'updatedAt', '__v']; // elimino createAt ya que es el ultimo en el objeto en la DB
   
     // Filtrar las propiedades que no quieres mostrar
     return Object.keys(row)
@@ -332,12 +355,11 @@ const DeletePdf = async (rowId) => {
             <TableCell colSpan={5} style={{ background: "#b8b3fc", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
               Condiciones especiales de manipulacion y almacenamiento
             </TableCell>
-            <TableCell colSpan={2} style={{ background: "#c5fcc5", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
+            <TableCell colSpan={3} style={{ background: "#c5fcc5", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
               Seguimiento Consumo
             </TableCell>
           </TableRow>
           <TableRow>
-
           <TableCell 
             style={
               ColumValue == 0 ? 
@@ -547,6 +569,7 @@ const DeletePdf = async (rowId) => {
             <TableCell style={{position: 'sticky',top:55, background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 2 }}>Observaciones</TableCell>
             <TableCell style={{position: 'sticky',top:55, background: "#d9ffd9", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 2 }}>Vencimiento</TableCell>
             <TableCell style={{position: 'sticky',top:55, background: "#d9ffd9", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 2 }}>Fecha actual</TableCell>
+            <TableCell style={{position: 'sticky',top:55, background: "#fcb6b1", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 2 }}>Delete</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -620,7 +643,15 @@ const DeletePdf = async (rowId) => {
                     />
                   ) : colIndex === 13 ? (
                     renderPdfButtons(row._id) // Mostrar botones solo para la columna 13
-                  ) : (
+                  ) :  colIndex === 18 ? (
+                    <IconButton
+                     style={{ outline: "none", color: "#fc5a4e" }}
+                     onClick={() => deleteRowData(row._id)}
+                     >
+                      <HighlightOffIcon />
+                     </IconButton>
+                  ) :
+                  (
                     filteredRow[column] // Mostrar el valor de la celda filtrada
                   )}
                 </TableCell>
