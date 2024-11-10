@@ -666,9 +666,10 @@ const deleteRowData = (rowId) => {
                       fontSize: "14px"
                     }
                   }
-                  onDoubleClick={() => handleDoubleClick(rowIndex, column)}
+                  // onDoubleClick={() => handleDoubleClick(rowIndex, column)}
+                  onClick={() => handleDoubleClick(rowIndex, column)}
                 >
-                  {editingCell.rowIndex === rowIndex && editingCell.column === column && colIndex !== 13 ? (
+                  {editingCell.rowIndex === rowIndex && editingCell.column === column && colIndex !== 13 && colIndex !== 18 ? (
                     <TextField
                       sx={{
                         width: '100%',
