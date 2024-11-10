@@ -455,9 +455,9 @@ const deleteRowData = (rowId) => {
             <TableCell 
               style={
                 ColumValue == 2 ? 
-                {position: 'sticky', left: 0,top:55, zIndex: 2, textAlign: 'center', background: "#f5d9ff"} 
+                {position: 'sticky', minWidth: '200px', left: 0,top:55, zIndex: 2, textAlign: 'center', background: "#f5d9ff"} 
                 : 
-                {position: 'sticky',top:55, background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', }}>            
+                {position: 'sticky', minWidth: '200px',top:55, background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', }}>            
               Nombre
               <IconButton
                 size="small"
@@ -475,9 +475,9 @@ const deleteRowData = (rowId) => {
             <TableCell 
               style={
                 ColumValue == 3 ? 
-                {position: 'sticky', left: 0,top:55, zIndex: 2, textAlign: 'center', background: "#f5d9ff"} 
+                {position: 'sticky', minWidth: '100px', left: 0,top:55, zIndex: 2, textAlign: 'center', background: "#f5d9ff"} 
                 : 
-                {position: 'sticky',top:55, background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', }}>    
+                {position: 'sticky', minWidth: '100px',top:55, background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', }}>    
               Marca
               <IconButton
                 size="small"
@@ -495,9 +495,9 @@ const deleteRowData = (rowId) => {
             <TableCell 
               style={
                 ColumValue == 4 ? 
-                {position: 'sticky', left: 0,top:55, zIndex: 2, textAlign: 'center', background: "#f5d9ff"} 
+                {position: 'sticky',  minWidth: '100px',left: 0,top:55, zIndex: 2, textAlign: 'center', background: "#f5d9ff"} 
                 : 
-                {position: 'sticky',top:55, background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', }}>                 
+                {position: 'sticky', minWidth: '100px',top:55, background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', }}>                 
               No. Lote
               <IconButton
                 size="small"
@@ -515,9 +515,9 @@ const deleteRowData = (rowId) => {
             <TableCell 
                style={
                 ColumValue == 5 ? 
-                {position: 'sticky', left: 0,top:55, zIndex: 2, textAlign: 'center', background: "#f5d9ff",} 
+                {position: 'sticky',  minWidth: '100px',left: 0,top:55, zIndex: 2, textAlign: 'center', background: "#f5d9ff",} 
                 : 
-                { position: 'sticky',top:55, background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)',}}>                 
+                { position: 'sticky',  minWidth: '100px',top:55, background: "#f5d9ff", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)',}}>                 
               TIPO
               <IconButton
                 size="small"
@@ -535,9 +535,9 @@ const deleteRowData = (rowId) => {
             <TableCell 
               style={
                 ColumValue == 6 ? 
-                {position: 'sticky', left: 0,top:55, zIndex: 2, textAlign: 'center',  background: "#feffcf",} 
+                {position: 'sticky',  minWidth: '100px', left: 0,top:55, zIndex: 2, textAlign: 'center',  background: "#feffcf",} 
                 : 
-                {position: 'sticky',top:55, background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', }}>                 
+                {position: 'sticky',  minWidth: '100px', top:55, background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', }}>                 
               AREA
               <IconButton
                 size="small"
@@ -555,9 +555,9 @@ const deleteRowData = (rowId) => {
             <TableCell 
               style={
                 ColumValue == 7 ? 
-                {position: 'sticky', left: 0,top:55, zIndex: 2, textAlign: 'center',   background: "#feffcf",} 
+                {position: 'sticky', left: 0, minWidth: '100px',top:55, zIndex: 2, textAlign: 'center',   background: "#feffcf",} 
                 : 
-                {position: 'sticky',top:55, background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)',}}>                 
+                {position: 'sticky',top:55,  minWidth: '100px', background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)',}}>                 
               Fecha de ingreso al laboratorio
               <IconButton
                 size="small"
@@ -575,9 +575,9 @@ const deleteRowData = (rowId) => {
             <TableCell 
               style={
                 ColumValue == 8 ? 
-                {position: 'sticky', left: 0,top:55, zIndex: 2, textAlign: 'center', background: "#feffcf"} 
+                {position: 'sticky', left: 0,  minWidth: '100px', top:55, zIndex: 2, textAlign: 'center', background: "#feffcf"} 
                 : 
-                {position: 'sticky',top:55, background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)',}}>                    
+                {position: 'sticky',top:55,  minWidth: '100px', background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)',}}>                    
               Fecha de vencimiento
               <IconButton
                 size="small"
@@ -595,9 +595,9 @@ const deleteRowData = (rowId) => {
             <TableCell 
               style={
                 ColumValue == 9 ? 
-                {position: 'sticky', left: 0,top:55, zIndex: 2, textAlign: 'center', background: "#feffcf"} 
+                {position: 'sticky', left: 0,  minWidth: '100px', top:55, zIndex: 2, textAlign: 'center', background: "#feffcf"} 
                 : 
-                {position: 'sticky',top:55, background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)',}}>                    
+                {position: 'sticky',top:55,  minWidth: '100px', background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)',}}>                    
               Fecha actualización de la información
               <IconButton
                 size="small"
