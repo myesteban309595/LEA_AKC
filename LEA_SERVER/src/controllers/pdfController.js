@@ -35,6 +35,37 @@ export const uploadPdf = async (req, res) => {
     }
 };
 
+export const updatePdf = async (req, res) => {
+    const { rowId } = req.body;
+    const { originalname, mimetype, buffer } = req.file;
+
+    try {
+        // Buscar el PDF existente por el rowId
+        const existingPdf = await Pdf.findOne({ rowId });
+
+        if (!existingPdf) {
+            return res.status(404).json({ message: 'No existe un PDF con este rowId.' });
+        }
+
+        // Eliminar el archivo anterior
+        await Pdf.findOneAndDelete({ rowId });
+
+        // Crear y guardar el nuevo archivo PDF
+        const newPdf = new Pdf({
+            filename: originalname,
+            data: buffer,
+            contentType: mimetype,
+            rowId: rowId,
+        });
+
+        await newPdf.save();
+        res.status(200).json({ message: 'PDF reemplazado exitosamente', filename: originalname });
+        
+    } catch (error) {
+        console.error("Error al actualizar el PDF:", error);
+        res.status(500).json({ message: 'Error al actualizar el PDF', error });
+    }
+};
 
 export const getPdfByIndex = async (req, res) => {
     const { rowId } = req.params;
@@ -81,8 +112,6 @@ export const getDownPdfByIndex = async (req, res) => {
             res.status(500).json({ message: 'Error al obtener el PDF', error });
         }
 };
-
-
 
 // Eliminar PDF
 export const deletePdfByIndex = async (req, res) => {

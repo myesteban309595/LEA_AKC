@@ -59,43 +59,101 @@ const FileUpload = ({ uploadrowId }) => {
     formData.append('rowId', rowId);
 
     try {
-        const response = await axios.post('http://localhost:4041/api/pdfs/upload', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
+        // Verificar si ya existe un PDF con este rowId
+        const checkResponse = await axios.get(`http://localhost:4041/api/pdfs/${rowId}`);
+        
+        // Si ya existe un PDF, preguntamos si desea reemplazarlo
+        if (checkResponse.status === 200) {
+            const result = await Swal.fire({
+                title: 'Ya existe un PDF asociado a este material de referencia',
+                text: '¿Deseas sustituirlo por el archivo actual?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, sustituir',
+                cancelButtonText: 'No, cancelar'
+            });
 
-        let timerInterval;
+            if (result.isConfirmed) {
+                // Reemplazar el PDF usando el endpoint updatePdf
+                const replaceFormData = new FormData();
+                replaceFormData.append('pdf', file);
+                replaceFormData.append('rowId', rowId);
 
-        Swal.fire({
-          title: "Archivo cargado correctamente",
-          html: "Redirigiendo en <b></b> millisegundos.",
-          timer: 2000,
-          timerProgressBar: true,
-          didOpen: () => {
-            Swal.showLoading();
-            const timer = Swal.getPopup().querySelector("b");
-            timerInterval = setInterval(() => {
-              timer.textContent = `${Swal.getTimerLeft()}`;
-            }, 100);
-          },
-          willClose: () => {
-            clearInterval(timerInterval);
-          }
-        }).then((result) => {
-          if (result.dismiss === Swal.DismissReason.timer) {
-            window.location = '/';
-          }
-        });
+                const replaceResponse = await axios.post('http://localhost:4041/api/pdfs/update', replaceFormData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
 
-        setMessage(`Archivo subido exitosamente: ${response.data.filename} (Extensión: ${fileExtension})`);
-        setPreviewUrl('');
-        setFile(null);
-        setFileName('Arrastra y suelta tu archivo aquí'); // Resetear el texto del input
+                // Mostrar el modal con el contador y redirección
+                let timerInterval;
+                Swal.fire({
+                    title: 'Reemplazo exitoso',
+                    html: 'Redirigiendo en <b></b> milisegundos.',
+                    timer: 2000,  // Tiempo de espera en milisegundos
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading();
+                        const timer = Swal.getPopup().querySelector("b");
+                        timerInterval = setInterval(() => {
+                            timer.textContent = `${Swal.getTimerLeft()}`;
+                        }, 100);
+                    },
+                    willClose: () => {
+                        clearInterval(timerInterval);
+                    }
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        window.location = '/';  // Redirige después del tiempo de espera
+                    }
+                });
+
+                setMessage(`Archivo reemplazado exitosamente: ${replaceResponse.data.filename}`);
+            }
+        }
     } catch (error) {
-        Swal.fire('Error al subir el archivo: ' + error.message);
-        setMessage('Error al subir el archivo: ' + error.message);
+        if (error.response && error.response.status === 404) {
+            // Si no existe un PDF asociado, hacemos la carga normalmente
+            const uploadResponse = await axios.post('http://localhost:4041/api/pdfs/upload', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            // Mostrar el modal con el contador y redirección después de la carga exitosa
+            let timerInterval;
+            Swal.fire({
+                title: 'Archivo cargado correctamente',
+                html: 'Redirigiendo en <b></b> milisegundos.',
+                timer: 2000,  // Tiempo de espera en milisegundos
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading();
+                    const timer = Swal.getPopup().querySelector("b");
+                    timerInterval = setInterval(() => {
+                        timer.textContent = `${Swal.getTimerLeft()}`;
+                    }, 100);
+                },
+                willClose: () => {
+                    clearInterval(timerInterval);
+                }
+            }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.timer) {
+                    window.location = '/';  // Redirige después del tiempo de espera
+                }
+            });
+
+            setMessage(`Archivo subido exitosamente: ${uploadResponse.data.filename}`);
+        } else {
+            Swal.fire('Error al verificar el archivo: ' + error.message);
+            setMessage('Error al verificar el archivo: ' + error.message);
+        }
     }
+
+    // Limpiar el formulario y el estado después de la carga
+    setPreviewUrl('');
+    setFile(null);
+    setFileName('Arrastra y suelta tu archivo aquí');
 };
 
   useEffect(() => {
