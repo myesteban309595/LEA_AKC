@@ -4,6 +4,8 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import Swal from 'sweetalert2'
 import { Snackbar, Alert } from '@mui/material'
 
+import {calcularDiferenciaEnMeses} from '../utils/Functions/CalcularDiferenciaFechas'
+
 import ModalComponent from '../utils/modals/ViewPdf';
 import FileUpload from '../components/UploadFile';
 import SpeedDialComponent from '../utils/speedDial/SpeedDial';
@@ -619,7 +621,7 @@ const deleteRowData = (rowId) => {
             <TableCell style={{position: 'sticky',top:55, background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 2 }}>Responsable de la manipulación</TableCell>
             <TableCell style={{position: 'sticky',top:55, background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 2 }}>Observaciones</TableCell>
             <TableCell style={{position: 'sticky',top:55, background: "#d9ffd9", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 2 }}>Vencimiento</TableCell>
-            <TableCell style={{position: 'sticky',top:55, background: "#d9ffd9", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 2 }}>Fecha actual</TableCell>
+            <TableCell style={{position: 'sticky',top:55, background: "#d9ffd9", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 2 }}>Alerta [Meses]</TableCell>
             <TableCell style={{position: 'sticky',top:55, background: "#fcb6b1", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 2 }}>Delete</TableCell>
           </TableRow>
         </TableHead>
@@ -633,40 +635,56 @@ const deleteRowData = (rowId) => {
             marginLeft: "600px",
             textAlign: 'center',
             padding: 3,
-            height: '50vh', // Asegura que ocupe toda la altura de la fila
+            height: '50vh',
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'center', // Centrado vertical y horizontal
+            alignItems: 'center',
           }}
         >
-          <CircularProgress size={150} /> {/* Aumenta el tamaño aquí */}
+          <CircularProgress size={150} />
         </TableCell>
       </TableRow>
     ) : (
       Array.isArray(data) && data.length > 0 ? (
         data.map((row, rowIndex) => {
           const filteredRow = filterData(row); // Filtrar la fila
+          const fechaVencimiento = row.fechaVencimiento;  // Fecha de vencimiento (string)
+          const mesesRestantes = parseInt(row.mesesRestantes, 10);  // Convertir mesesRestantes a número
+
+          // Calcular la diferencia en meses entre la fecha actual y la fecha de vencimiento
+          const fechaActual = new Date(); // Fecha actual
+          const diferenciaMeses = calcularDiferenciaEnMeses(fechaActual, fechaVencimiento);
+
+          // Comprobar si la fecha de vencimiento está dentro del rango de mesesRestantes
+          const esProximoAVencer = diferenciaMeses <= mesesRestantes;
+          const materialVencido = new Date(fechaVencimiento) < fechaActual; // Comprobar si la fecha ya ha pasado
+
+          // Establecer los colores de fondo
+          let backgroundColor = 'transparent';
+          let color = 'inherit'; // Color por defecto para el texto
+
+          // Si la fecha de vencimiento ya ha pasado
+          if (materialVencido) {
+            backgroundColor = 'rgba(255, 87, 34, 0.2)'; // Rojo claro
+            color = '#fc5a4e'; // Rojo para el texto
+          }
+          // Si la fecha está próxima a vencer (dentro de los meses restantes)
+          else if (esProximoAVencer) {
+            backgroundColor = 'rgba(255, 235, 59, 0.3)'; // Amarillo claro
+            color = '#ff9800'; // Naranja para el texto
+          }
+
           return (
             <TableRow key={rowIndex}>
               {Object.keys(filteredRow).map((column, colIndex) => (
                 <TableCell
                   key={colIndex}
-                  style={
-                    colIndex === ColumValue ? {
-                      position: 'sticky',
-                      left: 0,
-                      zIndex: 0,
-                      padding: 0,
-                      margin: 0,
-                      backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                      textAlign: 'center',
-                      fontSize: "14px"
-                    } : {
-                      textAlign: 'center',
-                      fontSize: "14px"
-                    }
-                  }
-                  // onDoubleClick={() => handleDoubleClick(rowIndex, column)}
+                  sx={{
+                    textAlign: 'center',
+                    fontSize: "14px",
+                    backgroundColor: backgroundColor, // Color de fondo
+                    color: color, // Color de texto
+                  }}
                   onClick={() => handleDoubleClick(rowIndex, column)}
                 >
                   {editingCell.rowIndex === rowIndex && editingCell.column === column && colIndex !== 13 && colIndex !== 18 ? (
@@ -695,15 +713,14 @@ const deleteRowData = (rowId) => {
                     />
                   ) : colIndex === 13 ? (
                     renderPdfButtons(row._id) // Mostrar botones solo para la columna 13
-                  ) :  colIndex === 18 ? (
+                  ) : colIndex === 18 ? (
                     <IconButton
-                     style={{ outline: "none", color: "#fc5a4e" }}
-                     onClick={() => deleteRowData(row._id)}
-                     >
+                      style={{ outline: "none", color: "#fc5a4e" }}
+                      onClick={() => deleteRowData(row._id)}
+                    >
                       <HighlightOffIcon />
-                     </IconButton>
-                  ) :
-                  (
+                    </IconButton>
+                  ) : (
                     filteredRow[column] // Mostrar el valor de la celda filtrada
                   )}
                 </TableCell>
