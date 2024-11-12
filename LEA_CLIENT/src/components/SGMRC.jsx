@@ -685,10 +685,11 @@ const deleteRowData = (rowId) => {
                     zIndex: 0,
                     padding: 0,
                     margin: 0,
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                    backgroundColor: backgroundColor,
+                    color: color,
                     textAlign: 'center',
                     fontSize: "14px"
-                  } : {
+                   } : {
                     textAlign: 'center',
                     fontSize: "14px",
                     backgroundColor: backgroundColor, // Color de fondo
