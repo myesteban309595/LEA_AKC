@@ -678,6 +678,23 @@ const deleteRowData = (rowId) => {
             <TableRow key={rowIndex}>
               {Object.keys(filteredRow).map((column, colIndex) => (
                 <TableCell
+                style={
+                  colIndex === ColumValue ? {
+                    position: 'sticky',
+                    left: 0,
+                    zIndex: 0,
+                    padding: 0,
+                    margin: 0,
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                    textAlign: 'center',
+                    fontSize: "14px"
+                  } : {
+                    textAlign: 'center',
+                    fontSize: "14px",
+                    backgroundColor: backgroundColor, // Color de fondo
+                    color: color, // Color de texto
+                  }
+                }
                   key={colIndex}
                   sx={{
                     textAlign: 'center',
