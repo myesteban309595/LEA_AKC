@@ -5,6 +5,7 @@ import Swal from 'sweetalert2'
 import { Snackbar, Alert } from '@mui/material'
 
 import {calcularDiferenciaEnMeses} from '../utils/Functions/CalcularDiferenciaFechas'
+import {sendProductData} from '../utils/Functions/SendNotificationEmail'
 
 import ModalComponent from '../utils/modals/ViewPdf';
 import FileUpload from '../components/UploadFile';
@@ -667,11 +668,13 @@ const deleteRowData = (rowId) => {
           if (materialVencido) {
             backgroundColor = 'rgba(255, 87, 34, 0.2)'; // Rojo claro
             color = '#fc5a4e'; // Rojo para el texto
+            sendProductData(data);
           }
           // Si la fecha está próxima a vencer (dentro de los meses restantes)
           else if (esProximoAVencer) {
             backgroundColor = 'rgba(255, 235, 59, 0.3)'; // Amarillo claro
             color = '#ff9800'; // Naranja para el texto
+            sendProductData(data);
           }
 
           return (

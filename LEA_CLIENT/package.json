@@ -16,12 +16,15 @@
     "@mui/material": "^6.1.5",
     "@react-pdf/renderer": "^4.0.0",
     "axios": "^1.7.7",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.16",
     "papaparse": "^5.4.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-pdf": "^9.1.1",
     "react-router-dom": "^6.27.0",
-    "sweetalert2": "^11.14.4"
+    "sweetalert2": "^11.14.4",
+    "whatsapp-web.js": "^1.26.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
