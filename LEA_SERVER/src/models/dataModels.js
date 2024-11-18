@@ -20,7 +20,8 @@ const dataSchema = new mongoose.Schema({
   responsable: { type: String },  // Cambié a String si es un nombre o identificador
   observaciones: { type: String },
   vencimiento: { type: String },
-  mesesRestantes: { type: String }
+  mesesRestantes: { type: String },
+  estado: {type: String}
 }, { timestamps: true });  // Este campo agrega createdAt y updatedAt automáticamente
 
 // Crear el modelo
