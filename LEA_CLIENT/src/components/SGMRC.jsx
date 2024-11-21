@@ -19,7 +19,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import CircularProgress from '@mui/material/CircularProgress';
 
-const SGMRC = () => {
+const SGMRC = React.memo(() => {
   // Estado para la fecha y hora actual
   const [fechaHoraActual, setFechaHoraActual] = useState('');
   const [data, setData] = useState([]);
@@ -67,6 +67,7 @@ const SGMRC = () => {
   }, []);
 
   useEffect(() => {
+    console.log('Componente montado');
     // Realizar la solicitud GET a la API
     axios.get('http://localhost:4041/api/table/data')
       .then(response => {
@@ -83,7 +84,7 @@ const SGMRC = () => {
         //setError('Error al cargar los datos');
         setLoading(false);
       });
-  }, []);
+  }, []); // Este useEffect depende de la data, pero solo se ejecuta cuando data cambia.
   
     if (error) {
       return <div>{error}</div>;
@@ -194,7 +195,19 @@ const DeletePdf = async (rowId) => {
     setTempValue(event.target.value);
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      // Al presionar Enter, desenfocamos el campo y luego guardamos los datos
+      event.target.blur(); // Esto activará el `onBlur` de inmediato
+      // Usamos setTimeout para asegurar que el blur se complete antes de guardar
+      setTimeout(() => {
+        handleBlur();
+      }, 100);  // Retraso de 100 ms para asegurarnos que el evento de blur haya pasado
+    }
+  };
+  
   const handleBlur = async () => {
+    
     // Crea una copia de los datos y actualiza el valor modificado
     const newData = [...data];
     newData[editingCell.rowIndex][editingCell.column] = tempValue;
@@ -218,7 +231,8 @@ const DeletePdf = async (rowId) => {
       setSnackbarOpen(true);
       setSnackbarSeverity("error");
     }
-  }  
+  };
+  
 
   const agregarDataFila = ()=> {
 
@@ -648,41 +662,42 @@ const deleteRowData = (rowId) => {
     ) : (
       Array.isArray(data) && data.length > 0 ? (
         data.map((row, rowIndex) => {
+
           const filteredRow = filterData(row); // Filtrar la fila
           const fechaVencimiento = row.fechaVencimiento;  // Fecha de vencimiento (string)
           const mesesRestantes = parseInt(row.mesesRestantes, 10);  // Convertir mesesRestantes a número
 
-          // Calcular la diferencia en meses entre la fecha actual y la fecha de vencimiento
+          // Convertimos la fecha de vencimiento a un objeto Date para asegurarnos de que sea válida
+          const fechaVencimientoDate = new Date(fechaVencimiento); // Convertir a Date
           const fechaActual = new Date(); // Fecha actual
-          const diferenciaMeses = calcularDiferenciaEnMeses(fechaActual, fechaVencimiento);
+          
+          // Calcular la diferencia en meses entre la fecha actual y la fecha de vencimiento
+          const diferenciaMeses = calcularDiferenciaEnMeses(fechaActual, fechaVencimientoDate);
 
           // Comprobar si la fecha de vencimiento está dentro del rango de mesesRestantes
           const esProximoAVencer = diferenciaMeses <= mesesRestantes;
-          const materialVencido = new Date(fechaVencimiento) < fechaActual; // Comprobar si la fecha ya ha pasado
+          const materialVencido = fechaVencimientoDate < fechaActual; // Comprobar si la fecha ya ha pasado
 
           // Establecer los colores de fondo
           let backgroundColor = 'transparent';
           let color = 'inherit'; // Color por defecto para el texto
 
-          // Si la fecha de vencimiento ya ha pasado
+          // Si la fecha de vencimiento ya ha pasado (producto vencido)
           if (materialVencido) {
             backgroundColor = 'rgba(255, 87, 34, 0.2)'; // Rojo claro
             color = '#fc5a4e'; // Rojo para el texto
-            sendProductData(data);
           }
           // Si la fecha está próxima a vencer (dentro de los meses restantes)
           else if (esProximoAVencer) {
             backgroundColor = 'rgba(255, 235, 59, 0.3)'; // Amarillo claro
             color = '#ff9800'; // Naranja para el texto
-            sendProductData(data);
           }
 
           return (
             <TableRow key={rowIndex}>
               {Object.keys(filteredRow).map((column, colIndex) => (
                 <TableCell
-                style={
-                  colIndex === ColumValue ? {
+                  style={colIndex === ColumValue ? {
                     position: 'sticky',
                     left: 0,
                     zIndex: 0,
@@ -692,13 +707,12 @@ const deleteRowData = (rowId) => {
                     color: color,
                     textAlign: 'center',
                     fontSize: "14px"
-                   } : {
+                  } : {
                     textAlign: 'center',
                     fontSize: "14px",
                     backgroundColor: backgroundColor, // Color de fondo
                     color: color, // Color de texto
-                  }
-                }
+                  }}
                   key={colIndex}
                   sx={{
                     textAlign: 'center',
@@ -731,6 +745,7 @@ const deleteRowData = (rowId) => {
                       value={tempValue}
                       onChange={handleChange}
                       onBlur={handleBlur}
+                      onKeyDown={handleKeyDown}
                     />
                   ) : colIndex === 13 ? (
                     renderPdfButtons(row._id) // Mostrar botones solo para la columna 13
@@ -800,6 +815,6 @@ const deleteRowData = (rowId) => {
 </TableContainer>
 
 );
-};
+});
 
 export default SGMRC;

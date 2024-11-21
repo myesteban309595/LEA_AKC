@@ -1,19 +1,22 @@
 // Función para enviar los datos de los productos al backend
-export const sendProductData = async (productData) => {
-  try {
-    const response = await fetch('/api/email/sendEmail', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(productData),
-    });
+import axios from 'axios'
 
-    const data = await response.json();
-    console.log('Datos enviados con éxito:', data);
-  } catch (error) {
-    console.error('Error al enviar los datos:', error);
-  }
+export const sendProductData = async (productData) => {
+
+  console.log("product data en sendProductData: ", productData);
+  
+  // try {
+  //   const response = await axios.post('http://localhost:4041/api/email/sendemail', productData, {
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //   });
+
+  //   const data = await response.json();
+  //   console.log('Datos enviados con éxito:', data);
+  // } catch (error) {
+  //   console.error('Error al enviar los datos:', error);
+  // }
 };
 
 // Ejemplo de productos que podrían estar por vencer o vencidos
