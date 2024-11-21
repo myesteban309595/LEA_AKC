@@ -1,4 +1,4 @@
 {
     "watch": ["src"],          
-    "ignore": ["node_modules", "cronJob.js"]  
+    "ignore": ["node_modules"]  
 }

@@ -7,7 +7,10 @@ import Data from '../models/dataModels.js'; // Asegúrate de que este modelo est
 const db = (async () => {
   try {
     // Conectar a la base de datos
-    await mongoose.connect(URI);
+    await mongoose.connect(URI, {
+      serverSelectionTimeoutMS: 30000,  // Aumenta el timeout a 30 segundos
+      socketTimeoutMS: 45000,  // Aumenta el tiempo de espera en el socket
+    });
     console.log("Conectado a la base de datos");
 
     // Verificar si existe algún registro en la colección
@@ -16,16 +19,16 @@ const db = (async () => {
     if (count === 0) {
       // Si no hay registros, crear un registro por defecto
       const defaultData = new Data({
-        fechaSolicitud: '2024/10/31',
+        fechaSolicitud: new Date('2024-10-31'), // Usa Date aquí
         codigoInventario: 'ABC123456',
         nombre: 'Producto Ejemplo',
         marca: 'Producto Ejemplo',
         lote: 'PRK32KJJ',
         tipo: 'Producto químico',
         area: 'Laboratorio',
-        fechaIngreso: '2024/10/31',
-        fechaVencimiento: '2024/10/31',
-        fechaActualizacionInformacion: '2024/10/31',
+        fechaIngreso: new Date('2024-10-31'), // Usa Date aquí
+        fechaVencimiento: new Date('2024-10-31'), // Usa Date aquí
+        fechaActualizacionInformacion: new Date('2024-10-31'), // Usa Date aquí
         cantidadIngreso: 150,
         manipulacion: 'Seguridad estándar',
         almacenamiento: 'A temperatura controlada',

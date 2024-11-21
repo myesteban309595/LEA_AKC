@@ -1,6 +1,6 @@
 import cron from 'node-cron';
-import { sendEmailData } from './mailer';
-import { obtenerProductosAProximoVencer, obtenerProductosVencidos } from './data/data';
+import { sendEmailData } from './mailer.js';
+import { obtenerProductosAProximoVencer, obtenerProductosVencidos } from './data/data.js';
 
 console.log("El cron job script está corriendo...");
 

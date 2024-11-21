@@ -1,4 +1,3 @@
-// models/user.model.js
 import mongoose from 'mongoose';
 
 // Definir el esquema con 18 campos
@@ -23,6 +22,10 @@ const dataSchema = new mongoose.Schema({
   mesesRestantes: { type: String },
   estado: {type: String}
 }, { timestamps: true });  // Este campo agrega createdAt y updatedAt automáticamente
+
+// Crear los índices en los campos más utilizados
+dataSchema.index({ fechaVencimiento: 1 });
+dataSchema.index({ mesesRestantes: 1 });
 
 // Crear el modelo
 const Data = mongoose.model('Data', dataSchema);
