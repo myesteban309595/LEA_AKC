@@ -10,18 +10,20 @@ console.log("hola enejcutando en mailer.js");
 console.log('Email User:', process.env.NODE_EMAIL_USER);
 console.log('Email Pass:', process.env.NODE_EMAIL_PASS);
 
+//^  ejecucion de nodecron
 
-cron.schedule('35 11 * * *', async () => {  // Ejecutar cada minuto
+cron.schedule('* * * * *', async () => {  // Ejecutar cada minuto
   console.log("Ejecutando node-cron a las 11:35");
 
   try {
+
     // Obtener productos próximos a vencer
     console.log('Obteniendo productos próximos a vencer...');
     const productosProximos = await obtenerProductosAProximoVencer();
-    console.log("productosProximos:", productosProximos);
+    console.log("productos Proximos a vencer en mailer:", productosProximos);
 
     productosProximos.forEach((producto) => {
-      const body = `El producto ${producto.nombre} con lote ${producto.lote} está a punto de vencer el ${producto.fechaVencimiento}.`;
+      const body = `El producto ${producto.nombre} con lote ${producto.lote} está a punto de vencer en ${producto.mesesRestantes} meses, vencimiento: ${producto.fechaVencimiento}.`;
       console.log(body);
       sendEmailData('Aviso proximo a vencer', body);
     });
@@ -29,7 +31,7 @@ cron.schedule('35 11 * * *', async () => {  // Ejecutar cada minuto
     // Obtener productos vencidos
     console.log('Obteniendo productos vencidos...');
     const productosVencidos = await obtenerProductosVencidos();
-    console.log("productosVencidos:", productosVencidos);
+    console.log("productos Vencidos en mailer:", productosVencidos);
 
     productosVencidos.forEach((producto) => {
       const body = `El producto ${producto.nombre} con lote ${producto.lote} ha vencido el ${producto.fechaVencimiento}.`;
@@ -40,6 +42,9 @@ cron.schedule('35 11 * * *', async () => {  // Ejecutar cada minuto
     console.error('Error al ejecutar las funciones:', error);
   }
 });
+
+
+//^  envio de mensaje con nodemailes
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -62,9 +67,6 @@ export const sendEmailData = async (subject, body) => {
     subject,
     text: body,
   };
-
-console.log("mailOptions:", mailOptions);
-
 
   try {
     const info = await transporter.sendMail(mailOptions);
