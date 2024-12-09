@@ -254,7 +254,8 @@ const DeletePdf = async (rowId) => {
       responsable: '',
       observaciones: '',
       vencimiento: '--/--/--',
-      mesesRestantes: null
+      mesesRestantes: null,
+      notificado: false
     }
 
     axios.post('http://localhost:4041/api/table/data', newFile)
