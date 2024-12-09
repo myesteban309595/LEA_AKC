@@ -1,4 +1,5 @@
 
+import Producto from '../models/dataModels.js'; // Asumiendo que tu modelo de Producto está en la carpeta models
 import {sendEmailData} from '../utils/mailer.js'
 
 export const sendEmail = async (req, res) => {
@@ -19,3 +20,32 @@ export const sendEmail = async (req, res) => {
     }
   };
   
+
+//? Controlador para actualizar el estado "notificado" de un producto
+
+export const notificarProducto = async (req, res) => {
+  const { productoId } = req.params; // Recibir el ID del producto de la URL
+
+  console.log("ejecutando notificar producto, id que llega:", productoId);
+  
+  try {
+    const producto = await Producto.findById(productoId);
+
+    if (!producto) {
+      return res.status(404).json({ message: 'Producto no encontrado' });
+    }
+
+    if (producto.notificado) {
+      return res.status(200).json({ message: 'El producto ya ha sido notificado' });
+    }
+
+    // Actualizar el campo "notificado" a true
+    producto.notificado = true;
+    await producto.save();
+
+    return res.status(200).json({ message: 'Producto notificado correctamente' });
+  } catch (error) {
+    console.error('Error al notificar el producto:', error);
+    return res.status(500).json({ message: 'Error interno del servidor' });
+  }
+};

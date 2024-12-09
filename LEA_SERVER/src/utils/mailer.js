@@ -27,7 +27,7 @@ cron.schedule('* * * * *', async () => {  // Ejecutar cada minuto
       const body = `
       <p>El producto ${producto.nombre} con lote ${producto.lote} está a punto de vencer en ${producto.mesesRestantes} meses, vencimiento: ${producto.fechaVencimiento}.</p>
       <p>
-        <a href="http://tuservidor.com/notificar-producto/${producto.id}" 
+        <a href="http://localhost:4041/api/email/notificar-producto/${producto.id}" 
            style="display: inline-block; background-color: #4CAF50; color: white; padding: 10px 20px; text-align: center; text-decoration: none; font-size: 16px; border-radius: 5px;">
            Notificado
         </a>
@@ -71,8 +71,6 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendEmailData = async (subject, body) => {
-  console.log("subject en sendEmailData:", subject);
-  console.log("body en sendEmailData:", body);
   
   const mailOptions = {
     from: process.env.NODE_EMAIL_USER,
