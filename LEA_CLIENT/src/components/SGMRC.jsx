@@ -199,6 +199,46 @@ const DeletePdf = async (rowId) => {
   }
 };
 
+const NotificarAlerta = async (params) => {
+
+  try {
+    const result = await Swal.fire({
+      title: params.notificado ? "Activar Notificaciones":"Estas seguro?",
+      text: params.notificado ? 
+            "Recibirá correos electronicos de alerta sobre este reactivo"
+            :
+            "Una vez notificado, se desactivará la alerta y no se enviarán emails para este reactivo",
+      icon:  params.notificado ? "question" :"warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: params.notificado ? "Sí, enviame alertas al email": "Sí, Notifica el Enterado",
+    });
+
+    // Verifica si el usuario confirmó la acción
+    if (result.isConfirmed) {
+      const response = await axios.get(`http://localhost:4041/api/email/notificar-producto/${params._id}`);
+
+      // Notificación de éxito
+      Swal.fire({
+        icon: 'success',
+        title: 'Nofiticado',
+        text: response.data.message,
+      });
+
+      // Aquí puedes realizar cualquier acción adicional, como actualizar el estado de la lista de PDFs
+    }
+   } catch (error) {
+     console.error('Error al notificar sobre la alerta:', error);
+    // Notificación de error
+    Swal.fire({
+      icon: 'error',
+      title: 'Error al notificar la alerta',
+      text: error.response?.data?.message || 'Ocurrió un error inesperado.',
+    });
+  }
+};
+
   const handleCloseModal = () => {
     setModalOpen(false);
   };
@@ -409,14 +449,14 @@ const deleteRowData = (rowId) => {
     </div>
   );
   
-  const renderNotificationsButtons = (notificado) => (
+  const renderNotificationsButtons = (params) => (
 
     <div style={{ display: 'flex', justifyContent: 'center', marginLeft: 10, marginRight: 10 }}>
-      {notificado ? 
+      {params.notificado ? 
        <Tooltip title="Alerta Desactivada" enterDelay={1000}>
          <IconButton
           style={{ outline: "none", color: "#5d6d7e" }}
-          //onClick={() => fetchPdf(rowId)}
+          onClick={() => NotificarAlerta(params)}
          >
           <NotificationsOffIcon />
          </IconButton>
@@ -425,7 +465,7 @@ const deleteRowData = (rowId) => {
         <Tooltip title="Recibir Alerta" >
          <IconButton
           style={{ outline: "none", color: "#212f3c" }}
-          //onClick={() => fetchPdf(rowId)}
+          onClick={() => NotificarAlerta(params)}
          >
           <NotificationsActiveIcon />
          </IconButton>
@@ -803,7 +843,7 @@ const deleteRowData = (rowId) => {
                   ) : colIndex === 13 ? (
                     renderPdfButtons(row._id) // Mostrar botones solo para la columna 13
                   ): colIndex === 18 ? (
-                    renderNotificationsButtons(row.notificado) // Mostrar boton si fue notificado o sigue en alarma
+                    renderNotificationsButtons({ _id: row._id, notificado: row.notificado }) // Mostrar boton si fue notificado o sigue en alarma
                   ): colIndex === 19 ? (
                     <IconButton
                       style={{ outline: "none", color: "#fc5a4e" }}
