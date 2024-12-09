@@ -1,8 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Button, IconButton } from '@mui/material';
+import { 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableContainer, 
+  Tooltip, 
+  TableHead, 
+  TableRow, 
+  Paper, 
+  TextField, 
+  Button, 
+  IconButton ,
+  Snackbar,
+  Alert
+  } from '@mui/material';
+
 import Swal from 'sweetalert2'
-import { Snackbar, Alert } from '@mui/material'
+//import { Snackbar, Alert } from '@mui/material'
 
 import {calcularDiferenciaEnMeses} from '../utils/Functions/CalcularDiferenciaFechas'
 import {sendProductData} from '../utils/Functions/SendNotificationEmail'
@@ -398,19 +413,23 @@ const deleteRowData = (rowId) => {
 
     <div style={{ display: 'flex', justifyContent: 'center', marginLeft: 10, marginRight: 10 }}>
       {notificado ? 
-        <IconButton
+       <Tooltip title="Alerta Desactivada" enterDelay={1000}>
+         <IconButton
           style={{ outline: "none", color: "#5d6d7e" }}
           //onClick={() => fetchPdf(rowId)}
-        >
+         >
           <NotificationsOffIcon />
-        </IconButton>
+         </IconButton>
+        </Tooltip>
         :
-        <IconButton
-         style={{ outline: "none", color: "#212f3c" }}
-         //onClick={() => fetchPdf(rowId)}
-        >
+        <Tooltip title="Recibir Alerta" >
+         <IconButton
+          style={{ outline: "none", color: "#212f3c" }}
+          //onClick={() => fetchPdf(rowId)}
+         >
           <NotificationsActiveIcon />
-        </IconButton>
+         </IconButton>
+        </Tooltip>
       }
     </div>
   );
