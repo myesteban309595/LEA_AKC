@@ -23,22 +23,24 @@ cron.schedule('* * * * *', async () => {  // Ejecutar cada minuto
     console.log("productos Proximos a vencer en mailer:", productosProximos);
 
     productosProximos.forEach((producto) => {
-
-      const body = `
-      <p>El producto ${producto.nombre} con lote ${producto.lote} está a punto de vencer en ${producto.mesesRestantes} meses, vencimiento: ${producto.fechaVencimiento}.</p>
-      <p>
-        <a href="http://localhost:4041/api/email/notificar-producto/${producto.id}" 
-           style="display: inline-block; background-color: #4CAF50; color: white; padding: 10px 20px; text-align: center; text-decoration: none; font-size: 16px; border-radius: 5px;">
-           Notificado
-        </a>
-      </p>
-      <p style="color: #ff0000;">
-        Tenga en cuenta que una vez se notifique el aviso, ya no aparecerá la alerta sobre este producto.
-      </p>
-    `;
-    
-      console.log(body);
-      sendEmailData('Aviso proximo a vencer', body);
+      if(producto.notificado){
+        return;
+      }else{
+        const body = `
+        <p>El producto ${producto.nombre} con lote ${producto.lote} está a punto de vencer en ${producto.mesesRestantes} meses, vencimiento: ${producto.fechaVencimiento}.</p>
+        <p>
+          <a href="http://localhost:4041/api/email/notificar-producto/${producto.id}" 
+             style="display: inline-block; background-color: #4CAF50; color: white; padding: 10px 20px; text-align: center; text-decoration: none; font-size: 16px; border-radius: 5px;">
+             Notificado
+          </a>
+        </p>
+        <p style="color: #ff0000;">
+          Tenga en cuenta que una vez se notifique el aviso, ya no aparecerá la alerta sobre este producto.
+        </p>
+      `;
+        console.log(body);
+        sendEmailData('Aviso proximo a vencer', body);
+      }
     });
 
     // Obtener productos vencidos
@@ -47,9 +49,24 @@ cron.schedule('* * * * *', async () => {  // Ejecutar cada minuto
     console.log("productos Vencidos en mailer:", productosVencidos);
 
     productosVencidos.forEach((producto) => {
-      const body = `El producto ${producto.nombre} con lote ${producto.lote} ha vencido el ${producto.fechaVencimiento}.`;
-      console.log(body);  // Agrega un log aquí para verificar
-      sendEmailData('Aviso de vencimiento', body);
+      if(producto.notificado){
+        return;
+      }else{
+        const body = `
+        <p>El producto ${producto.nombre} con lote ${producto.lote} ha vencido el dia: ${producto.fechaVencimiento}.</p>
+        <p>
+          <a href="http://localhost:4041/api/email/notificar-producto/${producto.id}" 
+             style="display: inline-block; background-color: #4CAF50; color: white; padding: 10px 20px; text-align: center; text-decoration: none; font-size: 16px; border-radius: 5px;">
+             Notificado
+          </a>
+        </p>
+        <p style="color: #ff0000;">
+          Tenga en cuenta que una vez se notifique el aviso, ya no aparecerá la alerta sobre este producto.
+        </p>
+      `;
+        console.log(body);
+        sendEmailData('Aviso de vencimiento', body);
+      }
     });
   } catch (error) {
     console.error('Error al ejecutar las funciones:', error);
@@ -57,8 +74,7 @@ cron.schedule('* * * * *', async () => {  // Ejecutar cada minuto
 });
 
 
-//^  envio de mensaje con nodemailes
-
+//?  envio de mensaje con nodemailes
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
