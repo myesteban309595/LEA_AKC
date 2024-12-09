@@ -36,12 +36,14 @@ export const notificarProducto = async (req, res) => {
     }
 
     if (producto.notificado) {
-      return res.status(200).json({ message: 'El producto ya ha sido notificado' });
+      producto.notificado = false;
+      await producto.save();
+      return res.status(200).json({ message: 'Se ha habilitado la alerta para este reactivo' });
+    }else {
+      // Actualizar el campo "notificado" a true si no estaba notificado
+      producto.notificado = true;
+      await producto.save();
     }
-
-    // Actualizar el campo "notificado" a true
-    producto.notificado = true;
-    await producto.save();
 
     return res.status(200).json({ message: 'Producto notificado correctamente' });
   } catch (error) {

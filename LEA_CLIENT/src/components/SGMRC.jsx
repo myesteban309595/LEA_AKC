@@ -203,11 +203,11 @@ const NotificarAlerta = async (params) => {
 
   try {
     const result = await Swal.fire({
-      title: params.notificado ? "Activar Notificaciones":"Estas seguro?",
+      title: params.notificado ? "Activar Notificaciones":"Notificar Enterado",
       text: params.notificado ? 
             "Recibirá correos electronicos de alerta sobre este reactivo"
             :
-            "Una vez notificado, se desactivará la alerta y no se enviarán emails para este reactivo",
+            "Una vez notificado, se desactivará la alerta y no se recibirán emails para este reactivo",
       icon:  params.notificado ? "question" :"warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -226,7 +226,8 @@ const NotificarAlerta = async (params) => {
         text: response.data.message,
       });
 
-      // Aquí puedes realizar cualquier acción adicional, como actualizar el estado de la lista de PDFs
+      window.location.reload(); //? recargamos la pagina para actualizazr
+
     }
    } catch (error) {
      console.error('Error al notificar sobre la alerta:', error);
