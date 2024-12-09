@@ -18,6 +18,8 @@ import PushPinIcon from '@mui/icons-material/PushPin';
 import DeleteIcon from '@mui/icons-material/Delete';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import CircularProgress from '@mui/material/CircularProgress';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
 
 const SGMRC = React.memo(() => {
   // Estado para la fecha y hora actual
@@ -352,7 +354,7 @@ const deleteRowData = (rowId) => {
   const filterData = (row) => {
     // Campos a excluir de la data
    // const excludedFields = ['_id', 'createdAt', 'updatedAt', '__v'];
-    const excludedFields = ['_id', 'updatedAt', '__v']; // elimino createAt ya que es el ultimo en el objeto en la DB
+    const excludedFields = ['_id', 'updatedAt', 'createdAt']; // elimino createAt ya que es el ultimo en el objeto en la DB
   
     // Filtrar las propiedades que no quieres mostrar
     return Object.keys(row)
@@ -392,6 +394,28 @@ const deleteRowData = (rowId) => {
     </div>
   );
   
+  const renderNotificationsButtons = (notificado) => (
+
+    <div style={{ display: 'flex', justifyContent: 'center', marginLeft: 10, marginRight: 10 }}>
+      {notificado ? 
+        <IconButton
+          style={{ outline: "none", color: "#5d6d7e" }}
+          //onClick={() => fetchPdf(rowId)}
+        >
+          <NotificationsOffIcon />
+        </IconButton>
+        :
+        <IconButton
+         style={{ outline: "none", color: "#212f3c" }}
+         //onClick={() => fetchPdf(rowId)}
+        >
+          <NotificationsActiveIcon />
+        </IconButton>
+      }
+    </div>
+  );
+
+
   return (
     <TableContainer component={Paper}
         style={{
@@ -402,12 +426,12 @@ const deleteRowData = (rowId) => {
       <Table style={{ width: 'max-content' }}>
         <TableHead>
           <TableRow style={{ position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 1 }}>
-            <TableCell colSpan={19} style={{ fontSize: '25px', fontWeight: 'bold' }}>
+            <TableCell colSpan={20} style={{ fontSize: '25px', fontWeight: 'bold' }}>
               <div>{fechaHoraActual}</div>
             </TableCell>
           </TableRow>
           <TableRow style={{background: "#82ccdd" }}>
-            <TableCell colSpan={19} style={{ fontSize: '18px', textAlign: 'center', fontWeight: 'bold', border: '1px solid rgba(224, 224, 224, 1)' }}>
+            <TableCell colSpan={20} style={{ fontSize: '18px', textAlign: 'center', fontWeight: 'bold', border: '1px solid rgba(224, 224, 224, 1)' }}>
               Seguimiento General Material de referencia
             </TableCell>
           </TableRow>
@@ -426,6 +450,9 @@ const deleteRowData = (rowId) => {
             </TableCell>
             <TableCell colSpan={3} style={{ background: "#c5fcc5", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
               Seguimiento Consumo
+            </TableCell>
+            <TableCell colSpan={1} style={{ background: "#f1c40f", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
+              Operaciones
             </TableCell>
           </TableRow>
           <TableRow>
@@ -638,6 +665,7 @@ const deleteRowData = (rowId) => {
             <TableCell style={{position: 'sticky',top:55, background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 2 }}>Observaciones</TableCell>
             <TableCell style={{position: 'sticky',top:55, background: "#d9ffd9", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 2 }}>Vencimiento</TableCell>
             <TableCell style={{position: 'sticky',top:55, background: "#d9ffd9", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 2 }}>Alerta [Meses]</TableCell>
+            <TableCell style={{position: 'sticky',top:55, background: "#f7dc6f", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 2 }}>Notificacion</TableCell>
             <TableCell style={{position: 'sticky',top:55, background: "#fcb6b1", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 2 }}>Delete</TableCell>
           </TableRow>
         </TableHead>
@@ -696,6 +724,11 @@ const deleteRowData = (rowId) => {
 
           return (
             <TableRow key={rowIndex}>
+
+              {/* {Object.keys(filteredRow).forEach((column, colIndex) => {
+                 console.log(`Columna: ${column}, Índice: ${colIndex}`);
+              })} esta linea me muestra el valor de la columna y su indice asi se en que indice se va pintasr cada dato */}
+
               {Object.keys(filteredRow).map((column, colIndex) => (
                 <TableCell
                   style={colIndex === ColumValue ? {
@@ -750,7 +783,9 @@ const deleteRowData = (rowId) => {
                     />
                   ) : colIndex === 13 ? (
                     renderPdfButtons(row._id) // Mostrar botones solo para la columna 13
-                  ) : colIndex === 18 ? (
+                  ): colIndex === 18 ? (
+                    renderNotificationsButtons(row.notificado) // Mostrar boton si fue notificado o sigue en alarma
+                  ): colIndex === 19 ? (
                     <IconButton
                       style={{ outline: "none", color: "#fc5a4e" }}
                       onClick={() => deleteRowData(row._id)}
@@ -774,9 +809,8 @@ const deleteRowData = (rowId) => {
       )
     )
   }
-</TableBody>
-
- </Table>
+ </TableBody>
+</Table>
  
    {/* Componente Modal visualizar Pdf */}
    <ModalComponent isOpen={isModalOpen} onClose={handleCloseModal} pdfUrl={pdfUrl} />
