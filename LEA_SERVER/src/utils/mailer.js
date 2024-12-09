@@ -23,7 +23,20 @@ cron.schedule('* * * * *', async () => {  // Ejecutar cada minuto
     console.log("productos Proximos a vencer en mailer:", productosProximos);
 
     productosProximos.forEach((producto) => {
-      const body = `El producto ${producto.nombre} con lote ${producto.lote} está a punto de vencer en ${producto.mesesRestantes} meses, vencimiento: ${producto.fechaVencimiento}.`;
+
+      const body = `
+      <p>El producto ${producto.nombre} con lote ${producto.lote} está a punto de vencer en ${producto.mesesRestantes} meses, vencimiento: ${producto.fechaVencimiento}.</p>
+      <p>
+        <a href="http://tuservidor.com/notificar-producto/${producto.id}" 
+           style="display: inline-block; background-color: #4CAF50; color: white; padding: 10px 20px; text-align: center; text-decoration: none; font-size: 16px; border-radius: 5px;">
+           Notificado
+        </a>
+      </p>
+      <p style="color: #ff0000;">
+        Tenga en cuenta que una vez se notifique el aviso, ya no aparecerá la alerta sobre este producto.
+      </p>
+    `;
+    
       console.log(body);
       sendEmailData('Aviso proximo a vencer', body);
     });
@@ -65,7 +78,8 @@ export const sendEmailData = async (subject, body) => {
     from: process.env.NODE_EMAIL_USER,
     to: process.env.NODE_TO,
     subject,
-    text: body,
+    html: body
+    //text: body,
   };
 
   try {

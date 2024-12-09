@@ -20,7 +20,8 @@ const dataSchema = new mongoose.Schema({
   observaciones: { type: String },
   vencimiento: { type: String },
   mesesRestantes: { type: String },
-  estado: {type: String}
+  estado: {type: String},
+  notificado: { type: Boolean, default: false }
 }, { timestamps: true });  // Este campo agrega createdAt y updatedAt automáticamente
 
 // Crear los índices en los campos más utilizados
