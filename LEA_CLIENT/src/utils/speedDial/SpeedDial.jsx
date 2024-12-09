@@ -6,16 +6,17 @@ import SaveIcon from '@mui/icons-material/Save';
 import PrintIcon from '@mui/icons-material/Print';
 import ShareIcon from '@mui/icons-material/Share';
 import PostAddIcon from '@mui/icons-material/PostAdd';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 const actions = [
   { icon: <PostAddIcon />, name: 'Nueva Fila' },
-  { icon: <FileCopyIcon />, name: 'Copy' },
+  { icon: <FileDownloadIcon />, name: 'Export Excel' },
   { icon: <SaveIcon />, name: 'Save' },
   { icon: <PrintIcon />, name: 'Print' },
   { icon: <ShareIcon />, name: 'Share' },
 ];
 
-export default function SpeedDialComponent({ sx, agregarDataFila }) {
+export default function SpeedDialComponent({ sx, agregarDataFila, exportExcelTable }) {
   return (
     <SpeedDial
       ariaLabel="SpeedDial example"
@@ -29,7 +30,11 @@ export default function SpeedDialComponent({ sx, agregarDataFila }) {
           key={action.name}
           icon={action.icon}
           tooltipTitle={action.name}
-          onClick={action.name === 'Nueva Fila' ? agregarDataFila : undefined}  // Ejecuta la función agregarDataFila cuando se hace clic en "Nueva Fila"
+          onClick={action.name === 'Nueva Fila' ? agregarDataFila 
+                    : 
+                  (action.name === 'Export Excel' ? exportExcelTable 
+                    : undefined
+                  )}
           sx={{
             '&:focus, &:active': {
               outline: 'none',   // Elimina el borde de enfoque

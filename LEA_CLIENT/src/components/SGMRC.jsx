@@ -21,6 +21,7 @@ import Swal from 'sweetalert2'
 
 import {calcularDiferenciaEnMeses} from '../utils/Functions/CalcularDiferenciaFechas'
 import {sendProductData} from '../utils/Functions/SendNotificationEmail'
+import {ExportExcelWithTemplate} from '../utils/Functions/DownloadExcelData'
 
 import ModalComponent from '../utils/modals/ViewPdf';
 import FileUpload from '../components/UploadFile';
@@ -162,7 +163,6 @@ const SGMRC = React.memo(() => {
    }
 };
 
-
 const DeletePdf = async (rowId) => {
   try {
     const result = await Swal.fire({
@@ -240,30 +240,7 @@ const NotificarAlerta = async (params) => {
   }
 };
 
-  const handleCloseModal = () => {
-    setModalOpen(false);
-  };
 
-  const handleDoubleClick = (rowIndex, column) => {
-    setEditingCell({ rowIndex, column });
-    setTempValue(data[rowIndex][column]);
-  };
-
-  const handleChange = (event) => {
-    setTempValue(event.target.value);
-  };
-
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      // Al presionar Enter, desenfocamos el campo y luego guardamos los datos
-      event.target.blur(); // Esto activará el `onBlur` de inmediato
-      // Usamos setTimeout para asegurar que el blur se complete antes de guardar
-      setTimeout(() => {
-        handleBlur();
-      }, 100);  // Retraso de 100 ms para asegurarnos que el evento de blur haya pasado
-    }
-  };
-  
   const handleBlur = async () => {
     
     // Crea una copia de los datos y actualiza el valor modificado
@@ -306,11 +283,11 @@ const NotificarAlerta = async (params) => {
       fechaVencimiento: '--/--/--',
       fechaActualizacionInformacion: '--/--/--',
       cantidadIngreso: null,
-      manipulacion: '',
+      manipulacion: 'Sin especificar',
       almacenamiento: '',
       certificadoAnalisis: null,
       responsable: '',
-      observaciones: '',
+      observaciones: 'Ninguna',
       vencimiento: '--/--/--',
       mesesRestantes: null,
       notificado: false
@@ -333,19 +310,6 @@ const NotificarAlerta = async (params) => {
       console.error(err);
     });
   }
-
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
-
-  const clickColumFixed = (columnClicked) => {
-    if(columnClicked == ColumValue)
-    {
-      setColumValue(100000); // se fija un valor de columna que nunca vaya a existir
-    }else{
-      setColumValue(columnClicked); // se fija un valor de columna que nunca vaya a existir
-    }
-  };
 
 const deleteRowData = (rowId) => {
   // Primero, mostramos una alerta de confirmación utilizando SweetAlert
@@ -405,6 +369,49 @@ const deleteRowData = (rowId) => {
         });
     }
   });
+};
+
+const exportExcelDataTable =()=> {
+  console.log("ejecutando la funcion de exportar data en SGMRC");
+  console.log("DATA QUE SE ENVIA A EXPORT EXCEL:", data);
+  ExportExcelWithTemplate({data:data}) //? se envia la data para exportar el excel
+}
+
+const handleCloseModal = () => {
+  setModalOpen(false);
+};
+
+const handleDoubleClick = (rowIndex, column) => {
+  setEditingCell({ rowIndex, column });
+  setTempValue(data[rowIndex][column]);
+};
+
+const handleChange = (event) => {
+  setTempValue(event.target.value);
+};
+
+const handleKeyDown = (event) => {
+  if (event.key === 'Enter') {
+    // Al presionar Enter, desenfocamos el campo y luego guardamos los datos
+    event.target.blur(); // Esto activará el `onBlur` de inmediato
+    // Usamos setTimeout para asegurar que el blur se complete antes de guardar
+    setTimeout(() => {
+      handleBlur();
+    }, 100);  // Retraso de 100 ms para asegurarnos que el evento de blur haya pasado
+  }
+};
+
+const handleSnackbarClose = () => {
+  setSnackbarOpen(false);
+};
+
+const clickColumFixed = (columnClicked) => {
+  if(columnClicked == ColumValue)
+  {
+    setColumValue(100000); // se fija un valor de columna que nunca vaya a existir
+  }else{
+    setColumValue(columnClicked); // se fija un valor de columna que nunca vaya a existir
+  }
 };
 
   const filterData = (row) => {
@@ -474,7 +481,6 @@ const deleteRowData = (rowId) => {
       }
     </div>
   );
-
 
   return (
     <TableContainer component={Paper}
@@ -894,6 +900,7 @@ const deleteRowData = (rowId) => {
 
       {/* Speed Dial */}
       <SpeedDialComponent
+        exportExcelTable={exportExcelDataTable}
         agregarDataFila={agregarDataFila} // ejecuto la funcion agregar fila desde el speedDial
               sx={{
                 position: 'fixed',
