@@ -22,6 +22,7 @@ import Swal from 'sweetalert2'
 import {calcularDiferenciaEnMeses} from '../utils/Functions/CalcularDiferenciaFechas'
 import {sendProductData} from '../utils/Functions/SendNotificationEmail'
 import {ExportExcelWithTemplate} from '../utils/Functions/DownloadExcelData'
+import {FileUploadExcel} from '../utils/Functions/UploadExcelDataMasive'
 
 import ModalComponent from '../utils/modals/ViewPdf';
 import FileUpload from '../components/UploadFile';
@@ -55,6 +56,9 @@ const SGMRC = React.memo(() => {
   // Visualizador de Pdf
   const [isModalOpen, setModalOpen] = useState(false);
   const [pdfUrl, setPdfUrl] = useState('');
+  // Abrir modal para carga masiva
+  const [openUploadExcelModal, setOpenUploadExcelModal] = useState(false);
+
 
   const [uploadRowIndex, setUploadRowIndex] = useState(null); // Estado para el rowIndex a subir
 
@@ -427,6 +431,19 @@ const clickColumFixed = (columnClicked) => {
         return obj;
       }, {});
   };
+
+    //? Función para abrir el modal
+    const handleOpenModalUploadExcel = () => {
+
+      console.log("ejecutando modal upload excel");
+      
+      setOpenUploadExcelModal(true);
+    };
+  
+    //? Función para cerrar el modal
+    const handleCloseModalUploadExcel = () => {
+      setOpenUploadExcelModal(false);
+    };
 
   const renderPdfButtons = (rowId) => (
     <div style={{ display: 'flex', justifyContent: 'space-between', marginLeft: 10, marginRight: 10 }}>
@@ -900,6 +917,7 @@ const clickColumFixed = (columnClicked) => {
 
       {/* Speed Dial */}
       <SpeedDialComponent
+        uploadExcelData={handleOpenModalUploadExcel}
         exportExcelTable={exportExcelDataTable}
         agregarDataFila={agregarDataFila} // ejecuto la funcion agregar fila desde el speedDial
               sx={{
@@ -913,6 +931,9 @@ const clickColumFixed = (columnClicked) => {
                 },
               }}
       />
+
+      {/* Componente con el modal de carga de Excel */}
+      <FileUploadExcel open={openUploadExcelModal} onClose={handleCloseModalUploadExcel} />
 
 </TableContainer>
 
