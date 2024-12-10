@@ -12,7 +12,7 @@ const dataSchema = new mongoose.Schema({
   fechaIngreso: { type: String },  // Cambié a Date si debe ser una fecha
   fechaVencimiento: { type: String },  // Cambié a Date, ya que parece ser una fecha
   fechaActualizacionInformacion: { type: String },
-  cantidadIngreso: { type: Number },  // Cambié a Number si representa una cantidad
+  cantidadIngreso: { type: String},  // Cambié a Number si representa una cantidad
   manipulacion: { type: String, default: "Sin especificar" },
   almacenamiento: { type: String },
   certificadoAnalisis: { type: Boolean },

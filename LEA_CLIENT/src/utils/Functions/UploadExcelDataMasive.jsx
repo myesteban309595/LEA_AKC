@@ -21,6 +21,7 @@ export const FileUploadExcel = ({ open, onClose }) => {
     }
 
     const reader = new FileReader();
+
     reader.onload = async (e) => {
       try {
         // Leemos el archivo Excel
@@ -31,30 +32,35 @@ export const FileUploadExcel = ({ open, onClose }) => {
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
 
         // Convertir los datos de la hoja a un formato JSON (omitimos las dos primeras filas)
-        const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 3 });
+         const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 0 });  // Toma la primera fila como los encabezados
+         const filteredData = jsonData.slice(0);  // Elimina las primeras dos filas
 
+         console.log("Datos leídos del Excel:", jsonData);  // Añade un console.log aquí
+         console.log("Datos leídos del Excel filteredData:", filteredData);  // Añade un console.log aquí
+         
         // Formatear los datos según tu modelo de Mongoose
-        const formattedData = jsonData.map(item => ({
-          fechaSolicitud: item.fechaSolicitud || '----',
-          codigoInventario: item.codigoInventario || '----',
-          nombre: item.nombre || '----',
-          marca: item.marca || '----',
-          lote: item.lote || '----',
-          tipo: item.tipo || '----',
-          area: item.area || '----',
-          fechaIngreso: item.fechaIngreso || '----',
-          fechaVencimiento: item.fechaVencimiento || '----',
-          fechaActualizacionInformacion: item.fechaActualizacionInformacion || '----',
-          cantidadIngreso: item.cantidadIngreso || 0,
-          manipulacion: item.manipulacion || 'Sin especificar',
-          almacenamiento: item.almacenamiento || '----',
-          certificadoAnalisis: item.certificadoAnalisis || false,
-          responsable: item.responsable || '----',
-          observaciones: item.observaciones || 'Ninguna',
-          vencimiento: item.vencimiento || '----',
-          mesesRestantes: item.mesesRestantes,
+        //& como las columnas no tienen nombre, por defecto llegan como __EMPTY
+        const formattedData = filteredData.map(item => ({
+          fechaSolicitud: item.D1 || '----',
+          codigoInventario: item.D2 || '----',
+          nombre: item.D3 || '----',
+          marca: item.D4 || '----',
+          lote: item.D5 || '----',
+          tipo: item.D6 || '----',
+          area: item.D7 || '----',
+          fechaIngreso: item.D8 || '----',
+          fechaVencimiento: item.D9 || '----',
+          fechaActualizacionInformacion: item.D10 || '----',
+          cantidadIngreso: item.D11 || '----',
+          manipulacion: item.D12 || 'Sin especificar',
+          almacenamiento: item.D13 || '----',
+          certificadoAnalisis: false,
+          responsable: item.D15 || '----',
+          observaciones: item.D16 || 'Ninguna',
+          vencimiento: item.D9 || '----',
+          mesesRestantes: '36',
           estado: item.estado || '----',
-          notificado: item.notificado || false,
+          notificado: false,
         }));
 
         console.log("formatted data:", formattedData);
