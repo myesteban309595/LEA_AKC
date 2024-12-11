@@ -6,7 +6,7 @@ export const sendProductData = async (productData) => {
   console.log("product data en sendProductData: ", productData);
   
   // try {
-  //   const response = await axios.post('http://localhost:4041/api/email/sendemail', productData, {
+  //   const response = await axios.post('https://sgmrcbackend-production.up.railway.app/api/email/sendemail', productData, {
   //     headers: {
   //       'Content-Type': 'application/json',
   //     },

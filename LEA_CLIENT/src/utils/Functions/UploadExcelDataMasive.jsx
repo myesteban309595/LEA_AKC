@@ -66,7 +66,7 @@ const FileUploadExcel = ({ open, onClose }) => {
         
 
         //? Enviar los datos al backend para guardarlos en la base de datos
-        await axios.post('http://localhost:4041/api/table/datareplaceall', formattedData);
+        await axios.post('https://sgmrcbackend-production.up.railway.app/api/table/datareplaceall', formattedData);
         alert('Datos cargados correctamente');
         onClose();  // Cerrar el modal después de la carga
         window.location.reload();

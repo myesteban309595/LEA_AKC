@@ -91,7 +91,7 @@ const SGMRC = React.memo(() => {
   useEffect(() => {
     console.log('Componente montado');
     // Realizar la solicitud GET a la API
-    axios.get('http://localhost:4041/api/table/data')
+    axios.get('https://sgmrcbackend-production.up.railway.app/api/table/data')
       .then(response => {
         setData(response.data);
         setLoading(false);
@@ -114,7 +114,7 @@ const SGMRC = React.memo(() => {
 
     const fetchPdf = async (rowId) => {
       try {
-          const response = await axios.get(`http://localhost:4041/api/pdfs/${rowId}`, {
+          const response = await axios.get(`https://sgmrcbackend-production.up.railway.app/api/pdfs/${rowId}`, {
               responseType: 'blob',  // Especifica que esperas un blob (archivo binario)
           });
   
@@ -137,7 +137,7 @@ const SGMRC = React.memo(() => {
   const DownloadPdf = async (rowId) => {
     try {
         // Realiza la solicitud para obtener el archivo PDF
-        const response = await axios.get(`http://localhost:4041/api/pdfs/download/${rowId}`);
+        const response = await axios.get(`https://sgmrcbackend-production.up.railway.app/api/pdfs/download/${rowId}`);
 
         // Extraer el nombre del archivo desde los datos JSON
         const { filename, data } = response.data;
@@ -202,7 +202,7 @@ const DeletePdf = async (rowId) => {
 
     // Verifica si el usuario confirmó la acción
     if (result.isConfirmed) {
-      const response = await axios.delete(`http://localhost:4041/api/pdfs/${rowId}`);
+      const response = await axios.delete(`https://sgmrcbackend-production.up.railway.app/api/pdfs/${rowId}`);
 
       // Notificación de éxito
       Swal.fire({
@@ -242,7 +242,7 @@ const NotificarAlerta = async (params) => {
 
     // Verifica si el usuario confirmó la acción
     if (result.isConfirmed) {
-      const response = await axios.get(`http://localhost:4041/api/email/notificar-producto/${params._id}`);
+      const response = await axios.get(`https://sgmrcbackend-production.up.railway.app/api/email/notificar-producto/${params._id}`);
 
       // Notificación de éxito
       Swal.fire({
@@ -275,7 +275,7 @@ const NotificarAlerta = async (params) => {
     // TAN PRONTO DESENFOQUE LA CASILLA, GUARDA LOS DATOS
     try {
       // Usar `newData` para enviar los datos modificados al servidor
-      const response = await axios.post('http://localhost:4041/api/table/datareplaceall', newData);
+      const response = await axios.post('https://sgmrcbackend-production.up.railway.app/api/table/datareplaceall', newData);
       console.log("ejecutando desde handleBlur");
   
       // Si la solicitud es exitosa
@@ -319,7 +319,7 @@ const NotificarAlerta = async (params) => {
       notificado: false
     }
 
-    axios.post('http://localhost:4041/api/table/data', newFile)
+    axios.post('https://sgmrcbackend-production.up.railway.app/api/table/data', newFile)
     .then(response => {
       // Una vez agregada la fila en la base de datos, agregarla al estado local para que se muestre
       setData(prevData => [response.data, ...prevData]);
@@ -351,10 +351,10 @@ const deleteRowData = (rowId) => {
     // Si el usuario confirma la eliminación
     if (result.isConfirmed) {
       // Realizamos la eliminación de la fila
-      axios.delete(`http://localhost:4041/api/table/data/${rowId}`)
+      axios.delete(`https://sgmrcbackend-production.up.railway.app/api/table/data/${rowId}`)
         .then(() => {
           // Si la eliminación es exitosa, obtenemos los datos actualizados
-          axios.get('http://localhost:4041/api/table/data')
+          axios.get('https://sgmrcbackend-production.up.railway.app/api/table/data')
             .then(updatedDataResponse => {
               setData(updatedDataResponse.data); // Actualizamos el estado con los nuevos datos
               setSnackbarMessage('Datos eliminados correctamente');
