@@ -7,12 +7,12 @@ import { obtenerProductosAProximoVencer, obtenerProductosVencidos } from './data
 dotenv.config();
 
 console.log("hola enejcutando en mailer.js");
-// console.log('Email User:', process.env.NODE_EMAIL_USER);
-// console.log('Email Pass:', process.env.NODE_EMAIL_PASS);
+console.log('Email User:', process.env.NODE_EMAIL_USER);
+console.log('Email Pass:', process.env.NODE_EMAIL_PASS);
 
 //^  ejecucion de nodecron
 
-cron.schedule('0 * * * *', async () => {  // Ejecutar cada minuto
+cron.schedule('0 */2 * * *', async () => {  // Ejecutar cada minuto
   console.log("Ejecutando node-cron a las 11:35");
 
   try {
@@ -20,7 +20,7 @@ cron.schedule('0 * * * *', async () => {  // Ejecutar cada minuto
     // Obtener productos próximos a vencer
     console.log('Obteniendo productos próximos a vencer...');
     const productosProximos = await obtenerProductosAProximoVencer();
-    console.log("productos Proximos a vencer en mailer:", productosProximos);
+    console.log("productos Proximos a vencer en mailer:", productosProximos.length);
 
     productosProximos.forEach((producto) => {
       if(producto.notificado){
@@ -46,7 +46,7 @@ cron.schedule('0 * * * *', async () => {  // Ejecutar cada minuto
     // Obtener productos vencidos
     console.log('Obteniendo productos vencidos...');
     const productosVencidos = await obtenerProductosVencidos();
-    console.log("productos Vencidos en mailer:", productosVencidos);
+    console.log("productos Vencidos en mailer:", productosVencidos.length);
 
     productosVencidos.forEach((producto) => {
       if(producto.notificado){
