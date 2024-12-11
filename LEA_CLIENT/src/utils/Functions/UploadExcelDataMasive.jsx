@@ -58,8 +58,7 @@ export const FileUploadExcel = ({ open, onClose }) => {
           responsable: item.D15 || '----',
           observaciones: item.D16 || 'Ninguna',
           vencimiento: item.D9 || '----',
-          mesesRestantes: '36',
-          estado: item.estado || '----',
+          mesesRestantes: '3',
           notificado: false,
         }));
 

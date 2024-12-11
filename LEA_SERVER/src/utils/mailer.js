@@ -7,12 +7,12 @@ import { obtenerProductosAProximoVencer, obtenerProductosVencidos } from './data
 dotenv.config();
 
 console.log("hola enejcutando en mailer.js");
-console.log('Email User:', process.env.NODE_EMAIL_USER);
-console.log('Email Pass:', process.env.NODE_EMAIL_PASS);
+// console.log('Email User:', process.env.NODE_EMAIL_USER);
+// console.log('Email Pass:', process.env.NODE_EMAIL_PASS);
 
 //^  ejecucion de nodecron
 
-cron.schedule('* * * * *', async () => {  // Ejecutar cada minuto
+cron.schedule('0 * * * *', async () => {  // Ejecutar cada minuto
   console.log("Ejecutando node-cron a las 11:35");
 
   try {
