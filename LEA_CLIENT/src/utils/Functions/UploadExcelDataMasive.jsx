@@ -35,8 +35,8 @@ const FileUploadExcel = ({ open, onClose }) => {
          const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 0 });  // Toma la primera fila como los encabezados
          const filteredData = jsonData.slice(0);  // Elimina las primeras dos filas
 
-         console.log("Datos leídos del Excel:", jsonData);  // Añade un console.log aquí
-         console.log("Datos leídos del Excel filteredData:", filteredData);  // Añade un console.log aquí
+        //  console.log("Datos leídos del Excel:", jsonData);  // Añade un console.log aquí
+        //  console.log("Datos leídos del Excel filteredData:", filteredData);  // Añade un console.log aquí
          
         // Formatear los datos según tu modelo de Mongoose
         //& como las columnas no tienen nombre, por defecto llegan como __EMPTY
@@ -69,7 +69,7 @@ const FileUploadExcel = ({ open, onClose }) => {
         await axios.post('http://localhost:4041/api/table/datareplaceall', formattedData);
         alert('Datos cargados correctamente');
         onClose();  // Cerrar el modal después de la carga
-        //window.location.reload();
+        window.location.reload();
       } catch (error) {
         console.error('Error al procesar el archivo:', error);
         alert('Error al procesar el archivo');
