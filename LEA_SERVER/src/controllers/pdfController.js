@@ -89,29 +89,27 @@ export const getPdfByIndex = async (req, res) => {
     }
 };
 
-// Obtener y descargar PDF por rowId
 export const getDownPdfByIndex = async (req, res) => {
     const { rowId } = req.params;
-    
-        try {
-            const pdf = await Pdf.findOne({ rowId: rowId });
-    
-            if (!pdf) {
-                return res.status(404).json({ message: 'PDF no encontrado' });
-            }
-    
-            res.set('Content-Type', pdf.contentType);
-            res.set('Content-Disposition', `attachment; filename="${pdf.filename}"`);
-            // res.send(pdf.data); // Asegúrate de que pdf.data contenga el buffer del PDF
-            res.json({
-                filename: pdf.filename,
-                data: pdf.data // Asegúrate de que pdf.data contenga el buffer del PDF
-            });
 
-        } catch (error) {
-            res.status(500).json({ message: 'Error al obtener el PDF', error });
+    try {
+        const pdf = await Pdf.findOne({ rowId: rowId });
+
+        if (!pdf) {
+            return res.status(404).json({ message: 'PDF no encontrado' });
         }
+
+        // Asegúrate de que el nombre del archivo se incluya en el encabezado `Content-Disposition`
+        res.set('Content-Type', 'application/pdf'); // Establece el tipo de contenido como PDF
+        res.set('Content-Disposition', `attachment; filename="${pdf.filename}"`); // Asegúrate de que el nombre del archivo esté incluido
+
+        // Enviar el archivo PDF (asegúrate de que pdf.data sea un buffer válido)
+        res.send(pdf.data);
+    } catch (error) {
+        res.status(500).json({ message: 'Error al obtener el PDF', error });
+    }
 };
+
 
 // Eliminar PDF
 export const deletePdfByIndex = async (req, res) => {

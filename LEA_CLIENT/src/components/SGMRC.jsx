@@ -135,37 +135,51 @@ const SGMRC = React.memo(() => {
   };
 
   const DownloadPdf = async (rowId) => {
-
     try {
-      const response = await axios.get(`http://localhost:4041/api/pdfs/download/${rowId}`);
+        const response = await axios.get(`http://localhost:4041/api/pdfs/download/${rowId}`, {
+            responseType: 'arraybuffer', // Asegúrate de que la respuesta se reciba como un ArrayBuffer
+        });
 
-      const fileName = response.data.filename; // Obtén el nombre del archivo
-      const pdfBlob = new Blob([response.data.data], { type: 'application/pdf' }); // Crea un blob del PDF
+        // Extraer el nombre del archivo desde los encabezados de la respuesta
+        const disposition = response.headers['content-disposition'];
+        let fileName = 'default.pdf'; // Valor predeterminado si no se encuentra el nombre
 
-      // Crea una URL para el blob
-      const url = window.URL.createObjectURL(pdfBlob);
-      
-      // Crea un enlace de descarga
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', fileName); // Usa el nombre original
+        if (disposition) {
+            const fileNameMatch = disposition.match(/filename="(.+)"/);
+            if (fileNameMatch && fileNameMatch[1]) {
+                fileName = fileNameMatch[1];
+            }
+        }
 
-      // Agrega el enlace al documento y simula un clic
-      document.body.appendChild(link);
-      link.click();
+        // Crear un Blob con los datos del archivo PDF
+        const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
 
-      // Elimina el enlace del documento
-      document.body.removeChild(link);
+        // Crear una URL para el Blob
+        const url = window.URL.createObjectURL(pdfBlob);
+
+        // Crear un enlace para descargar el archivo
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', fileName); // Usar el nombre del archivo extraído
+
+        // Agregar el enlace al DOM y simular un clic para iniciar la descarga
+        document.body.appendChild(link);
+        link.click();
+
+        // Eliminar el enlace después de descargar el archivo
+        document.body.removeChild(link);
     } catch (error) {
-      console.error('Error al obtener el PDF:', error);
-      Swal.fire({
-          icon: "error",
-          title: "Error al descargar el archivo",
-          text: "No hay archivo asociado a este material de referencia!",
-          footer: `<a href="/upload/${rowId}">Subir archivo</a>`,
-      });
-   }
+        console.error('Error al obtener el PDF:', error);
+
+        Swal.fire({
+            icon: "error",
+            title: "Error al descargar el archivo",
+            text: "No hay archivo asociado a este material de referencia!",
+            footer: `<a href="/upload/${rowId}">Subir archivo</a>`,
+        });
+    }
 };
+
 
 const DeletePdf = async (rowId) => {
   try {
