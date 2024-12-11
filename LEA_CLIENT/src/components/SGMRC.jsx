@@ -842,7 +842,7 @@ const clickColumFixed = (columnClicked) => {
                     zIndex: 0,
                     padding: 0,
                     margin: 0,
-                    backgroundColor: backgroundColor,
+                    backgroundColor: 'rgba(229, 232, 232, 0.85)',
                     color: color,
                     textAlign: 'center',
                     fontSize: "14px"
