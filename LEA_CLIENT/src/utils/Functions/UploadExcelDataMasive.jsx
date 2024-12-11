@@ -4,7 +4,7 @@ import * as XLSX from 'xlsx';
 import axios from 'axios';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
 
-export const FileUploadExcel = ({ open, onClose }) => {
+const FileUploadExcel = ({ open, onClose }) => {
 
   const [file, setFile] = useState(null);
 
@@ -104,3 +104,5 @@ export const FileUploadExcel = ({ open, onClose }) => {
     </Dialog>
   );
 };
+
+export default FileUploadExcel;  //& se cambia la exportacion a default para que pueda funcionar react.lazy

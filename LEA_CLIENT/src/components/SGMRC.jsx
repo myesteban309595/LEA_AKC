@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import axios from 'axios';
 import { 
   Table, 
@@ -22,7 +22,7 @@ import Swal from 'sweetalert2'
 import {calcularDiferenciaEnMeses} from '../utils/Functions/CalcularDiferenciaFechas'
 import {sendProductData} from '../utils/Functions/SendNotificationEmail'
 import {ExportExcelWithTemplate} from '../utils/Functions/DownloadExcelData'
-import {FileUploadExcel} from '../utils/Functions/UploadExcelDataMasive'
+const FileUploadExcel = lazy(() => import('../utils/Functions/UploadExcelDataMasive')); //& aplicando lazy a este componente
 
 import ModalComponent from '../utils/modals/ViewPdf';
 import FileUpload from '../components/UploadFile';
@@ -934,7 +934,10 @@ const clickColumFixed = (columnClicked) => {
       />
 
       {/* Componente con el modal de carga de Excel */}
-      <FileUploadExcel open={openUploadExcelModal} onClose={handleCloseModalUploadExcel} />
+      {/* Suspense envuelve el componente lazy */}
+       <Suspense fallback={<CircularProgress />}>
+         <FileUploadExcel open={openUploadExcelModal} onClose={handleCloseModalUploadExcel} />
+       </Suspense>
 
 </TableContainer>
 
