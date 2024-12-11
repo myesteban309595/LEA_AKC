@@ -255,6 +255,7 @@ const NotificarAlerta = async (params) => {
     try {
       // Usar `newData` para enviar los datos modificados al servidor
       const response = await axios.post('http://localhost:4041/api/table/datareplaceall', newData);
+      console.log("ejecutando desde handleBlur");
   
       // Si la solicitud es exitosa
       if (response.status === 200) {
@@ -861,7 +862,7 @@ const clickColumFixed = (columnClicked) => {
                       }}
                       value={tempValue}
                       onChange={handleChange}
-                      onBlur={handleBlur}
+                      onBlur={()=>handleBlur()}
                       onKeyDown={handleKeyDown}
                     />
                   ) : colIndex === 13 ? (
