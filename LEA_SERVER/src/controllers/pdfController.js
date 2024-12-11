@@ -99,16 +99,19 @@ export const getDownPdfByIndex = async (req, res) => {
             return res.status(404).json({ message: 'PDF no encontrado' });
         }
 
+        console.log("pdf encontrado:", pdf);
+
         // Asegúrate de que el nombre del archivo se incluya en el encabezado `Content-Disposition`
         res.set('Content-Type', 'application/pdf'); // Establece el tipo de contenido como PDF
         res.set('Content-Disposition', `attachment; filename="${pdf.filename}"`); // Asegúrate de que el nombre del archivo esté incluido
 
-        // Enviar el archivo PDF (asegúrate de que pdf.data sea un buffer válido)
-        res.send(pdf.data);
+        // Enviar el archivo PDF y el nombre del archivo como un objeto JSON
+        res.json({ filename: pdf.filename, data: pdf.data.toString('base64') });  // Convertir el buffer a base64
     } catch (error) {
         res.status(500).json({ message: 'Error al obtener el PDF', error });
     }
 };
+
 
 
 // Eliminar PDF

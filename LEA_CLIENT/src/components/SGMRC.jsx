@@ -136,23 +136,29 @@ const SGMRC = React.memo(() => {
 
   const DownloadPdf = async (rowId) => {
     try {
-        const response = await axios.get(`http://localhost:4041/api/pdfs/download/${rowId}`, {
-            responseType: 'arraybuffer', // Asegúrate de que la respuesta se reciba como un ArrayBuffer
-        });
+        // Realiza la solicitud para obtener el archivo PDF
+        const response = await axios.get(`http://localhost:4041/api/pdfs/download/${rowId}`);
 
-        // Extraer el nombre del archivo desde los encabezados de la respuesta
-        const disposition = response.headers['content-disposition'];
-        let fileName = 'default.pdf'; // Valor predeterminado si no se encuentra el nombre
+        // Extraer el nombre del archivo desde los datos JSON
+        const { filename, data } = response.data;
 
-        if (disposition) {
-            const fileNameMatch = disposition.match(/filename="(.+)"/);
-            if (fileNameMatch && fileNameMatch[1]) {
-                fileName = fileNameMatch[1];
-            }
+        if (!filename || !data) {
+            throw new Error("Nombre del archivo o datos no disponibles.");
         }
 
-        // Crear un Blob con los datos del archivo PDF
-        const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
+        // Convertir los datos base64 a un Blob
+        const byteCharacters = atob(data); // Decodificar el base64
+        const byteArrays = [];
+        for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
+            const slice = byteCharacters.slice(offset, offset + 1024);
+            const byteNumbers = new Array(slice.length);
+            for (let i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+            byteArrays.push(new Uint8Array(byteNumbers));
+        }
+
+        const pdfBlob = new Blob(byteArrays, { type: 'application/pdf' });
 
         // Crear una URL para el Blob
         const url = window.URL.createObjectURL(pdfBlob);
@@ -160,7 +166,7 @@ const SGMRC = React.memo(() => {
         // Crear un enlace para descargar el archivo
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', fileName); // Usar el nombre del archivo extraído
+        link.setAttribute('download', filename); // Asigna el nombre del archivo
 
         // Agregar el enlace al DOM y simular un clic para iniciar la descarga
         document.body.appendChild(link);
@@ -171,6 +177,7 @@ const SGMRC = React.memo(() => {
     } catch (error) {
         console.error('Error al obtener el PDF:', error);
 
+        // Si ocurre un error, muestra una alerta
         Swal.fire({
             icon: "error",
             title: "Error al descargar el archivo",
