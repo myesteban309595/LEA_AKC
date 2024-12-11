@@ -8,7 +8,8 @@ export const ExportExcelWithTemplate = async ({ data }) => {
   // Función para exportar los datos a Excel usando la plantilla
   try {
     // Cargar la plantilla directamente desde la carpeta public
-    const response = await fetch('public/XLSX_BASE/BASEXLXMSGMRC.xlsx'); // Ruta al archivo en la carpeta public
+    //const response = await fetch('public/XLSX_BASE/BASEXLXMSGMRC.xlsx'); // Ruta al archivo en la carpeta public
+    const response = await fetch('/XLSX_BASE/BASEXLXMSGMRC.xlsx'); //& sin public para subir a netlify
     const arrayBuffer = await response.arrayBuffer();
     const workbook = XLSX.read(arrayBuffer, { type: 'array' });
 
