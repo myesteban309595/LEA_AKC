@@ -238,7 +238,7 @@ const clickColumFixed = (columnClicked) => {
   const filterData = (row) => {
     // Campos a excluir de la data
    // const excludedFields = ['_id', 'createdAt', 'updatedAt', '__v'];
-    const excludedFields = ['_id', 'updatedAt', 'createdAt']; // elimino createAt ya que es el ultimo en el objeto en la DB
+    const excludedFields = ['_id', 'updatedAt', 'createdAt', '__v']; // elimino createAt ya que es el ultimo en el objeto en la DB
   
     // Filtrar las propiedades que no quieres mostrar
     return Object.keys(row)
@@ -354,27 +354,14 @@ const clickColumFixed = (columnClicked) => {
       Array.isArray(data) && data.length > 0 ? (
 
         data.map((row, rowIndex) => {
+          const filteredRow = filterData(row); // Filtrar la fila
+          const backgroundColor = "transparent"
+          const color = "black"
           return (
             <TableRow key={rowIndex}>
 
               {Object.keys(filteredRow).map((column, colIndex) => (
                 <TableCell
-                  style={colIndex === ColumValue ? {
-                    position: 'sticky',
-                    left: 0,
-                    zIndex: 0,
-                    padding: 0,
-                    margin: 0,
-                    backgroundColor: 'rgba(229, 232, 232, 0.85)',
-                    color: color,
-                    textAlign: 'center',
-                    fontSize: "14px"
-                  } : {
-                    textAlign: 'center',
-                    fontSize: "14px",
-                    backgroundColor: backgroundColor, // Color de fondo
-                    color: color, // Color de texto
-                  }}
                   key={colIndex}
                   sx={{
                     textAlign: 'center',
@@ -384,7 +371,7 @@ const clickColumFixed = (columnClicked) => {
                   }}
                   onClick={() => handleDoubleClick(rowIndex, column)}
                 >
-                  {editingCell.rowIndex === rowIndex && editingCell.column === column && colIndex !== 13 && colIndex !== 18 && colIndex !== 19 ? (
+                  {editingCell.rowIndex === rowIndex && editingCell.column === column && colIndex !== 7 ? (
                     <TextField
                       sx={{
                         width: '100%',
