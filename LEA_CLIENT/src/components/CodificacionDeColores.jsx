@@ -432,7 +432,11 @@ const clickColumFixed = (columnClicked) => {
       {/* Componente con el modal de carga de Excel */}
       {/* Suspense envuelve el componente lazy */}
        <Suspense fallback={<CircularProgress />}>
-         <FileUploadExcel open={openUploadExcelModal} onClose={handleCloseModalUploadExcel} />
+         <FileUploadExcel 
+           open={openUploadExcelModal} 
+           onClose={handleCloseModalUploadExcel} 
+           module="dataTableColors"
+          />
        </Suspense>
 
 </TableContainer>

@@ -4,8 +4,10 @@ import * as XLSX from 'xlsx';
 import axios from 'axios';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
 
-const FileUploadExcel = ({ open, onClose }) => {
+const FileUploadExcel = ({ open, onClose, module }) => {
 
+  console.log("module en FileUploadExcel:", module);
+  
   const [file, setFile] = useState(null);
 
   //? Cuando el usuario selecciona un archivo
@@ -40,33 +42,48 @@ const FileUploadExcel = ({ open, onClose }) => {
          
         // Formatear los datos según tu modelo de Mongoose
         //& como las columnas no tienen nombre, por defecto llegan como __EMPTY
-        const formattedData = filteredData.map(item => ({
-          fechaSolicitud: item.D1 || '----',
-          codigoInventario: item.D2 || '----',
-          nombre: item.D3 || '----',
-          marca: item.D4 || '----',
-          lote: item.D5 || '----',
-          tipo: item.D6 || '----',
-          area: item.D7 || '----',
-          fechaIngreso: item.D8 || '----',
-          fechaVencimiento: item.D9 || '----',
-          fechaActualizacionInformacion: item.D10 || '----',
-          cantidadIngreso: item.D11 || '----',
-          manipulacion: item.D12 || 'Sin especificar',
-          almacenamiento: item.D13 || '----',
-          certificadoAnalisis: false,
-          responsable: item.D15 || '----',
-          observaciones: item.D16 || 'Ninguna',
-          vencimiento: item.D9 || '----',
-          mesesRestantes: '3',
-          notificado: false,
-        }));
+        const formattedData = filteredData.map(item => {
+          if (module === 'dataTableColors') {
+            return {
+              Reactivo: item.D1 || '----',
+              Marca: item.D2 || '----',
+              Codigo: item.D3 || '----',
+              Lote: item.D4 || '----',
+              fechaVencimiento: item.D5 || '--/--/--',
+              CAS: item.D6 || '----',
+              Color: item.D7 || '----',
+              Accion: '----',
+            };
+          } else {
+            return {
+              fechaSolicitud: item.D1 || '----',
+              codigoInventario: item.D2 || '----',
+              nombre: item.D3 || '----',
+              marca: item.D4 || '----',
+              lote: item.D5 || '----',
+              tipo: item.D6 || '----',
+              area: item.D7 || '----',
+              fechaIngreso: item.D8 || '----',
+              fechaVencimiento: item.D9 || '----',
+              fechaActualizacionInformacion: item.D10 || '----',
+              cantidadIngreso: item.D11 || '----',
+              manipulacion: item.D12 || 'Sin especificar',
+              almacenamiento: item.D13 || '----',
+              certificadoAnalisis: false,
+              responsable: item.D15 || '----',
+              observaciones: item.D16 || 'Ninguna',
+              vencimiento: item.D9 || '----',
+              mesesRestantes: '3',
+              notificado: false,
+            };
+          }
+        });        
 
         console.log("formatted data:", formattedData);
         
-
+        const rutaConsumoPost = module == 'dataTableColors' ? 'tableColors/dataColorsreplaceall' : 'table/datareplaceall'
         //? Enviar los datos al backend para guardarlos en la base de datos
-        await axios.post('https://sgmrcbackend-production.up.railway.app/api/table/datareplaceall', formattedData);
+        await axios.post(`https://sgmrcbackend-production.up.railway.app/api/${rutaConsumoPost}`, formattedData);
         alert('Datos cargados correctamente');
         onClose();  // Cerrar el modal después de la carga
         window.location.reload();
