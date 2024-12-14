@@ -258,7 +258,6 @@ const clickColumFixed = (columnClicked) => {
     <TableContainer component={Paper}
         style={{
           height: '100vh', // Ocupa el 100% de la altura de la ventana
-          height: '100vh', // Ocupa el 100% de la altura de la ventana
           overflow: 'auto', // Permite el desplazamiento vertical y horizontal
         }}
       >
@@ -279,7 +278,7 @@ const clickColumFixed = (columnClicked) => {
               </Tooltip>								
             </TableCell>
           </TableRow>
-          <TableRow style={{position: 'sticky', top: 0, zIndex: 1, }}>
+          <TableRow>
             <TableCell colSpan={3} style={{ background: "#78e08f", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
              <strong>Area</strong>: Físicoquímica		
             </TableCell>
@@ -297,7 +296,7 @@ const clickColumFixed = (columnClicked) => {
              </Tooltip>
             </TableCell>
           </TableRow>
-          <TableRow style={{position: 'sticky', top: 0, zIndex: 1, }}>
+          <TableRow>
             <TableCell colSpan={3} style={{ background: "#78e08f", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
               <strong>Fecha de actualización</strong>: 2024-10-18		
             </TableCell>
@@ -316,14 +315,14 @@ const clickColumFixed = (columnClicked) => {
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell style={{position: 'sticky',top:55, background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Reactivo</TableCell>
-            <TableCell style={{position: 'sticky',top:55, background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Marca</TableCell>
-            <TableCell style={{position: 'sticky',top:55, background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Codigo</TableCell>
-            <TableCell style={{position: 'sticky',top:55, background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>No. Lote</TableCell>
-            <TableCell style={{position: 'sticky',top:55, background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Fecha de vencimiento</TableCell>
-            <TableCell style={{position: 'sticky',top:55, background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>No. CAS</TableCell>
-            <TableCell style={{position: 'sticky',top:55, background: "#d9ffd9", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Color</TableCell>
-            <TableCell style={{position: 'sticky',top:55, background: "#d9ffd9", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Accion</TableCell>
+            <TableCell style={{position: 'sticky',top:0, background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Reactivo</TableCell>
+            <TableCell style={{position: 'sticky',top:0, background: "#f569fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Marca</TableCell>
+            <TableCell style={{position: 'sticky',top:0, background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Codigo</TableCell>
+            <TableCell style={{position: 'sticky',top:0, background: "#69fc8f", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>No. Lote</TableCell>
+            <TableCell style={{position: 'sticky',top:0, background: "#fcae69", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Fecha de vencimiento</TableCell>
+            <TableCell style={{position: 'sticky',top:0, background: "#c069fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>No. CAS</TableCell>
+            <TableCell style={{position: 'sticky',top:0, background: "#f6fe7b", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Color</TableCell>
+            <TableCell style={{position: 'sticky',top:0, background: "#f8a0fc", textAlign: 'center', borderRight: '1px solid rgb(224, 224, 224)', zIndex: 1 }}>Accion</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -352,6 +351,16 @@ const clickColumFixed = (columnClicked) => {
           const filteredRow = filterData(row); // Filtrar la fila
           const backgroundColor = "transparent"
           const color = "black"
+
+          const colorMapping = {
+            VERDE: '#89e273',  // Color verde
+            ROJO: '#f39278',   // Color rojo
+            AZUL: '#78a4f3',   // Color azul
+            AMARILLO: '#fafc69', // Color amarillo
+            BLANCORAYADO: 'repeating-linear-gradient(45deg, #ffffff 0px, #ffffff 10px,rgb(231, 235, 238) 10px,rgb(214, 218, 221) 20px)', // Blanco con rayas grises
+            BLANCO: '#ffffff'   // Color blanco
+          };          
+
           return (
             <TableRow key={rowIndex}>
 
@@ -361,7 +370,10 @@ const clickColumFixed = (columnClicked) => {
                   sx={{
                     textAlign: 'center',
                     fontSize: "14px",
-                    backgroundColor: backgroundColor, // Color de fondo
+                    background: colIndex === 6 
+                    // Eliminar todos los espacios antes de buscar el color en el objeto colorMapping
+                    ? colorMapping[filteredRow[column].replace(/\s+/g, '').toUpperCase()] // Mapeo de color sin espacios
+                    : backgroundColor, // Color de fondo predeterminado                    
                     color: color, // Color de texto
                   }}
                   onClick={() => handleDoubleClick(rowIndex, column)}
