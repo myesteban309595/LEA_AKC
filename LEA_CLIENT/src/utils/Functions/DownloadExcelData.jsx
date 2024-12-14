@@ -77,7 +77,7 @@ export const ExportExcelWithTemplate = async ({ data, module }) => {
 
     // Insertar los datos en la hoja a partir de la fila 2 (después de los encabezados)
     const ws = XLSX.utils.sheet_add_json(sheet, dataToInsert, {
-      origin: (module === "dataTableColors") ? 10 : 3,
+      origin: (module === "dataTableColors") ? 9 : 3,
       skipHeader: true,
     });
 
