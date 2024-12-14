@@ -6,7 +6,7 @@ export const ExportExcelWithTemplate = async ({ data, module }) => {
   try {
     // Ruta al archivo dependiendo del módulo
     // Intentar cargar el archivo
-    const response = await fetch((module === "dataTableColors") ? '/XLSX_BASE/BASEXLSMCODCOLOR.xlsx' : '/XLSX_BASE/BASEXLXMSGMRC.xlsx');
+    const response = await fetch((module === "dataTableColors") ? '/XLSX_BASE/BASEXLSMCODCOLOR.xlsx' : 'public/XLSX_BASE/BASEXLXMSGMRC.xlsx');
     
     // Verificar si la respuesta es exitosa
     if (!response.ok) {
