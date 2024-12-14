@@ -17,7 +17,6 @@ import {
   } from '@mui/material';
 
 import Swal from 'sweetalert2'
-//import { Snackbar, Alert } from '@mui/material'
 
 import {ExportExcelWithTemplate} from '../utils/Functions/DownloadExcelData'
 const FileUploadExcel = lazy(() => import('../utils/Functions/UploadExcelDataMasive')); //& aplicando lazy a este componente
@@ -31,7 +30,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 const CodificacionDeColoresComponent = React.memo(() => {
   // Estado para la fecha y hora actual
-  const [fechaHoraActual, setFechaHoraActual] = useState('');
   const [data, setDataColors] = useState([]);
   const [editingCell, setEditingCell] = useState({ rowIndex: null, column: null });
   const [tempValue, setTempValue] = useState('');
@@ -49,9 +47,6 @@ const CodificacionDeColoresComponent = React.memo(() => {
   const [pdfUrl, setPdfUrl] = useState('');
   // Abrir modal para carga masiva
   const [openUploadExcelModal, setOpenUploadExcelModal] = useState(false);
-
-
-  const [uploadRowIndex, setUploadRowIndex] = useState(null); // Estado para el rowIndex a subir
 
   useEffect(() => {
     // Realizar la solicitud GET a la API
@@ -115,11 +110,11 @@ const CodificacionDeColoresComponent = React.memo(() => {
       Color: '----',
       Accion: '----'
     };
-  
     axios.post('https://sgmrcbackend-production.up.railway.app/api/tableColors/dataColors', newFile)
       .then(response => {
         // Una vez agregada la fila en la base de datos, agregarla al estado local para que se muestre
-        setdataColorsColors(prevData => [response.data, ...prevData]);
+        console.log("response en agregar fila:",response);
+        setDataColors(prevData => [response.data, ...prevData]);
       })
       .catch(err => {
         Swal.fire({
@@ -195,7 +190,7 @@ const deleteRowData = (rowId) => {
 };
 
 const exportExcelDataTable =()=> {
-  ExportExcelWithTemplate({data:data}) //? se envia la data para exportar el excel
+  ExportExcelWithTemplate({data:data, module:"dataTableColors"}) //? se envia la data para exportar el excel
 }
 
 const handleCloseModal = () => {

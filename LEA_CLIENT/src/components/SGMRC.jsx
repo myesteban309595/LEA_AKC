@@ -17,7 +17,6 @@ import {
   } from '@mui/material';
 
 import Swal from 'sweetalert2'
-//import { Snackbar, Alert } from '@mui/material'
 
 import {calcularDiferenciaEnMeses} from '../utils/Functions/CalcularDiferenciaFechas'
 import {ExportExcelWithTemplate} from '../utils/Functions/DownloadExcelData'
@@ -399,7 +398,7 @@ const deleteRowData = (rowId) => {
 const exportExcelDataTable =()=> {
   console.log("ejecutando la funcion de exportar data en SGMRC");
   console.log("DATA QUE SE ENVIA A EXPORT EXCEL:", data);
-  ExportExcelWithTemplate({data:data}) //? se envia la data para exportar el excel
+  ExportExcelWithTemplate({data:data, module:"dataTable"}) //? se envia la data para exportar el excel
 }
 
 const handleCloseModal = () => {
