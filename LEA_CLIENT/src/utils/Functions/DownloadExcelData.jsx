@@ -7,11 +7,8 @@ export const ExportExcelWithTemplate = async ({ data, module }) => {
   
   try {
     // Ruta al archivo dependiendo del módulo
-    const FileLoaded = (module === "dataTableColors") ? '/BASEXLSMCODCOLOR.xlsx' : '/XLSX_BASE/BASEXLXMSGMRC.xlsx';
-    console.log("FileLoaded:", FileLoaded);
-    
     // Intentar cargar el archivo
-    const response = await fetch(FileLoaded);
+    const response = await fetch((module === "dataTableColors") ? 'public/XLSX_BASE/BASEXLSMCODCOLOR.xlsx' : 'public/XLSX_BASE/BASEXLXMSGMRC.xlsx');
     
     // Verificar si la respuesta es exitosa
     if (!response.ok) {
@@ -20,9 +17,11 @@ export const ExportExcelWithTemplate = async ({ data, module }) => {
 
     // Comprobar el tipo de contenido de la respuesta (debe ser Excel)
     const contentType = response.headers.get('content-type');
-    if (!contentType || !contentType.includes('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
-      throw new Error('El archivo descargado no es un archivo Excel válido.');
-    }
+    console.log("Tipo de contenido:", contentType);  // Agregar log para verificar el tipo de contenido
+
+    // if (!contentType || !contentType.includes('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
+    //   throw new Error('El archivo descargado no es un archivo Excel válido.');
+    // }
 
     // Leer el archivo Excel
     const arrayBuffer = await response.arrayBuffer();
