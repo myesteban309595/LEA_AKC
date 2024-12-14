@@ -22,19 +22,12 @@ import Swal from 'sweetalert2'
 import {ExportExcelWithTemplate} from '../utils/Functions/DownloadExcelData'
 const FileUploadExcel = lazy(() => import('../utils/Functions/UploadExcelDataMasive')); //& aplicando lazy a este componente
 
-import ModalComponent from '../utils/modals/ViewPdf';
-import FileUpload from '../components/UploadFile';
-import SpeedDialComponent from '../utils/speedDial/SpeedDial';
-
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
-import PushPinIcon from '@mui/icons-material/PushPin';
+import DownloadIcon from '@mui/icons-material/Download';
+import UploadIcon from '@mui/icons-material/Upload';
+import PostAddIcon from '@mui/icons-material/PostAdd';
 import DeleteIcon from '@mui/icons-material/Delete';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import CircularProgress from '@mui/material/CircularProgress';
-import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
-import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
 
 const CodificacionDeColoresComponent = React.memo(() => {
   // Estado para la fecha y hora actual
@@ -82,7 +75,7 @@ const CodificacionDeColoresComponent = React.memo(() => {
     if (error) {
       return <div>{error}</div>;
     }
-    
+
   const handleBlur = async () => {
     
     // Crea una copia de los datos y actualiza el valor modificado
@@ -257,10 +250,7 @@ const clickColumFixed = (columnClicked) => {
   };
 
     //? Función para abrir el modal
-    const handleOpenModalUploadExcel = () => {
-
-      console.log("ejecutando modal upload excel");
-      
+    const handleOpenModalUploadExcel = () => {     
       setOpenUploadExcelModal(true);
     };
   
@@ -279,8 +269,18 @@ const clickColumFixed = (columnClicked) => {
       <Table style={{ width: 'max-content' }}>
         <TableHead>
           <TableRow style={{background: "#82ccdd" }}>
-            <TableCell colSpan={8} style={{ fontSize: '18px', textAlign: 'center', fontWeight: 'bold', border: '1px solid rgba(224, 224, 224, 1)' }}>
+            <TableCell colSpan={7} style={{ fontSize: '18px', textAlign: 'center', fontWeight: 'bold', border: '1px solid rgba(224, 224, 224, 1)' }}>
               CODIFICACION DE COLOR PARA ALMACENAMIENTO DE REACTIVOS								
+            </TableCell>
+            <TableCell colSpan={1} style={{ fontSize: '18px', textAlign: 'center', fontWeight: 'bold', border: '1px solid rgba(224, 224, 224, 1)' }}>
+             <Tooltip title="Nueva Fila" enterDelay={100}>
+               <IconButton
+                style={{ outline: "none", color: "black" }}
+                onClick={() => agregarDataFila()}
+               >
+                <PostAddIcon/>
+               </IconButton>
+              </Tooltip>								
             </TableCell>
           </TableRow>
           <TableRow style={{position: 'sticky', top: 0, zIndex: 1, }}>
@@ -291,6 +291,14 @@ const clickColumFixed = (columnClicked) => {
              <strong>Revisado y aprobado</strong>: Paula Julia Blanco - Líder Laboratorio						
             </TableCell>
             <TableCell colSpan={1} style={{ background: "#eabbfa", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
+             <Tooltip title="Subir Data" enterDelay={100}>
+              <IconButton
+               style={{ outline: "none", color: "black" }}
+               onClick={() => handleOpenModalUploadExcel()}
+              >
+               <UploadIcon/>
+              </IconButton>
+             </Tooltip>
             </TableCell>
           </TableRow>
           <TableRow style={{position: 'sticky', top: 0, zIndex: 1, }}>
@@ -301,6 +309,14 @@ const clickColumFixed = (columnClicked) => {
               <strong>Responsable actualización</strong>: Gloria Emilse Almeida Gonzalez - Coordinadora Area Físico- Química					
             </TableCell>
             <TableCell colSpan={1} style={{ background: "#eabbfa", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
+             <Tooltip title="Descargar Data" enterDelay={100}>
+               <IconButton
+                style={{ outline: "none", color: "black" }}
+                onClick={() => exportExcelDataTable()}
+               >
+                <DownloadIcon/>
+               </IconButton>
+             </Tooltip>
             </TableCell>
           </TableRow>
           <TableRow>
@@ -418,14 +434,6 @@ const clickColumFixed = (columnClicked) => {
   }
  </TableBody>
 </Table>
- 
-   {/* Componente Modal visualizar Pdf */}
-   <ModalComponent isOpen={isModalOpen} onClose={handleCloseModal} pdfUrl={pdfUrl} />
-
-   {/* Condicional para mostrar el componente FileUpload */}
-      {uploadRowIndex !== null && (
-        <FileUpload rowIndex={uploadRowIndex} />
-      )}
 
     {/* Snackbar para mostrar mensajes */}
     <Snackbar
@@ -438,24 +446,6 @@ const clickColumFixed = (columnClicked) => {
           {snackbarMessage}
         </Alert>
       </Snackbar>
-
-      {/* Speed Dial */}
-      <SpeedDialComponent
-        uploadExcelData={handleOpenModalUploadExcel}
-        exportExcelTable={exportExcelDataTable}
-        agregarDataFila={agregarDataFila} // ejecuto la funcion agregar fila desde el speedDial
-              sx={{
-                position: 'fixed',
-                top: 16,  // Puedes ajustar este valor para mover el SpeedDial
-                right: 35,  // Ajusta el valor para la distancia del borde derecho
-                zIndex: 1300,
-                '&:focus, &:active': { 
-                  outline: 'none', // Elimina el borde de enfoque (outline) al hacer clic
-                  // boxShadow: 'none', // Elimina la sombra de enfoque
-                },
-              }}
-      />
-
       {/* Componente con el modal de carga de Excel */}
       {/* Suspense envuelve el componente lazy */}
        <Suspense fallback={<CircularProgress />}>
