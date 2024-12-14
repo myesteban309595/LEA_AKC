@@ -27,6 +27,7 @@ import PostAddIcon from '@mui/icons-material/PostAdd';
 import DeleteIcon from '@mui/icons-material/Delete';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import CircularProgress from '@mui/material/CircularProgress';
+import HomeIcon from '@mui/icons-material/Home';
 
 const CodificacionDeColoresComponent = React.memo(() => {
   // Estado para la fecha y hora actual
@@ -429,6 +430,20 @@ const clickColumFixed = (columnClicked) => {
   }
  </TableBody>
 </Table>
+
+{/* Botón en la esquina superior derecha */}
+     <IconButton
+        style={{
+          position: 'absolute',
+          top: '20px',
+          right: '120px',
+          zIndex: 1,  // Para asegurarse de que esté por encima de otros elementos
+          outline: "none"
+        }}
+        onClick={() => window.location="/"}
+      >
+        <HomeIcon />
+      </IconButton>
 
     {/* Snackbar para mostrar mensajes */}
     <Snackbar
