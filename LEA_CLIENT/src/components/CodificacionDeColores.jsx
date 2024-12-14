@@ -263,10 +263,11 @@ const clickColumFixed = (columnClicked) => {
     <TableContainer component={Paper}
         style={{
           height: '100vh', // Ocupa el 100% de la altura de la ventana
+          height: '100vh', // Ocupa el 100% de la altura de la ventana
           overflow: 'auto', // Permite el desplazamiento vertical y horizontal
         }}
       >
-      <Table style={{ width: 'max-content' }}>
+      <Table style={{ width: '100%' }}>
         <TableHead>
           <TableRow style={{background: "#82ccdd" }}>
             <TableCell colSpan={7} style={{ fontSize: '18px', textAlign: 'center', fontWeight: 'bold', border: '1px solid rgba(224, 224, 224, 1)' }}>

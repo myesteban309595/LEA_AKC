@@ -10,13 +10,14 @@ import ShareIcon from '@mui/icons-material/Share';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import TableRowsIcon from '@mui/icons-material/TableRows';
 
 const actions = [
   { icon: <PostAddIcon />, name: 'Nueva Fila' },
   { icon: <FileDownloadIcon />, name: 'Export Excel' },
   { icon: <FileUploadIcon />, name: 'Upload Excel' },
   { icon: <PrintIcon />, name: 'Print' },
-  { icon: <ShareIcon />, name: 'Share' },
+  { icon: <TableRowsIcon />, name: 'Table de Colores' },
 ];
 
 export default function SpeedDialComponent({ sx, agregarDataFila, exportExcelTable, uploadExcelData }) {
@@ -41,6 +42,8 @@ export default function SpeedDialComponent({ sx, agregarDataFila, exportExcelTab
               exportExcelTable();
             } else if (action.name === 'Upload Excel') {
               uploadExcelData();  // Llamamos la función para abrir el modal
+            } else if (action.name === 'Table de Colores') {
+              window.location ="/colors" 
             }
           }}
           sx={{
