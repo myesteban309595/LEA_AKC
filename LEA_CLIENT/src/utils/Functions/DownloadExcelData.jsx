@@ -2,8 +2,6 @@ import React from 'react';
 import * as XLSX from 'xlsx';
 
 export const ExportExcelWithTemplate = async ({ data, module }) => {
-  console.log("modulo que envia:", module);
-  console.log("data que llega a exportar excel:", data);
   
   try {
     // Ruta al archivo dependiendo del módulo
@@ -14,14 +12,6 @@ export const ExportExcelWithTemplate = async ({ data, module }) => {
     if (!response.ok) {
       throw new Error(`Error al cargar el archivo: ${response.statusText}`);
     }
-
-    // Comprobar el tipo de contenido de la respuesta (debe ser Excel)
-    const contentType = response.headers.get('content-type');
-    console.log("Tipo de contenido:", contentType);  // Agregar log para verificar el tipo de contenido
-
-    // if (!contentType || !contentType.includes('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
-    //   throw new Error('El archivo descargado no es un archivo Excel válido.');
-    // }
 
     // Leer el archivo Excel
     const arrayBuffer = await response.arrayBuffer();
@@ -65,7 +55,7 @@ export const ExportExcelWithTemplate = async ({ data, module }) => {
     });
 
     // Insertar los datos en la hoja a partir de la fila 2 (después de los encabezados)
-    const ws = XLSX.utils.sheet_add_json(sheet, dataToInsert, { origin: (module === "dataTableColors") ? 10 : 3, skipHeader: true });
+    const ws = XLSX.utils.sheet_add_json(sheet, dataToInsert, { origin: (module === "dataTableColors") ? 9 : 3, skipHeader: true });
 
     // Crear un nuevo libro de trabajo (workbook) para evitar modificar la plantilla original
     const wb = XLSX.utils.book_new();
