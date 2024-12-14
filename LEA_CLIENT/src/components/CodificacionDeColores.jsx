@@ -1,0 +1,470 @@
+import React, { useState, useEffect, Suspense, lazy } from 'react';
+import axios from 'axios';
+import { 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableContainer, 
+  Tooltip, 
+  TableHead, 
+  TableRow, 
+  Paper, 
+  TextField, 
+  Button, 
+  IconButton ,
+  Snackbar,
+  Alert
+  } from '@mui/material';
+
+import Swal from 'sweetalert2'
+//import { Snackbar, Alert } from '@mui/material'
+
+import {ExportExcelWithTemplate} from '../utils/Functions/DownloadExcelData'
+const FileUploadExcel = lazy(() => import('../utils/Functions/UploadExcelDataMasive')); //& aplicando lazy a este componente
+
+import ModalComponent from '../utils/modals/ViewPdf';
+import FileUpload from '../components/UploadFile';
+import SpeedDialComponent from '../utils/speedDial/SpeedDial';
+
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
+import PushPinIcon from '@mui/icons-material/PushPin';
+import DeleteIcon from '@mui/icons-material/Delete';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import CircularProgress from '@mui/material/CircularProgress';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
+
+const CodificacionDeColoresComponent = React.memo(() => {
+  // Estado para la fecha y hora actual
+  const [fechaHoraActual, setFechaHoraActual] = useState('');
+  const [data, setDataColors] = useState([]);
+  const [editingCell, setEditingCell] = useState({ rowIndex: null, column: null });
+  const [tempValue, setTempValue] = useState('');
+  const [ColumValue, setColumValue] = useState();
+  // propiedades del snackbar
+  const [snackbarOpen, setSnackbarOpen] = useState(false);  // Estado para controlar el Snackbar
+  const [snackbarMessage, setSnackbarMessage] = useState("");  // Mensaje del Snackbar
+  const [snackbarSeverity, setSnackbarSeverity] = useState('');  // 'success' o 'error'
+
+  // carga de data
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  // Visualizador de Pdf
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState('');
+  // Abrir modal para carga masiva
+  const [openUploadExcelModal, setOpenUploadExcelModal] = useState(false);
+
+
+  const [uploadRowIndex, setUploadRowIndex] = useState(null); // Estado para el rowIndex a subir
+
+  useEffect(() => {
+    // Realizar la solicitud GET a la API
+    axios.get('https://sgmrcbackend-production.up.railway.app/api/tableColors/data')
+      .then(response => {
+        setDataColors(response.data);
+        setLoading(false);
+      })
+      .catch(err => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Error al cargar los datos",
+          footer: '<a href="#">Why do I have this issue?</a>'
+        });
+        //setError('Error al cargar los datos');
+        setLoading(false);
+      });
+  }, []); // Este useEffect depende de la data, pero solo se ejecuta cuando data cambia.
+  
+    if (error) {
+      return <div>{error}</div>;
+    }
+    
+  const handleBlur = async () => {
+    
+    // Crea una copia de los datos y actualiza el valor modificado
+    const newData = [...data];
+    newData[editingCell.rowIndex][editingCell.column] = tempValue;
+  
+    // TAN PRONTO DESENFOQUE LA CASILLA, GUARDA LOS DATOS
+    try {
+      // Usar `newData` para enviar los datos modificados al servidor
+      const response = await axios.post('https://sgmrcbackend-production.up.railway.app/api/tableColors/datareplaceall', newData);
+      console.log("ejecutando desde handleBlur");
+  
+      // Si la solicitud es exitosa
+      if (response.status === 200) {
+        setSnackbarMessage('Datos actualizados correctamente');
+        setSnackbarSeverity('success'); 
+        setSnackbarOpen(true);
+        // Actualiza el estado de `data` con los datos retornados por el servidor
+        setDataColors(response.data); // Aquí asumimos que el servidor devuelve los datos actualizados
+      }
+    } catch (error) {
+      console.error(error);
+      setSnackbarMessage("Hubo un error al guardar los datos");
+      setSnackbarOpen(true);
+      setSnackbarSeverity("error");
+    }
+  };
+
+  const agregarDataFila = () => {
+    const newFile = {
+      Reactivo: '----',
+      Marca: '----',
+      Codigo: '----',
+      Lote: '----',
+      fechaVencimiento: '--/--/--',  // Si necesitas que sea tipo Date, debes convertirlo a formato adecuado
+      CAS: '----',  // Asignar valor por defecto
+      Color: '----',
+      Accion: '----'
+    };
+  
+    axios.post('https://sgmrcbackend-production.up.railway.app/api/tableColors/data', newFile)
+      .then(response => {
+        // Una vez agregada la fila en la base de datos, agregarla al estado local para que se muestre
+        setDataColors(prevData => [response.data, ...prevData]);
+      })
+      .catch(err => {
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: `Error al agregar la fila: ${err.response ? err.response.data.message : err.message}`,
+          showConfirmButton: false,
+          timer: 1500
+        });
+        console.error(err);
+      });
+  };
+  
+
+const deleteRowData = (rowId) => {
+  // Primero, mostramos una alerta de confirmación utilizando SweetAlert
+  Swal.fire({
+    title: "¿Estás seguro?",
+    text: "¡No podrás revertir esto!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Sí, eliminar",
+  }).then((result) => {
+    // Si el usuario confirma la eliminación
+    if (result.isConfirmed) {
+      // Realizamos la eliminación de la fila
+      axios.delete(`https://sgmrcbackend-production.up.railway.app/api/tableColors/data/${rowId}`)
+        .then(() => {
+          // Si la eliminación es exitosa, obtenemos los datos actualizados
+          axios.get('https://sgmrcbackend-production.up.railway.app/api/tableColors/data')
+            .then(updatedDataResponse => {
+              setDataColors(updatedDataResponse.data); // Actualizamos el estado con los nuevos datos
+              setSnackbarMessage('Datos eliminados correctamente');
+              setSnackbarSeverity('success');
+              setSnackbarOpen(true); // Mostrar mensaje de éxito
+
+              // Mostramos una notificación de éxito con SweetAlert
+              Swal.fire({
+                icon: 'success',
+                title: 'Fila eliminada',
+                text: 'La fila se ha eliminado correctamente.',
+              });
+            })
+            .catch(err => {
+              const errorMessage = err.response ? err.response.data.message : err.message;
+              setSnackbarMessage(`Error al obtener datos: ${errorMessage}`);
+              setSnackbarSeverity('error');
+              setSnackbarOpen(true);
+              // Notificación de error en caso de que no se puedan obtener los datos
+              Swal.fire({
+                icon: 'error',
+                title: 'Error al obtener los datos',
+                text: errorMessage,
+              });
+            });
+        })
+        .catch(err => {
+          const errorMessage = err.response ? err.response.data.message : err.message;
+          setSnackbarMessage(`Error al eliminar la fila: ${errorMessage}`);
+          setSnackbarSeverity('error');
+          setSnackbarOpen(true);
+          // Notificación de error si la eliminación falla
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al eliminar la fila',
+            text: errorMessage,
+          });
+        });
+    }
+  });
+};
+
+const exportExcelDataTable =()=> {
+  ExportExcelWithTemplate({data:data}) //? se envia la data para exportar el excel
+}
+
+const handleCloseModal = () => {
+  setModalOpen(false);
+};
+
+const handleDoubleClick = (rowIndex, column) => {
+  setEditingCell({ rowIndex, column });
+  setTempValue(data[rowIndex][column]);
+};
+
+const handleChange = (event) => {
+  setTempValue(event.target.value);
+};
+
+const handleKeyDown = (event) => {
+  if (event.key === 'Enter') {
+    // Al presionar Enter, desenfocamos el campo y luego guardamos los datos
+    event.target.blur(); // Esto activará el `onBlur` de inmediato
+    // Usamos setTimeout para asegurar que el blur se complete antes de guardar
+    setTimeout(() => {
+      handleBlur();
+    }, 100);  // Retraso de 100 ms para asegurarnos que el evento de blur haya pasado
+  }
+};
+
+const handleSnackbarClose = () => {
+  setSnackbarOpen(false);
+};
+
+const clickColumFixed = (columnClicked) => {
+  if(columnClicked == ColumValue)
+  {
+    setColumValue(100000); // se fija un valor de columna que nunca vaya a existir
+  }else{
+    setColumValue(columnClicked); // se fija un valor de columna que nunca vaya a existir
+  }
+};
+
+  const filterData = (row) => {
+    // Campos a excluir de la data
+   // const excludedFields = ['_id', 'createdAt', 'updatedAt', '__v'];
+    const excludedFields = ['_id', 'updatedAt', 'createdAt']; // elimino createAt ya que es el ultimo en el objeto en la DB
+  
+    // Filtrar las propiedades que no quieres mostrar
+    return Object.keys(row)
+      .filter((key) => !excludedFields.includes(key)) // Excluye los campos no deseados
+      .reduce((obj, key) => {
+        obj[key] = row[key]; // Solo incluye los campos que quieres
+        return obj;
+      }, {});
+  };
+
+    //? Función para abrir el modal
+    const handleOpenModalUploadExcel = () => {
+
+      console.log("ejecutando modal upload excel");
+      
+      setOpenUploadExcelModal(true);
+    };
+  
+    //? Función para cerrar el modal
+    const handleCloseModalUploadExcel = () => {
+      setOpenUploadExcelModal(false);
+    };
+
+  return (
+    <TableContainer component={Paper}
+        style={{
+          height: '100vh', // Ocupa el 100% de la altura de la ventana
+          overflow: 'auto', // Permite el desplazamiento vertical y horizontal
+        }}
+      >
+      <Table style={{ width: 'max-content' }}>
+        <TableHead>
+          <TableRow style={{background: "#82ccdd" }}>
+            <TableCell colSpan={8} style={{ fontSize: '18px', textAlign: 'center', fontWeight: 'bold', border: '1px solid rgba(224, 224, 224, 1)' }}>
+              CODIFICACION DE COLOR PARA ALMACENAMIENTO DE REACTIVOS								
+            </TableCell>
+          </TableRow>
+          <TableRow style={{position: 'sticky', top: 0, zIndex: 1, }}>
+            <TableCell colSpan={3} style={{ background: "#78e08f", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
+             <strong>Area</strong>: Físicoquímica		
+            </TableCell>
+            <TableCell colSpan={4} style={{ background: "#eabbfa", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
+             <strong>Revisado y aprobado</strong>: Paula Julia Blanco - Líder Laboratorio						
+            </TableCell>
+            <TableCell colSpan={1} style={{ background: "#eabbfa", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
+            </TableCell>
+          </TableRow>
+          <TableRow style={{position: 'sticky', top: 0, zIndex: 1, }}>
+            <TableCell colSpan={3} style={{ background: "#78e08f", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
+              <strong>Fecha de actualización</strong>: 2024-10-18		
+            </TableCell>
+            <TableCell colSpan={4} style={{ background: "#eabbfa", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
+              <strong>Responsable actualización</strong>: Gloria Emilse Almeida Gonzalez - Coordinadora Area Físico- Química					
+            </TableCell>
+            <TableCell colSpan={1} style={{ background: "#eabbfa", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell style={{position: 'sticky',top:55, background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Reactivo</TableCell>
+            <TableCell style={{position: 'sticky',top:55, background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Marca</TableCell>
+            <TableCell style={{position: 'sticky',top:55, background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Codigo</TableCell>
+            <TableCell style={{position: 'sticky',top:55, background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>No. Lote</TableCell>
+            <TableCell style={{position: 'sticky',top:55, background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Fecha de vencimiento</TableCell>
+            <TableCell style={{position: 'sticky',top:55, background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>No. CAS</TableCell>
+            <TableCell style={{position: 'sticky',top:55, background: "#d9ffd9", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Color</TableCell>
+            <TableCell style={{position: 'sticky',top:55, background: "#d9ffd9", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Accion</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+  {
+    loading ? (
+      <TableRow>
+        <TableCell
+          colSpan={Object.keys(data[0] || {}).length}
+          sx={{
+            marginLeft: "600px",
+            textAlign: 'center',
+            padding: 3,
+            height: '50vh',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <CircularProgress size={150} />
+        </TableCell>
+      </TableRow>
+    ) : (
+      Array.isArray(data) && data.length > 0 ? (
+
+        data.map((row, rowIndex) => {
+          return (
+            <TableRow key={rowIndex}>
+
+              {Object.keys(filteredRow).map((column, colIndex) => (
+                <TableCell
+                  style={colIndex === ColumValue ? {
+                    position: 'sticky',
+                    left: 0,
+                    zIndex: 0,
+                    padding: 0,
+                    margin: 0,
+                    backgroundColor: 'rgba(229, 232, 232, 0.85)',
+                    color: color,
+                    textAlign: 'center',
+                    fontSize: "14px"
+                  } : {
+                    textAlign: 'center',
+                    fontSize: "14px",
+                    backgroundColor: backgroundColor, // Color de fondo
+                    color: color, // Color de texto
+                  }}
+                  key={colIndex}
+                  sx={{
+                    textAlign: 'center',
+                    fontSize: "14px",
+                    backgroundColor: backgroundColor, // Color de fondo
+                    color: color, // Color de texto
+                  }}
+                  onClick={() => handleDoubleClick(rowIndex, column)}
+                >
+                  {editingCell.rowIndex === rowIndex && editingCell.column === column && colIndex !== 13 && colIndex !== 18 && colIndex !== 19 ? (
+                    <TextField
+                      sx={{
+                        width: '100%',
+                        height: '42px',
+                        padding: 0,
+                        margin: 0,
+                        borderRadius: "1px",
+                        backgroundColor: '#f9fcfe',
+                        textAlign: 'center',
+                        fontSize: '15px',
+                        lineHeight: "normal",
+                        border: 'none',
+                        '& .MuiInputBase-input': {
+                          height: '42px',
+                          padding: '0px',
+                          fontSize: '15px',
+                          textAlign: 'center',
+                        },
+                      }}
+                      value={tempValue}
+                      onChange={handleChange}
+                      onBlur={()=>handleBlur()}
+                      onKeyDown={handleKeyDown}
+                    />
+                  ) : colIndex === 7 ? (
+                    <IconButton
+                      style={{ outline: "none", color: "#fc5a4e" }}
+                      onClick={() => deleteRowData(row._id)}
+                    >
+                      <HighlightOffIcon />
+                    </IconButton>
+                  ) : (
+                    filteredRow[column] // Mostrar el valor de la celda filtrada
+                  )}
+                </TableCell>
+              ))}
+            </TableRow>
+          );
+        })
+      ) : (
+        <TableRow>
+          <TableCell colSpan={Object.keys(data[0] || {}).length} sx={{ textAlign: 'center' }}>
+            No data available
+          </TableCell>
+        </TableRow>
+      )
+    )
+  }
+ </TableBody>
+</Table>
+ 
+   {/* Componente Modal visualizar Pdf */}
+   <ModalComponent isOpen={isModalOpen} onClose={handleCloseModal} pdfUrl={pdfUrl} />
+
+   {/* Condicional para mostrar el componente FileUpload */}
+      {uploadRowIndex !== null && (
+        <FileUpload rowIndex={uploadRowIndex} />
+      )}
+
+    {/* Snackbar para mostrar mensajes */}
+    <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={snackbarOpen}
+        autoHideDuration={3000} // Se cierra automáticamente después de 3 segundos
+        onClose={handleSnackbarClose}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
+
+      {/* Speed Dial */}
+      <SpeedDialComponent
+        uploadExcelData={handleOpenModalUploadExcel}
+        exportExcelTable={exportExcelDataTable}
+        agregarDataFila={agregarDataFila} // ejecuto la funcion agregar fila desde el speedDial
+              sx={{
+                position: 'fixed',
+                top: 16,  // Puedes ajustar este valor para mover el SpeedDial
+                right: 35,  // Ajusta el valor para la distancia del borde derecho
+                zIndex: 1300,
+                '&:focus, &:active': { 
+                  outline: 'none', // Elimina el borde de enfoque (outline) al hacer clic
+                  // boxShadow: 'none', // Elimina la sombra de enfoque
+                },
+              }}
+      />
+
+      {/* Componente con el modal de carga de Excel */}
+      {/* Suspense envuelve el componente lazy */}
+       <Suspense fallback={<CircularProgress />}>
+         <FileUploadExcel open={openUploadExcelModal} onClose={handleCloseModalUploadExcel} />
+       </Suspense>
+
+</TableContainer>
+
+);
+});
+
+export default CodificacionDeColoresComponent;

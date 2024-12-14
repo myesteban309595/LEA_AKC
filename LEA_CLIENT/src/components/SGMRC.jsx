@@ -20,7 +20,6 @@ import Swal from 'sweetalert2'
 //import { Snackbar, Alert } from '@mui/material'
 
 import {calcularDiferenciaEnMeses} from '../utils/Functions/CalcularDiferenciaFechas'
-import {sendProductData} from '../utils/Functions/SendNotificationEmail'
 import {ExportExcelWithTemplate} from '../utils/Functions/DownloadExcelData'
 const FileUploadExcel = lazy(() => import('../utils/Functions/UploadExcelDataMasive')); //& aplicando lazy a este componente
 
