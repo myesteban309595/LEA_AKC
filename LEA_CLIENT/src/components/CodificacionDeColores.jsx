@@ -432,10 +432,11 @@ const clickColumFixed = (columnClicked) => {
 </Table>
 
 {/* Botón en la esquina superior derecha */}
+  <Tooltip title="INICIO" enterDelay={100}>
      <IconButton
         style={{
           position: 'absolute',
-          top: '20px',
+          top: '18px',
           right: '120px',
           zIndex: 1,  // Para asegurarse de que esté por encima de otros elementos
           outline: "none"
@@ -444,6 +445,7 @@ const clickColumFixed = (columnClicked) => {
       >
         <HomeIcon />
       </IconButton>
+    </Tooltip>
 
     {/* Snackbar para mostrar mensajes */}
     <Snackbar
