@@ -55,7 +55,7 @@ const CodificacionDeColoresComponent = React.memo(() => {
 
   useEffect(() => {
     // Realizar la solicitud GET a la API
-    axios.get('https://sgmrcbackend-production.up.railway.app/api/tableColors/data')
+    axios.get('https://sgmrcbackend-production.up.railway.app/api/tableColors/dataColors')
       .then(response => {
         setDataColors(response.data);
         setLoading(false);
@@ -85,7 +85,7 @@ const CodificacionDeColoresComponent = React.memo(() => {
     // TAN PRONTO DESENFOQUE LA CASILLA, GUARDA LOS DATOS
     try {
       // Usar `newData` para enviar los datos modificados al servidor
-      const response = await axios.post('https://sgmrcbackend-production.up.railway.app/api/tableColors/datareplaceall', newData);
+      const response = await axios.post('https://sgmrcbackend-production.up.railway.app/api/tableColors/dataColorsreplaceall', newData);
       console.log("ejecutando desde handleBlur");
   
       // Si la solicitud es exitosa
@@ -110,16 +110,16 @@ const CodificacionDeColoresComponent = React.memo(() => {
       Marca: '----',
       Codigo: '----',
       Lote: '----',
-      fechaVencimiento: '--/--/--',  // Si necesitas que sea tipo Date, debes convertirlo a formato adecuado
-      CAS: '----',  // Asignar valor por defecto
+      fechaVencimiento: '--/--/--', 
+      CAS: '----', 
       Color: '----',
       Accion: '----'
     };
   
-    axios.post('https://sgmrcbackend-production.up.railway.app/api/tableColors/data', newFile)
+    axios.post('https://sgmrcbackend-production.up.railway.app/api/tableColors/dataColors', newFile)
       .then(response => {
         // Una vez agregada la fila en la base de datos, agregarla al estado local para que se muestre
-        setDataColors(prevData => [response.data, ...prevData]);
+        setdataColorsColors(prevData => [response.data, ...prevData]);
       })
       .catch(err => {
         Swal.fire({
@@ -148,10 +148,10 @@ const deleteRowData = (rowId) => {
     // Si el usuario confirma la eliminación
     if (result.isConfirmed) {
       // Realizamos la eliminación de la fila
-      axios.delete(`https://sgmrcbackend-production.up.railway.app/api/tableColors/data/${rowId}`)
+      axios.delete(`https://sgmrcbackend-production.up.railway.app/api/tableColors/dataColors/${rowId}`)
         .then(() => {
           // Si la eliminación es exitosa, obtenemos los datos actualizados
-          axios.get('https://sgmrcbackend-production.up.railway.app/api/tableColors/data')
+          axios.get('https://sgmrcbackend-production.up.railway.app/api/tableColors/dataColors')
             .then(updatedDataResponse => {
               setDataColors(updatedDataResponse.data); // Actualizamos el estado con los nuevos datos
               setSnackbarMessage('Datos eliminados correctamente');
