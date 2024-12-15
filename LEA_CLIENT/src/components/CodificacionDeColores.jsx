@@ -263,10 +263,33 @@ const clickColumFixed = (columnClicked) => {
         }}
       >
       <Table style={{ width: '100%' }}>
-        <TableHead>
-          <TableRow style={{background: "#82ccdd" }}>
-            <TableCell colSpan={7} style={{ fontSize: '18px', textAlign: 'center', fontWeight: 'bold', border: '1px solid rgba(224, 224, 224, 1)' }}>
-              CODIFICACION DE COLOR PARA ALMACENAMIENTO DE REACTIVOS								
+          <TableHead>
+            <TableRow style={{background: "#82ccdd" }}>
+            <TableCell 
+              colSpan={7} 
+              style={{ 
+               fontSize: '18px', 
+               textAlign: 'center', 
+               fontWeight: 'bold', 
+               border: '1px solid rgba(224, 224, 224, 1)', 
+               position: 'relative'  // Para que el botón se posicione dentro de esta celda
+              }}
+            >
+               CODIFICACION DE COLOR PARA ALMACENAMIENTO DE REACTIVOS
+             <Tooltip title="INICIO" enterDelay={100}>
+              <IconButton
+              style={{
+               position: 'absolute',  // Posicionamos el botón dentro de la celda
+               bottom: '15px',         // A 10px del fondo de la celda
+               right: '10px',          // A 10px del borde derecho de la celda
+               zIndex: 1000,           // Asegura que el botón esté por encima de otros elementos
+               outline: "none"
+               }}
+                onClick={() => window.location = "/"}  // Redirige al inicio
+               >
+                 <HomeIcon />
+              </IconButton>
+             </Tooltip>
             </TableCell>
             <TableCell colSpan={1} style={{ fontSize: '18px', textAlign: 'center', fontWeight: 'bold', border: '1px solid rgba(224, 224, 224, 1)' }}>
              <Tooltip title="Nueva Fila" enterDelay={100}>
@@ -430,22 +453,6 @@ const clickColumFixed = (columnClicked) => {
   }
  </TableBody>
 </Table>
-
-{/* Botón en la esquina superior derecha */}
-  <Tooltip title="INICIO" enterDelay={100}>
-     <IconButton
-        style={{
-          position: 'absolute',
-          top: '18px',
-          right: '120px',
-          zIndex: 1,  // Para asegurarse de que esté por encima de otros elementos
-          outline: "none"
-        }}
-        onClick={() => window.location="/"}
-      >
-        <HomeIcon />
-      </IconButton>
-    </Tooltip>
 
     {/* Snackbar para mostrar mensajes */}
     <Snackbar
