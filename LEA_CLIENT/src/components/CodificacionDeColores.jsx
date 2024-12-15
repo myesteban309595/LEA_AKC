@@ -28,6 +28,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import CircularProgress from '@mui/material/CircularProgress';
 import HomeIcon from '@mui/icons-material/Home';
+import SearchIcon from '@mui/icons-material/Search';
 
 const CodificacionDeColoresComponent = React.memo(() => {
   // Estado para la fecha y hora actual
@@ -285,31 +286,49 @@ const clickColumFixed = (columnClicked) => {
       <Table style={{ width: '100%' }}>
           <TableHead>
             <TableRow style={{background: "#a0d9e8" }}>
-            <TableCell 
-              colSpan={7} 
-              style={{ 
-               fontSize: '18px', 
-               textAlign: 'center', 
-               fontWeight: 'bold', 
-               border: '1px solid rgba(224, 224, 224, 1)', 
-               position: 'relative'  // Para que el botón se posicione dentro de esta celda
-              }}
-            >
-               CODIFICACION DE COLOR PARA ALMACENAMIENTO DE REACTIVOS
-             <Tooltip title="INICIO" enterDelay={100}>
-              <IconButton
-              style={{
-               position: 'absolute',  // Posicionamos el botón dentro de la celda
-               bottom: '15px',         // A 10px del fondo de la celda
-               right: '10px',          // A 10px del borde derecho de la celda
-               zIndex: 1000,           // Asegura que el botón esté por encima de otros elementos
-               outline: "none"
-               }}
-                onClick={() => window.location = "/"}  // Redirige al inicio
+              <TableCell 
+               colSpan={7} 
+                 style={{ 
+                  fontSize: '18px', 
+                  textAlign: 'center', 
+                  fontWeight: 'bold', 
+                  border: '1px solid rgba(224, 224, 224, 1)', 
+                  position: 'relative'  // Para que los botones se posicionen dentro de esta celda
+                  }}
                >
-                 <HomeIcon />
-              </IconButton>
-             </Tooltip>
+              {/* Botón de filtro al inicio de la fila */}
+             <Tooltip title="Filtro" enterDelay={100}>
+              <IconButton
+               style={{
+                position: 'absolute',  // Posicionamos el botón dentro de la celda
+                top: '15px',            // A 15px del borde superior de la celda
+                left: '10px',           // A 10px del borde izquierdo de la celda
+                zIndex: 1000,           // Asegura que el botón esté por encima de otros elementos
+                outline: 'none'
+                }}
+                  onClick={() => console.log('Abrir filtro')}  // Aquí puedes agregar la lógica para abrir el filtro
+                 >
+                  <SearchIcon /> {/* Este es el ícono para el filtro */}
+               </IconButton>
+              </Tooltip>
+
+              {/* Texto principal de la celda */}
+               CODIFICACION DE COLOR PARA ALMACENAMIENTO DE REACTIVOS
+              {/* Botón de Home al final de la fila */}
+              <Tooltip title="INICIO" enterDelay={100}>
+                <IconButton
+                 style={{
+                  position: 'absolute',  // Posicionamos el botón dentro de la celda
+                  bottom: '15px',         // A 15px del fondo de la celda
+                  right: '10px',          // A 10px del borde derecho de la celda
+                  zIndex: 1000,           // Asegura que el botón esté por encima de otros elementos
+                  outline: 'none'
+                 }}
+                   onClick={() => window.location = "/"}  // Redirige al inicio
+                 >
+                    <HomeIcon /> {/* Este es el ícono de "Home" */}
+                </IconButton>
+              </Tooltip>
             </TableCell>
             <TableCell colSpan={1} style={{ fontSize: '18px',backgroundColor:"#82ccdd", textAlign: 'center', fontWeight: 'bold', border: '1px solid rgba(224, 224, 224, 1)' }}>
              <Tooltip title="Nueva Fila" enterDelay={100}>
