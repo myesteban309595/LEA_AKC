@@ -222,6 +222,9 @@ const handleSnackbarClose = () => {
   setSnackbarOpen(false);
 };
 
+ // Ref para el TableBody
+const tableBodyRef = useRef(null);
+
 const clickColumFixed = (columnClicked) => {
   if(columnClicked == ColumValue)
   {
@@ -231,6 +234,24 @@ const clickColumFixed = (columnClicked) => {
   }
 };
 
+
+  useEffect(() => {
+    // Función para detectar clics fuera del TableBody
+    const handleClickOutside = (event) => {
+      if (tableBodyRef.current && !tableBodyRef.current.contains(event.target)) {
+        clickColumFixed(100000); // Fijar la columna en 100000 (valor que nunca existirá)
+      }
+    };
+
+    // Añadir el event listener para clics en el documento
+    document.addEventListener('mousedown', handleClickOutside);
+
+    // Limpiar el event listener cuando el componente se desmonte
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [ColumValue]);
+  
   const filterData = (row) => {
     // Campos a excluir de la data
    // const excludedFields = ['_id', 'createdAt', 'updatedAt', '__v'];
@@ -264,7 +285,7 @@ const clickColumFixed = (columnClicked) => {
       >
       <Table style={{ width: '100%' }}>
           <TableHead>
-            <TableRow style={{background: "#82ccdd" }}>
+            <TableRow style={{background: "#a0d9e8" }}>
             <TableCell 
               colSpan={7} 
               style={{ 
@@ -291,7 +312,7 @@ const clickColumFixed = (columnClicked) => {
               </IconButton>
              </Tooltip>
             </TableCell>
-            <TableCell colSpan={1} style={{ fontSize: '18px', textAlign: 'center', fontWeight: 'bold', border: '1px solid rgba(224, 224, 224, 1)' }}>
+            <TableCell colSpan={1} style={{ fontSize: '18px',backgroundColor:"#82ccdd", textAlign: 'center', fontWeight: 'bold', border: '1px solid rgba(224, 224, 224, 1)' }}>
              <Tooltip title="Nueva Fila" enterDelay={100}>
                <IconButton
                 style={{ outline: "none", color: "black" }}
@@ -303,10 +324,10 @@ const clickColumFixed = (columnClicked) => {
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell colSpan={3} style={{ background: "#78e08f", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
+            <TableCell colSpan={3} style={{ background: "#f8f9f5", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
              <strong>Area</strong>: Físicoquímica		
             </TableCell>
-            <TableCell colSpan={4} style={{ background: "#eabbfa", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
+            <TableCell colSpan={4} style={{ background: "#f8f9f5", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
              <strong>Revisado y aprobado</strong>: Paula Julia Blanco - Líder Laboratorio						
             </TableCell>
             <TableCell colSpan={1} style={{ background: "#eabbfa", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
@@ -321,10 +342,10 @@ const clickColumFixed = (columnClicked) => {
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell colSpan={3} style={{ background: "#78e08f", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
+            <TableCell colSpan={3} style={{ background: "#f8f9f5", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
               <strong>Fecha de actualización</strong>: 2024-10-18		
             </TableCell>
-            <TableCell colSpan={4} style={{ background: "#eabbfa", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
+            <TableCell colSpan={4} style={{ background: "#f8f9f5", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
               <strong>Responsable actualización</strong>: Gloria Emilse Almeida Gonzalez - Coordinadora Area Físico- Química					
             </TableCell>
             <TableCell colSpan={1} style={{ background: "#eabbfa", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
@@ -340,16 +361,16 @@ const clickColumFixed = (columnClicked) => {
           </TableRow>
           <TableRow>
             <TableCell style={{position: 'sticky',top:0, background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Reactivo</TableCell>
-            <TableCell style={{position: 'sticky',top:0, background: "#f569fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Marca</TableCell>
-            <TableCell style={{position: 'sticky',top:0, background: "#c9c5fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Codigo</TableCell>
-            <TableCell style={{position: 'sticky',top:0, background: "#69fc8f", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>No. Lote</TableCell>
-            <TableCell style={{position: 'sticky',top:0, background: "#fcae69", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Fecha de vencimiento</TableCell>
-            <TableCell style={{position: 'sticky',top:0, background: "#c069fc", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>No. CAS</TableCell>
-            <TableCell style={{position: 'sticky',top:0, background: "#f6fe7b", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Color</TableCell>
+            <TableCell style={{position: 'sticky',top:0, background: "#f9a7fd", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Marca</TableCell>
+            <TableCell style={{position: 'sticky',top:0, background: "#e1dffd", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Codigo</TableCell>
+            <TableCell style={{position: 'sticky',top:0, background: "#a7fcc0", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>No. Lote</TableCell>
+            <TableCell style={{position: 'sticky',top:0, background: "#fde0b6", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Fecha de vencimiento</TableCell>
+            <TableCell style={{position: 'sticky',top:0, background: "#e09cfb", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>No. CAS</TableCell>
+            <TableCell style={{position: 'sticky',top:0, background: "#f9fe9e", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Color</TableCell>
             <TableCell style={{position: 'sticky',top:0, background: "#f8a0fc", textAlign: 'center', borderRight: '1px solid rgb(224, 224, 224)', zIndex: 1 }}>Accion</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
+        <TableBody ref={tableBodyRef}>
   {
     loading ? (
       <TableRow>
