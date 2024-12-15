@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { useState, useEffect, Suspense, lazy, useRef } from 'react';
 import axios from 'axios';
 import { 
   Table, 
@@ -245,13 +245,12 @@ const clickColumFixed = (columnClicked) => {
 
     // Añadir el event listener para clics en el documento
     document.addEventListener('mousedown', handleClickOutside);
-
     // Limpiar el event listener cuando el componente se desmonte
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [ColumValue]);
-  
+
   const filterData = (row) => {
     // Campos a excluir de la data
    // const excludedFields = ['_id', 'createdAt', 'updatedAt', '__v'];
