@@ -35,6 +35,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import CircularProgress from '@mui/material/CircularProgress';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
+import SearchIcon from '@mui/icons-material/Search';
 
 const SGMRC = React.memo(() => {
   // Estado para la fecha y hora actual
@@ -535,6 +536,21 @@ const clickColumFixed = (columnClicked) => {
           </TableRow>
           <TableRow style={{background: "#82ccdd" }}>
             <TableCell colSpan={21} style={{ fontSize: '18px', textAlign: 'center', fontWeight: 'bold', border: '1px solid rgba(224, 224, 224, 1)' }}>
+             {/* Botón de filtro al inicio de la fila */}
+             <Tooltip title="Filtro" enterDelay={100}>
+              <IconButton
+               style={{
+                position: 'absolute',  // Posicionamos el botón dentro de la celda
+                top: '65px',            // A 15px del borde superior de la celda
+                left: '10px',           // A 10px del borde izquierdo de la celda
+                zIndex: 1,           // Asegura que el botón esté por encima de otros elementos
+                outline: 'none'
+                }}
+                  onClick={() => console.log('Abrir filtro')}  // Aquí puedes agregar la lógica para abrir el filtro
+                 >
+                  <SearchIcon /> {/* Este es el ícono para el filtro */}
+               </IconButton>
+              </Tooltip>
               Seguimiento General Material de referencia
             </TableCell>
           </TableRow>
@@ -559,7 +575,7 @@ const clickColumFixed = (columnClicked) => {
             </TableCell>
           </TableRow>
           <TableRow>
-          <TableCell style={{position: 'sticky',top:0, border: 'white 3px groove', background: "#e1dffd", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>N°</TableCell>
+          <TableCell style={{position: 'sticky',top:55, border: 'white 3px groove', background: "#e1dffd", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 2 }}>N°</TableCell>
           <TableCell 
             style={
               ColumValue == 0 ? 
@@ -837,7 +853,8 @@ const clickColumFixed = (columnClicked) => {
                   fontSize: "14px",
                   backgroundColor: 'rgba(246, 247, 247, 0.85)', // Color de fondo
                   color: color, 
-                  border: 'white 3px groove'
+                  border: 'white 3px groove',
+                  zIndex: 3
                 }}              
               >
                {rowIndex+1}
