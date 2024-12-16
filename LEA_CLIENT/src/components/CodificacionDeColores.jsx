@@ -287,7 +287,7 @@ const clickColumFixed = (columnClicked) => {
           <TableHead>
             <TableRow style={{background: "#a0d9e8" }}>
               <TableCell 
-               colSpan={7} 
+               colSpan={8} 
                  style={{ 
                   fontSize: '18px', 
                   textAlign: 'center', 
@@ -342,13 +342,13 @@ const clickColumFixed = (columnClicked) => {
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell colSpan={3} style={{ background: "#f8f9f5", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
+            <TableCell colSpan={4} style={{ background: "#f8f9f5", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
              <strong>Area</strong>: Físicoquímica		
             </TableCell>
             <TableCell colSpan={4} style={{ background: "#f8f9f5", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
              <strong>Revisado y aprobado</strong>: Paula Julia Blanco - Líder Laboratorio						
             </TableCell>
-            <TableCell colSpan={1} style={{ background: "#eabbfa", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
+            <TableCell colSpan={1} style={{ background: "#f7d9fd", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
              <Tooltip title="Subir Data" enterDelay={100}>
               <IconButton
                style={{ outline: "none", color: "black" }}
@@ -360,13 +360,13 @@ const clickColumFixed = (columnClicked) => {
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell colSpan={3} style={{ background: "#f8f9f5", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
+            <TableCell colSpan={4} style={{ background: "#f8f9f5", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
               <strong>Fecha de actualización</strong>: 2024-10-18		
             </TableCell>
             <TableCell colSpan={4} style={{ background: "#f8f9f5", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
               <strong>Responsable actualización</strong>: Gloria Emilse Almeida Gonzalez - Coordinadora Area Físico- Química					
             </TableCell>
-            <TableCell colSpan={1} style={{ background: "#eabbfa", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
+            <TableCell colSpan={1} style={{ background: "#f7d9fd", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
              <Tooltip title="Descargar Data" enterDelay={100}>
                <IconButton
                 style={{ outline: "none", color: "black" }}
@@ -378,6 +378,7 @@ const clickColumFixed = (columnClicked) => {
             </TableCell>
           </TableRow>
           <TableRow>
+            <TableCell style={{position: 'sticky',border: 'white 3px groove', top:0, background: "#e1dffd", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>N°</TableCell>
             <TableCell style={{position: 'sticky',top:0, background: "#feffcf", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Reactivo</TableCell>
             <TableCell style={{position: 'sticky',top:0, background: "#f9a7fd", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Marca</TableCell>
             <TableCell style={{position: 'sticky',top:0, background: "#e1dffd", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>Codigo</TableCell>
@@ -425,8 +426,18 @@ const clickColumFixed = (columnClicked) => {
           };          
 
           return (
-            <TableRow key={rowIndex}>
-
+            <TableRow key={rowIndex}>    
+             <TableCell 
+              style={{                  
+               textAlign: 'center',
+               fontSize: "14px",
+               backgroundColor: 'rgba(229, 232, 232, 0.85)', // Color de fondo
+               color: color, 
+               border: 'white 3px groove'
+              }}              
+             >
+              {rowIndex+1}
+             </TableCell>
               {Object.keys(filteredRow).map((column, colIndex) => (
                 <TableCell
                   key={colIndex}

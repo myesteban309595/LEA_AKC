@@ -529,17 +529,17 @@ const clickColumFixed = (columnClicked) => {
       <Table style={{ width: 'max-content' }}>
         <TableHead>
           <TableRow style={{ position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 1 }}>
-            <TableCell colSpan={20} style={{ fontSize: '25px', fontWeight: 'bold' }}>
+            <TableCell colSpan={21} style={{ fontSize: '25px', fontWeight: 'bold' }}>
               <div>{fechaHoraActual}</div>
             </TableCell>
           </TableRow>
           <TableRow style={{background: "#82ccdd" }}>
-            <TableCell colSpan={20} style={{ fontSize: '18px', textAlign: 'center', fontWeight: 'bold', border: '1px solid rgba(224, 224, 224, 1)' }}>
+            <TableCell colSpan={21} style={{ fontSize: '18px', textAlign: 'center', fontWeight: 'bold', border: '1px solid rgba(224, 224, 224, 1)' }}>
               Seguimiento General Material de referencia
             </TableCell>
           </TableRow>
           <TableRow style={{position: 'sticky', top: 0, zIndex: 1, }}>
-            <TableCell colSpan={2} style={{ background: "#78e08f", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
+            <TableCell colSpan={3} style={{ background: "#78e08f", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
               Seguimiento inventario
             </TableCell>
             <TableCell colSpan={4} style={{ background: "#eabbfa", textAlign: 'center', fontWeight: 'bold', borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
@@ -559,6 +559,7 @@ const clickColumFixed = (columnClicked) => {
             </TableCell>
           </TableRow>
           <TableRow>
+          <TableCell style={{position: 'sticky',top:0, border: 'white 3px groove', background: "#e1dffd", textAlign: 'center', borderRight: '1px solid rgba(224, 224, 224, 1)', zIndex: 1 }}>N°</TableCell>
           <TableCell 
             style={
               ColumValue == 0 ? 
@@ -827,11 +828,20 @@ const clickColumFixed = (columnClicked) => {
 
           return (
             <TableRow key={rowIndex}>
-
-              {/* {Object.keys(filteredRow).forEach((column, colIndex) => {
+               {/* {Object.keys(filteredRow).forEach((column, colIndex) => {
                  console.log(`Columna: ${column}, Índice: ${colIndex}`);
               })} esta linea me muestra el valor de la columna y su indice asi se en que indice se va pintasr cada dato */}
-
+              <TableCell
+                style={{                  
+                   textAlign: 'center',
+                  fontSize: "14px",
+                  backgroundColor: 'rgba(246, 247, 247, 0.85)', // Color de fondo
+                  color: color, 
+                  border: 'white 3px groove'
+                }}              
+              >
+               {rowIndex+1}
+              </TableCell>
               {Object.keys(filteredRow).map((column, colIndex) => (
                 <TableCell
                   style={colIndex === ColumValue ? {
