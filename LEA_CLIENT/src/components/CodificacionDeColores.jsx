@@ -19,6 +19,7 @@ import {
 import Swal from 'sweetalert2'
 
 import {ExportExcelWithTemplate} from '../utils/Functions/DownloadExcelData'
+import ModalFilterData from '../utils/modals/ModalFilterData';
 const FileUploadExcel = lazy(() => import('../utils/Functions/UploadExcelDataMasive')); //& aplicando lazy a este componente
 
 import DownloadIcon from '@mui/icons-material/Download';
@@ -49,6 +50,9 @@ const CodificacionDeColoresComponent = React.memo(() => {
   const [pdfUrl, setPdfUrl] = useState('');
   // Abrir modal para carga masiva
   const [openUploadExcelModal, setOpenUploadExcelModal] = useState(false);
+  // Abrir modal para filtrar data
+  const [isModalFilterOpen, setIsModalFilterOpen] = useState(false);
+
 
   useEffect(() => {
     // Realizar la solicitud GET a la API
@@ -276,6 +280,14 @@ const clickColumFixed = (columnClicked) => {
       setOpenUploadExcelModal(false);
     };
 
+    const openFilterModal = () => {
+      setIsModalFilterOpen(true);
+    };
+  
+    const closeFilterModal = () => {
+      setIsModalFilterOpen(false);
+    };
+
   return (
     <TableContainer component={Paper}
         style={{
@@ -306,7 +318,7 @@ const clickColumFixed = (columnClicked) => {
                 zIndex: 1000,           // Asegura que el botón esté por encima de otros elementos
                 outline: 'none'
                 }}
-                  onClick={() => console.log('Abrir filtro')}  // Aquí puedes agregar la lógica para abrir el filtro
+                  onClick={() => openFilterModal()}  // Aquí puedes agregar la lógica para abrir el filtro
                  >
                   <SearchIcon /> {/* Este es el ícono para el filtro */}
                </IconButton>
@@ -503,6 +515,12 @@ const clickColumFixed = (columnClicked) => {
   }
  </TableBody>
 </Table>
+    {/* Modal para filtrar */}
+     <ModalFilterData
+        isOpen={isModalFilterOpen}
+        onClose={closeFilterModal}
+        data={data}
+     />
 
     {/* Snackbar para mostrar mensajes */}
     <Snackbar
