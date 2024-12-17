@@ -98,7 +98,7 @@ const ModalFilterData = ({ isOpen, onClose, data, module }) => {
     }).then((result) => {
       // Restaurar el z-index del modal después de que SweetAlert se cierre
       if (modalElement) {
-        modalElement.style.zIndex = ''; // Restaurar el z-index original
+        modalElement.style.zIndex = 999; // Restaurar el z-index original
       }
   
       if (result.isConfirmed) {
@@ -116,6 +116,9 @@ const ModalFilterData = ({ isOpen, onClose, data, module }) => {
             });
           })
           .catch((err) => {
+            if (modalElement) {
+              modalElement.style.zIndex = 999; // Restaurar el z-index original
+            }
             // Notificación de error si la eliminación falla
             Swal.fire({
               icon: 'error',
