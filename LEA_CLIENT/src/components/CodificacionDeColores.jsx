@@ -519,6 +519,7 @@ const clickColumFixed = (columnClicked) => {
         isOpen={isModalFilterOpen}
         onClose={closeFilterModal}
         data={data}
+        module="dataTableColors"
      />
 
     {/* Snackbar para mostrar mensajes */}

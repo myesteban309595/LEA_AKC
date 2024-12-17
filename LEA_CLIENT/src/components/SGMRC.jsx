@@ -959,6 +959,7 @@ const clickColumFixed = (columnClicked) => {
         isOpen={isModalFilterOpen}
         onClose={closeFilterModal}
         data={data}
+        module="dataTable"
      />
 
     {/* Componente Modal visualizar Pdf */}
