@@ -75,9 +75,17 @@ const ModalFilterData = ({ isOpen, onClose, data, module }) => {
   // Función para eliminar un item de la base de datos
   const deleteItem = async (rowId) => {
     console.log("ejecutando deleteItem id:", rowId);
-
-    const UrlRequest = module == "dataTableColor" ? "tableColors/dataColors" : "table/data"
+  
+    const UrlRequest = module === "dataTableColor" ? "tableColors/dataColors" : "table/data";
     
+    // Obtener el modal actual para ajustar el z-index
+    const modalElement = document.querySelector('.MuiDialog-root');
+    
+    // Reducir el z-index del modal para que quede detrás del SweetAlert
+    if (modalElement) {
+      modalElement.style.zIndex = 999; // Asumimos que el Swal tendrá un z-index mayor (ejemplo: 1050)
+    }
+  
     // Primero, mostramos una alerta de confirmación utilizando SweetAlert
     Swal.fire({
       title: "¿Estás seguro?",
@@ -88,13 +96,18 @@ const ModalFilterData = ({ isOpen, onClose, data, module }) => {
       cancelButtonColor: "#d33",
       confirmButtonText: "Sí, eliminar",
     }).then((result) => {
+      // Restaurar el z-index del modal después de que SweetAlert se cierre
+      if (modalElement) {
+        modalElement.style.zIndex = ''; // Restaurar el z-index original
+      }
+  
       if (result.isConfirmed) {
         // Realizamos la eliminación del item
         axios.delete(`https://sgmrcbackend-production.up.railway.app/api/${UrlRequest}/${rowId}`)
           .then(() => {
             const newData = filteredData.filter((item) => item._id !== rowId); // Filtramos el item eliminado
             setFilteredData(newData); // Actualizamos los datos filtrados
-
+  
             // Mostramos una notificación de éxito con SweetAlert
             Swal.fire({
               icon: 'success',
@@ -113,7 +126,7 @@ const ModalFilterData = ({ isOpen, onClose, data, module }) => {
       }
     });
   };
-
+  
   // Función para renderizar el campo `certificadoAnalisis` como enlace solo si el módulo es `dataTable`
   const renderCertificadoAnalisis = (item) => {
     if (module === 'dataTable') {
