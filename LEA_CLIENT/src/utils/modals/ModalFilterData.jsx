@@ -76,7 +76,7 @@ const ModalFilterData = ({ isOpen, onClose, data, module }) => {
   const deleteItem = async (rowId) => {
     console.log("ejecutando deleteItem id:", rowId);
   
-    const UrlRequest = module === "dataTableColor" ? "tableColors/dataColors" : "table/data";
+    const UrlRequest = module === "dataTableColors" ? "tableColors/dataColors" : "table/data";
     
     // Obtener el modal actual para ajustar el z-index
     const modalElement = document.querySelector('.MuiDialog-root');
@@ -103,6 +103,8 @@ const ModalFilterData = ({ isOpen, onClose, data, module }) => {
   
       if (result.isConfirmed) {
         // Realizamos la eliminación del item
+        console.log("url para eliminar:",`https://sgmrcbackend-production.up.railway.app/api/${UrlRequest}/${rowId}`);
+        
         axios.delete(`https://sgmrcbackend-production.up.railway.app/api/${UrlRequest}/${rowId}`)
           .then(() => {
             // Actualizamos los datos filtrados eliminando el item de la lista
