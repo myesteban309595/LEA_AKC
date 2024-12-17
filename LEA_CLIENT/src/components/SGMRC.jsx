@@ -558,7 +558,7 @@ const clickColumFixed = (columnClicked) => {
                 zIndex: 1,           // Asegura que el botón esté por encima de otros elementos
                 outline: 'none'
                 }}
-                  onClick={() => console.log('Abrir filtro')}  // Aquí puedes agregar la lógica para abrir el filtro
+                  onClick={() => openFilterModal()}  // Aquí puedes agregar la lógica para abrir el filtro
                  >
                   <SearchIcon /> {/* Este es el ícono para el filtro */}
                </IconButton>
