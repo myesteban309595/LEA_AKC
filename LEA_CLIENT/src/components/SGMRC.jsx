@@ -124,9 +124,6 @@ const SGMRC = React.memo(() => {
           const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
           const pdfUrl = window.URL.createObjectURL(pdfBlob);
   
-          // setPdfUrl(url);  // Establecer la URL del PDF para el modal
-          // setModalOpen(true);  // Abrir el modal
-
           // Abre el PDF en una nueva pestaña o en un modal
           const newTab = window.open(pdfUrl, '_blank');
 
