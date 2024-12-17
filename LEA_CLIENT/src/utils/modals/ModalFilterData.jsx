@@ -98,15 +98,15 @@ const ModalFilterData = ({ isOpen, onClose, data, module }) => {
     }).then((result) => {
       // Restaurar el z-index del modal después de que SweetAlert se cierre
       if (modalElement) {
-        modalElement.style.zIndex = 999; // Restaurar el z-index original
+        modalElement.style.zIndex = ''; // Restaurar el z-index original
       }
   
       if (result.isConfirmed) {
         // Realizamos la eliminación del item
         axios.delete(`https://sgmrcbackend-production.up.railway.app/api/${UrlRequest}/${rowId}`)
           .then(() => {
-            const newData = filteredData.filter((item) => item._id !== rowId); // Filtramos el item eliminado
-            setFilteredData(newData); // Actualizamos los datos filtrados
+            // Actualizamos los datos filtrados eliminando el item de la lista
+            setFilteredData((prevData) => prevData.filter(item => item._id !== rowId));
   
             // Mostramos una notificación de éxito con SweetAlert
             Swal.fire({
@@ -117,7 +117,7 @@ const ModalFilterData = ({ isOpen, onClose, data, module }) => {
           })
           .catch((err) => {
             if (modalElement) {
-              modalElement.style.zIndex = 999; // Restaurar el z-index original
+              modalElement.style.zIndex = ''; // Restaurar el z-index original
             }
             // Notificación de error si la eliminación falla
             Swal.fire({
@@ -128,7 +128,7 @@ const ModalFilterData = ({ isOpen, onClose, data, module }) => {
           });
       }
     });
-  };
+  };  
   
   // Función para renderizar el campo `certificadoAnalisis` como enlace solo si el módulo es `dataTable`
   const renderCertificadoAnalisis = (item) => {
