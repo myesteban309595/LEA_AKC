@@ -113,7 +113,12 @@ const ModalFilterData = ({ isOpen, onClose, data, module }) => {
               icon: 'success',
               title: 'Fila eliminada',
               text: 'La fila se ha eliminado correctamente.',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.reload();
+              }
             });
+
           })
           .catch((err) => {
             if (modalElement) {
