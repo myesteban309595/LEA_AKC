@@ -132,7 +132,6 @@ const CodificacionDeColoresComponent = React.memo(() => {
         console.error(err);
       });
   };
-  
 
 const deleteRowData = (rowId) => {
   // Primero, mostramos una alerta de confirmación utilizando SweetAlert
