@@ -21,11 +21,63 @@ const ModalFilterData = ({ isOpen, onClose, data, module }) => {
     }
   }, [data]);
 
+  // Función para obtener el PDF
+  const fetchPdf = async (rowId) => {
+    try {
+      const response = await axios.get(`https://sgmrcbackend-production.up.railway.app/api/pdfs/${rowId}`, {
+        responseType: 'blob', // Especifica que esperas un blob (archivo binario)
+      });
+      
+      if(response.status == 404){
+        window.alert("No se encontró MRC asociado a este material")
+      }
+
+      const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
+      const pdfUrl = window.URL.createObjectURL(pdfBlob);
+
+      // Abre el PDF en una nueva pestaña
+      const newTab = window.open(pdfUrl, '_blank');
+      if (newTab) newTab.focus();
+
+    } catch (error) {
+      console.error('Error al obtener el PDF:', error);
+      window.alert("No se encontró MRC asociado a este material")
+    }
+  };
+
+  // Cambiar la variable seleccionada
+  const handleSelectChange = (event) => {
+    setSelectedVariable(event.target.value);
+  };
+
+  // Cambiar el valor del filtro
+  const handleInputChange = (event) => {
+    setFilterValue(event.target.value);
+  };
+
+  // Aplicar filtro según la variable seleccionada y el valor del filtro
+  const applyFilter = () => {
+    if (selectedVariable && filterValue) {
+      const filtered = data.filter((item) =>
+        item[selectedVariable]?.toString().includes(filterValue)
+      );
+      setFilteredData(filtered);
+    }
+  };
+
+  // Mostrar toda la data sin aplicar filtro
+  const showAllData = () => {
+    setSelectedVariable('');
+    setFilterValue('');
+    setFilteredData(data); // Deshacer el filtro y mostrar todos los datos
+  };
+
   // Función para eliminar un item de la base de datos
   const deleteItem = async (rowId) => {
     console.log("ejecutando deleteItem id:", rowId);
 
     const UrlRequest = module == "dataTableColor" ? "tableColors/dataColors" : "table/data"
+    
     // Primero, cerramos temporalmente el modal antes de mostrar el Swal
     setOpenModal(false);
 
@@ -69,7 +121,55 @@ const ModalFilterData = ({ isOpen, onClose, data, module }) => {
     });
   };
 
-  // El resto de las funciones permanecen igual...
+  // Función para renderizar el campo `certificadoAnalisis` como enlace solo si el módulo es `dataTable`
+  const renderCertificadoAnalisis = (item) => {
+    if (module === 'dataTable') {
+      return (
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault(); // Previene el comportamiento predeterminado del enlace
+            fetchPdf(item._id); // Usamos el `_id` para hacer la petición
+          }}
+        >
+          {" "+"Ver Certificado"}
+        </a>
+      );
+    }
+    return null; // No mostrar nada si no es `dataTable`
+  };
+
+  // Renderizar cada item
+  const renderItem = (item, index) => {
+    // Copiar el item y eliminar la propiedad `_id` antes de mostrarlo
+    const { _id, ...displayItem } = item;
+
+    return (
+      <div key={index} style={{ marginBottom: '20px' }}>
+        <div style={{ marginBottom: '8px' }}>
+          {availableKeys.map((key) => (
+            <div key={key} style={{ marginBottom: '8px' }}>
+              <strong>{key}:</strong>
+              {/* Mostrar los valores del item, pero no el `id` */}
+              {key === "certificadoAnalisis" ? renderCertificadoAnalisis(item) : displayItem[key] || 'No disponible'}
+            </div>
+          ))}
+        </div>
+        
+        <div style={{ textAlign: 'right', marginTop: '10px' }}>
+          <Button
+            variant="outlined"
+            color="error"
+            startIcon={<DeleteIcon />}
+            onClick={() => deleteItem(item._id)} // Pasamos el _id aquí
+          >
+            Eliminar
+          </Button>
+          <hr style={{ margin: '20px 0', borderColor: '#e0e0e0', borderWidth: '1px' }} />
+        </div>
+      </div>
+    );
+  };
 
   return (
     <Dialog open={openModal} onClose={onClose}>
