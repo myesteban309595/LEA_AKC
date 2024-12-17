@@ -47,7 +47,6 @@ const CodificacionDeColoresComponent = React.memo(() => {
   const [error, setError] = useState(null);
   // Visualizador de Pdf
   const [isModalOpen, setModalOpen] = useState(false);
-  const [pdfUrl, setPdfUrl] = useState('');
   // Abrir modal para carga masiva
   const [openUploadExcelModal, setOpenUploadExcelModal] = useState(false);
   // Abrir modal para filtrar data

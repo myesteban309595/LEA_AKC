@@ -20,7 +20,9 @@ import Swal from 'sweetalert2'
 
 import {calcularDiferenciaEnMeses} from '../utils/Functions/CalcularDiferenciaFechas'
 import {ExportExcelWithTemplate} from '../utils/Functions/DownloadExcelData'
+import ModalFilterData from '../utils/modals/ModalFilterData';
 const FileUploadExcel = lazy(() => import('../utils/Functions/UploadExcelDataMasive')); //& aplicando lazy a este componente
+
 
 import ModalComponent from '../utils/modals/ViewPdf';
 import FileUpload from '../components/UploadFile';
@@ -57,6 +59,8 @@ const SGMRC = React.memo(() => {
   const [pdfUrl, setPdfUrl] = useState('');
   // Abrir modal para carga masiva
   const [openUploadExcelModal, setOpenUploadExcelModal] = useState(false);
+  // Abrir modal para filtrar data
+  const [isModalFilterOpen, setIsModalFilterOpen] = useState(false);
 
 
   const [uploadRowIndex, setUploadRowIndex] = useState(null); // Estado para el rowIndex a subir
@@ -464,6 +468,14 @@ const clickColumFixed = (columnClicked) => {
     //? Función para cerrar el modal
     const handleCloseModalUploadExcel = () => {
       setOpenUploadExcelModal(false);
+    };
+
+    const openFilterModal = () => {
+      setIsModalFilterOpen(true);
+    };
+  
+    const closeFilterModal = () => {
+      setIsModalFilterOpen(false);
     };
 
   const renderPdfButtons = (rowId) => (
@@ -941,9 +953,20 @@ const clickColumFixed = (columnClicked) => {
   }
  </TableBody>
 </Table>
- 
-   {/* Componente Modal visualizar Pdf */}
-   <ModalComponent isOpen={isModalOpen} onClose={handleCloseModal} pdfUrl={pdfUrl} />
+
+     {/* Modal para filtrar */}
+     <ModalFilterData
+        isOpen={isModalFilterOpen}
+        onClose={closeFilterModal}
+        data={data}
+     />
+
+    {/* Componente Modal visualizar Pdf */}
+    <ModalComponent 
+     isOpen={isModalOpen} 
+     onClose={handleCloseModal} 
+     pdfUrl={pdfUrl} 
+     />
 
    {/* Condicional para mostrar el componente FileUpload */}
       {uploadRowIndex !== null && (
