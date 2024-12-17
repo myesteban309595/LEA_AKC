@@ -72,8 +72,8 @@ const ModalFilterData = ({ isOpen, onClose, data, module }) => {
   };
 
   // Función para eliminar un item de la base de datos
-  const deleteItem = async (id) => {
-    console.log("ejecutando deleItem id:", id);
+  const deleteItem = async (rowId) => {
+    console.log("ejecutando deleItem id:", rowId);
     
     try {
       // Hacer una petición DELETE a la API para eliminar el item por su id
@@ -81,7 +81,7 @@ const ModalFilterData = ({ isOpen, onClose, data, module }) => {
       await axios.delete(`https://sgmrcbackend-production.up.railway.app/api/${UrlRequest}/${rowId}`)
 
       // Después de eliminar, actualizamos la lista de datos
-      const newData = filteredData.filter((item) => item._id !== id); // Filtramos el item eliminado
+      const newData = filteredData.filter((item) => item._id !== rowId); // Filtramos el item eliminado
       setFilteredData(newData); // Actualizamos los datos filtrados
     } catch (error) {
       console.error('Error al eliminar el item:', error);
