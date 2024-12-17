@@ -9,8 +9,8 @@ const ModalFilterData = ({ isOpen, onClose, data, module }) => {
   const [filterValue, setFilterValue] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   const [availableKeys, setAvailableKeys] = useState([]);
-  const [openModal, setOpenModal] = useState(isOpen); // Estado para manejar la visibilidad del modal
 
+  // Extraemos las claves del primer objeto de los datos, sin incluir el `id`
   useEffect(() => {
     if (data.length > 0) {
       const keys = Object.keys(data[0]).filter(
@@ -78,10 +78,7 @@ const ModalFilterData = ({ isOpen, onClose, data, module }) => {
 
     const UrlRequest = module == "dataTableColor" ? "tableColors/dataColors" : "table/data"
     
-    // Primero, cerramos temporalmente el modal antes de mostrar el Swal
-    setOpenModal(false);
-
-    // Mostramos una alerta de confirmación utilizando SweetAlert
+    // Primero, mostramos una alerta de confirmación utilizando SweetAlert
     Swal.fire({
       title: "¿Estás seguro?",
       text: "¡No podrás revertir esto!",
@@ -98,8 +95,7 @@ const ModalFilterData = ({ isOpen, onClose, data, module }) => {
             const newData = filteredData.filter((item) => item._id !== rowId); // Filtramos el item eliminado
             setFilteredData(newData); // Actualizamos los datos filtrados
 
-            // Reabrimos el modal y mostramos una notificación de éxito
-            setOpenModal(true);
+            // Mostramos una notificación de éxito con SweetAlert
             Swal.fire({
               icon: 'success',
               title: 'Fila eliminada',
@@ -107,16 +103,13 @@ const ModalFilterData = ({ isOpen, onClose, data, module }) => {
             });
           })
           .catch((err) => {
-            setOpenModal(true); // Reabrir el modal si ocurre un error
+            // Notificación de error si la eliminación falla
             Swal.fire({
               icon: 'error',
               title: 'Error al eliminar la data',
               text: "Hubo un error al eliminar el item.",
             });
           });
-      } else {
-        // Si el usuario cancela la eliminación, reabrimos el modal
-        setOpenModal(true);
       }
     });
   };
@@ -172,7 +165,7 @@ const ModalFilterData = ({ isOpen, onClose, data, module }) => {
   };
 
   return (
-    <Dialog open={openModal} onClose={onClose}>
+    <Dialog open={isOpen} onClose={onClose}>
       <DialogTitle sx={{ textAlign: 'center' }}>Filtrar Data</DialogTitle>
       <DialogContent>
         <FormControl fullWidth margin="normal">
