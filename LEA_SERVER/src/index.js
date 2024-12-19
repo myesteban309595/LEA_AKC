@@ -8,6 +8,7 @@ import pdfRoutes from './routes/pdfRoutes.js';
 import dataRoutes from './routes/dataRoutes.js';
 import sendEmail  from './routes/emailRouter.js';
 import DataColors from './routes/dataColorsRoutes.js';
+import DownloadManual from './routes/manualRoutes.js';
 
 import configuraciones from './config/config.js'
 const app = express();
@@ -21,7 +22,6 @@ app.use(cors()); //comunica la api con el servidor y ciertos dominios
 app.use(morgan('dev'))
 app.use(express.json()); //* middleware- analiza solicitudes entrantes con cargas JSON y se basa en body-parser
 
-
 const corsOptions = {
     origin: ['http://127.0.0.1:5173', 'https://leaakcsgmrc.netlify.app'],
     optionsSuccessStatus: 200 
@@ -34,6 +34,7 @@ app.use('/api/pdfs', pdfRoutes);
 app.use('/api/table', dataRoutes);
 app.use('/api/email', sendEmail);
 app.use('/api/tableColors', DataColors);
+app.use('/api/download', DownloadManual);
 // ***************************************************************
 
 app.listen(PORT, ()=> {
