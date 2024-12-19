@@ -815,20 +815,27 @@ const clickColumFixed = (columnClicked) => {
   {
     loading ? (
       <TableRow>
-        <TableCell
-          colSpan={Object.keys(data[0] || {}).length}
-          sx={{
-            marginLeft: "600px",
-            textAlign: 'center',
-            padding: 3,
-            height: '50vh',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <CircularProgress size={150} />
-        </TableCell>
+<TableCell
+  colSpan={Object.keys(data[0] || {}).length}
+  sx={{
+    position: 'relative', // Establecer posición relativa para que el z-index se pueda aplicar
+    zIndex: 1, // Asegurar que la tabla tenga un z-index inferior al spinner
+  }}
+>
+  {/* CircularProgress centrado en la página */}
+  <div
+    style={{
+      position: 'fixed', // Posición fija respecto a la ventana del navegador
+      top: '50%', // Centrado verticalmente
+      left: '50%', // Centrado horizontalmente
+      transform: 'translate(-50%, -50%)', // Ajuste para centrar exactamente
+      zIndex: 9999, // Asegura que esté por encima de la tabla
+    }}
+  >
+    <CircularProgress size={150} />
+  </div>
+</TableCell>
+
       </TableRow>
     ) : (
       Array.isArray(data) && data.length > 0 ? (
