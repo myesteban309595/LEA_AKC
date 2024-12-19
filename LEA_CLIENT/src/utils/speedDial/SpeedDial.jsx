@@ -19,7 +19,7 @@ const actions = [
   { icon: <FileUploadIcon />, name: 'Upload Excel' },
   { icon: <PrintIcon />, name: 'Print' },
   { icon: <TableRowsIcon />, name: 'Table de Colores' },
-  { icon: <PictureAsPdfIcon />, name: 'DescargarManual' },
+  { icon: <PictureAsPdfIcon />, name: 'Descargar Manual' },
 ];
 
 export default function SpeedDialComponent({ sx, agregarDataFila, exportExcelTable, uploadExcelData, DownloadManual }) {
@@ -46,7 +46,7 @@ export default function SpeedDialComponent({ sx, agregarDataFila, exportExcelTab
               uploadExcelData();  // Llamamos la función para abrir el modal
             } else if (action.name === 'Table de Colores') {
               window.location ="/colors" 
-            } else if (action.name === 'DescargarManual'){
+            } else if (action.name === 'Descargar Manual'){
               DownloadManual()
             }
           }}
