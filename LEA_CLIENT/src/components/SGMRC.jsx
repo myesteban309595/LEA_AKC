@@ -453,6 +453,7 @@ const clickColumFixed = (columnClicked) => {
 
   
     //? Función para Descargar el manual
+    import axios from 'axios';
 
     const DescargarManual = async () => {
       try {
@@ -490,7 +491,7 @@ const clickColumFixed = (columnClicked) => {
         setSnackbarOpen(true);
         setSnackbarSeverity("error");
       }
-    };
+    };    
     
     
     //? Función para abrir el modal
