@@ -265,7 +265,6 @@ const NotificarAlerta = async (params) => {
   }
 };
 
-
   const handleBlur = async () => {
     
     // Crea una copia de los datos y actualiza el valor modificado
@@ -454,11 +453,13 @@ const clickColumFixed = (columnClicked) => {
       }, {});
   };
 
+  
+    //? Función para Descargar el manual
+    const DescargarManual = () => {      
+    };
+    
     //? Función para abrir el modal
-    const handleOpenModalUploadExcel = () => {
-
-      console.log("ejecutando modal upload excel");
-      
+    const handleOpenModalUploadExcel = () => {      
       setOpenUploadExcelModal(true);
     };
   
@@ -988,6 +989,7 @@ const clickColumFixed = (columnClicked) => {
         uploadExcelData={handleOpenModalUploadExcel}
         exportExcelTable={exportExcelDataTable}
         agregarDataFila={agregarDataFila} // ejecuto la funcion agregar fila desde el speedDial
+        DownloadManual={DescargarManual}
               sx={{
                 position: 'fixed',
                 top: 16,  // Puedes ajustar este valor para mover el SpeedDial
