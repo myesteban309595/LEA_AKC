@@ -397,8 +397,6 @@ const deleteRowData = (rowId) => {
 };
 
 const exportExcelDataTable =()=> {
-  console.log("ejecutando la funcion de exportar data en SGMRC");
-  console.log("DATA QUE SE ENVIA A EXPORT EXCEL:", data);
   ExportExcelWithTemplate({data:data, module:"dataTable"}) //? se envia la data para exportar el excel
 }
 
@@ -455,7 +453,21 @@ const clickColumFixed = (columnClicked) => {
 
   
     //? Función para Descargar el manual
-    const DescargarManual = () => {      
+    const DescargarManual = async () => {     
+      try {
+        const response = await axios.get('https://sgmrcbackend-production.up.railway.app/api/download/downloadpdf');    
+        // Si la solicitud es exitosa
+        if (response.status === 200) {
+          setSnackbarMessage('Manual Descargado');
+          setSnackbarSeverity('success'); 
+          setSnackbarOpen(true);
+        }
+      } catch (error) {
+        console.error(error);
+        setSnackbarMessage("Hubo un error al Descargar el manual ");
+        setSnackbarOpen(true);
+        setSnackbarSeverity("error");
+      } 
     };
     
     //? Función para abrir el modal
