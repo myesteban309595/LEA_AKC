@@ -453,22 +453,45 @@ const clickColumFixed = (columnClicked) => {
 
   
     //? Función para Descargar el manual
-    const DescargarManual = async () => {     
+
+    const DescargarManual = async () => {
       try {
-        const response = await axios.get('https://sgmrcbackend-production.up.railway.app/api/download/downloadmanual');    
-        // Si la solicitud es exitosa
+        // Solicitar el archivo con la respuesta como 'blob'
+        const response = await axios.get('https://sgmrcbackend-production.up.railway.app/api/download/downloadmanual', {
+          responseType: 'blob',  // Especificamos que la respuesta es un archivo binario
+        });
+    
+        // Verificamos si la respuesta fue exitosa
         if (response.status === 200) {
+          // Crear un enlace temporal para descargar el archivo
+          const blob = response.data; // El archivo PDF recibido
+          const link = document.createElement('a');
+          
+          // Crear una URL para el blob y asignarlo al enlace
+          const url = window.URL.createObjectURL(new Blob([blob]));
+          link.href = url;
+          link.setAttribute('download', 'manualAPPLABAKC.pdf');  // El nombre con el que se descargará el archivo
+          document.body.appendChild(link);
+          
+          // Simular un clic en el enlace para descargar el archivo
+          link.click();
+          
+          // Limpiar la URL del blob después de la descarga
+          window.URL.revokeObjectURL(url);
+          
+          // Mostrar mensaje de éxito
           setSnackbarMessage('Manual Descargado');
-          setSnackbarSeverity('success'); 
+          setSnackbarSeverity('success');
           setSnackbarOpen(true);
         }
       } catch (error) {
         console.error(error);
-        setSnackbarMessage("Hubo un error al Descargar el manual ");
+        setSnackbarMessage("Hubo un error al Descargar el manual");
         setSnackbarOpen(true);
         setSnackbarSeverity("error");
-      } 
+      }
     };
+    
     
     //? Función para abrir el modal
     const handleOpenModalUploadExcel = () => {      
